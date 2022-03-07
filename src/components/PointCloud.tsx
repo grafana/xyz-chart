@@ -5,10 +5,10 @@
  */
 
 import React from 'react';
+import { PointData } from 'types';
 
 interface Props {
-  points: [];
-  colors?: [];
+  points: PointData;
   onPointerOver?: Function;
   onPointerOut?: Function;
 }
@@ -25,22 +25,19 @@ export const PointCloud: React.FC<Props> = ({ points }) => {
         colors.push(0.5);
     }
 
-    let f32positions = new Float32Array(positions);
-    let f32colors = new Float32Array(colors);
-
     return (
         <points>
             <bufferGeometry attach="geometry">
             <bufferAttribute
                 attachObject={['attributes', 'position']}
-                count={positions.length / 3}
-                array={f32positions}
+                count={points.points.length / 3}
+                array={points.points}
                 itemSize={ 1 }
             />
             <bufferAttribute
                 attachObject={['attributes', 'color']}
-                count={colors.length / 3}
-                array={f32colors}
+                count={points.colors.length / 3}
+                array={points.colors}
                 itemSize={ 1 }
             />
             </bufferGeometry>

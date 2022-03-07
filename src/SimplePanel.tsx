@@ -4,20 +4,20 @@ import { useTheme2 } from '@grafana/ui';
 import { SimpleOptions } from 'types';
 import { prepare3DScatterPlotDisplayValues } from 'utils';
 import { CameraControls } from 'components/CameraControls';
-import { PlotCanvas } from 'components/PlotCanvnas';
+import { PlotCanvas } from 'components/PlotCanvas';
 
 
 interface Props extends PanelProps<SimpleOptions> {}
 
 export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
   const theme = useTheme2();
-  const values = useMemo(() => prepare3DScatterPlotDisplayValues(data?.series, theme), [data, theme]);
+  const frames = useMemo(() => prepare3DScatterPlotDisplayValues(data?.series, theme), [data, theme]);
 
   // const styles = getStyles();
   return (
     <>
       <CameraControls />
-      <PlotCanvas />
+      <PlotCanvas frames={ frames } />
     </>
   );
 };

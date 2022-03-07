@@ -69,7 +69,7 @@ export function prepare3DScatterPlotDisplayValues(series: DataFrame[], theme: Gr
 /**
  * Take sparse frame data and format for display with R3F.
  */
-export function prepData(frames: DataFrame[]): PointData {
+export function prepData(frames: DataFrame[] | null): PointData {
   let points = new Float32Array();
   let colors = new Float32Array();
 
