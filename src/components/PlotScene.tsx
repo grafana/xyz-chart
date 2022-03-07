@@ -1,19 +1,19 @@
 import React from "react";
 import { Direction } from "types";
-import { Axis } from "./Axis";
 import { Grid } from "./Grid";
 
 export const PlotScene = () => {
   // const theme = useTheme();
   // const styles = getStyles();
+
+  const size = 10;
+  const gridInterval = 1;
+
   return (
     <group>
-      <Grid direction={Direction.Up} size={10} gridInterval={1} />
-      <Grid direction={Direction.Right} size={10} gridInterval={1} />
-      <Grid direction={Direction.Forward} size={10} gridInterval={1} />
-      <Axis direction={Direction.Up} size={10} />
-      <Axis direction={Direction.Right} size={10} />
-      <Axis direction={Direction.Forward} size={10} />
+      <Grid direction={Direction.Up} size={size} gridInterval={gridInterval} />
+      <Grid direction={Direction.Right} size={size} gridInterval={gridInterval} />
+      <Grid direction={Direction.Forward} size={size} gridInterval={gridInterval} />
     </group>
   );
 };

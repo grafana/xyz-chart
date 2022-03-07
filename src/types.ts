@@ -1,5 +1,5 @@
 import { extend, ReactThreeFiber } from '@react-three/fiber';
-import { Line, Vector3 } from 'three';
+import { BufferGeometry, Line, Vector3 } from 'three';
 
 type SeriesSize = 'sm' | 'md' | 'lg';
 
@@ -29,6 +29,7 @@ export interface AxisProps {
   direction: Direction;
   color?: string;
   size: number;
+  gridInterval: number;
 }
 
 export interface GridProps {
@@ -41,4 +42,11 @@ export enum Direction {
   Up = 1,
   Right,
   Forward
+}
+
+export interface AxisData {
+  axisGeometry: BufferGeometry;
+  intervalGeometries: BufferGeometry[];
+  intervalLabelPos: Vector3[];
+  intervalLabelText: string[];
 }

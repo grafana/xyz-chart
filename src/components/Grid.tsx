@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { BufferGeometry, Vector3 } from "three";
 import { Direction, GridProps } from "types";
 import { createLineGeometry } from "utils";
+import { Axis } from "./Axis";
 
 export const Grid = (props: GridProps) => {
   const ref = useRef<any>(null);
@@ -9,7 +10,7 @@ export const Grid = (props: GridProps) => {
   const createGeometry = () => {
     let lineGeometries: BufferGeometry[] = [];
   
-    for (let i = 0; i < props.size; i++) {
+    for (let i = 0; i < props.size; i = i + props.gridInterval) {
       switch (props.direction) {
         case Direction.Up:
           lineGeometries.push(createLineGeometry(new Vector3(i, 0, 0), new Vector3(i, props.size, 0)));
@@ -43,6 +44,7 @@ export const Grid = (props: GridProps) => {
             );
           })
         }
+        <Axis direction={props.direction} size={props.size} gridInterval={props.gridInterval}/>
       </group>
     </>
   );
