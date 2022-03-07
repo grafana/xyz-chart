@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { PanelProps } from '@grafana/data';
+import { useTheme2, PanelChrome } from '@grafana/ui';
 import { SimpleOptions } from 'types';
 import { Canvas, extend } from '@react-three/fiber';
 import { OrbitControls } from 'three-stdlib';
 import { Camera } from 'components/Camera';
 import { PlotScene } from 'components/PlotScene';
+import { prepare3DScatterPlotDisplayValues } from 'utils';
 
 extend({ OrbitControls });
 
 interface Props extends PanelProps<SimpleOptions> {}
 
 export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
-  // const theme = useTheme();
+  const theme = useTheme2();
+  const values = useMemo(() => prepare3DScatterPlotDisplayValues(data?.series, theme), [data, theme]);
+
   // const styles = getStyles();
   return (
     <Canvas>
