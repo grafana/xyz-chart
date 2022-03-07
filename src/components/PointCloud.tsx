@@ -17,19 +17,20 @@ export const PointCloud: React.FC<Props> = ({ points }) => {
     return (
         <points>
             <bufferGeometry attach="geometry">
-            <bufferAttribute
-                attachObject={['attributes', 'position']}
-                count={points.points.length / 3}
-                array={points.points}
-                itemSize={ 1 }
-            />
-            <bufferAttribute
-                attachObject={['attributes', 'color']}
-                count={points.colors.length / 3}
-                array={points.colors}
-                itemSize={ 1 }
-            />
-            </bufferGeometry>
+                <bufferAttribute
+                    attachObject={['attributes', 'position']}
+                    count={points.points.length / 3}
+                    array={points.points}
+                    itemSize={ 3 }
+                />
+                <bufferAttribute
+                    attachObject={['attributes', 'color']}
+                    count={points.colors.length / 3}
+                    array={points.colors}
+                    itemSize={ 3 }
+                />
+            </bufferGeometry> 
+            <pointsMaterial attach="material" vertexColors size={ 0.1 } sizeAttenuation={ true } color={'#FF0000'}/>
         </points>
     );
 };

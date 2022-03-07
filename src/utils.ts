@@ -62,12 +62,37 @@ export function prepare3DScatterPlotDisplayValues(series: DataFrame[], theme: Gr
   return frames;
 }
 
+type ScaleFactors = {
+  [n: number]: {
+    min: number;
+    max: number;
+    factor: number;
+  }
+}
+
 /**
  * Take sparse frame data and format for display with R3F.
  */
 export function prepData(frames: DataFrame[]): PointData {
   const points = [], colors = [];
-  
+  let scaleFactors: ScaleFactors = {};
+
+  // Create scaling factor to map data coordinates to 
+  // chart coords, assuming as single data frame (although that's silly)
+  for (let frame of frames) {
+    for (let i = 0; i < 3; i++) {
+      let vals = frame.fields[i].values.toArray();
+      const max = Math.max(...vals);
+      const min = Math.min(...vals);
+
+      scaleFactors[i] = {
+        min: min,
+        max: max,
+        factor: (max - min) / 10, // Currently scaled to 10
+      }
+    }
+  }
+
   for (let frame of frames) {
     // TODO: Currently this is simply determing point location
     // by taking the first (sensible, i.e datetime or numeric) field as X, the second field as Y,
@@ -80,11 +105,8 @@ export function prepData(frames: DataFrame[]): PointData {
       for (let j = 0; j < 3; j++) {
         switch (frame.fields[j].type) {
           case FieldType.time:
-            points.push(i * 2);
-            break;
-
           case FieldType.number:
-            points.push(frame.fields[j].values.get(i))
+            points.push(frame.fields[j].values.get(i) / scaleFactors[j].factor - scaleFactors[j].min / scaleFactors[j].factor);
             break;
   
         }

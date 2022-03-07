@@ -18,11 +18,13 @@ export const PlotScene : React.FC<Props> = ({ frames }) => {
   const pointData = prepData(frames);
 
   return (
-    <group>
-      <Grid direction={Direction.Up} size={size} gridInterval={gridInterval} />
-      <Grid direction={Direction.Right} size={size} gridInterval={gridInterval} />
-      <Grid direction={Direction.Forward} size={size} gridInterval={gridInterval} />
+    <>
       <PointCloud points={ pointData } />
-    </group>
+      <group>
+        <Grid direction={Direction.Up} size={size} gridInterval={gridInterval} />
+        <Grid direction={Direction.Right} size={size} gridInterval={gridInterval} />
+        <Grid direction={Direction.Forward} size={size} gridInterval={gridInterval} />
+      </group>
+    </>
   );
 };

@@ -1,11 +1,8 @@
 import React from 'react';
-import { Canvas, extend } from '@react-three/fiber';
-import { OrbitControls } from 'three-stdlib';
+import { Canvas } from '@react-three/fiber';
 import { Camera } from 'components/Camera';
 import { PlotScene } from 'components/PlotScene';
 import { DataFrame } from '@grafana/data';
-
-extend({ OrbitControls });
 
 
 interface Props {
