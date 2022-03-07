@@ -2,10 +2,9 @@ import React from 'react';
 import { PanelProps } from '@grafana/data';
 import { SimpleOptions } from 'types';
 import { Canvas, extend } from '@react-three/fiber';
-import { Label } from 'components/Label';
-import { Vector3 } from 'three';
 import { OrbitControls } from 'three-stdlib';
 import { Camera } from 'components/Camera';
+import { PlotScene } from 'components/PlotScene';
 
 extend({ OrbitControls });
 
@@ -20,7 +19,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
       <Camera />
       <ambientLight intensity={0.3} color="#FFFFFF" />
       <pointLight intensity={1.0} position={[10, 10, 10]} />
-      <Label position={new Vector3(-3, 0, 0)} text={'test'} />
+      <PlotScene />
     </Canvas>
   );
 };
