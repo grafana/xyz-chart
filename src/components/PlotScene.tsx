@@ -6,7 +6,7 @@ import { Grid } from './Grid';
 import { PointCloud } from './PointCloud';
 
 interface Props {
-  frames: DataFrame[] | null;
+  frames: DataFrame[];
 }
 
 export const PlotScene : React.FC<Props> = ({ frames }) => {

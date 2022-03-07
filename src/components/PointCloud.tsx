@@ -14,17 +14,6 @@ interface Props {
 }
 
 export const PointCloud: React.FC<Props> = ({ points }) => {
-  let positions = [], colors = [];
-
-    for (let i = 0; i < 100; i++) {
-        positions.push(Math.random() * 10);
-        positions.push(Math.random() * 10);
-        positions.push(Math.random() * 10);
-        colors.push(1);
-        colors.push(0.5);
-        colors.push(0.5);
-    }
-
     return (
         <points>
             <bufferGeometry attach="geometry">

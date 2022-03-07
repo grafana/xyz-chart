@@ -9,7 +9,7 @@ extend({ OrbitControls });
 
 
 interface Props {
-    frames: DataFrame[] | null;
+    frames: DataFrame[];
 }
 
 export const PlotCanvas: React.FC<Props> = ({ frames }) => {
