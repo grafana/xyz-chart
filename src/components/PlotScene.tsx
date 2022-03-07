@@ -1,6 +1,7 @@
-import React from "react";
-import { Direction } from "types";
-import { Grid } from "./Grid";
+import React from 'react';
+import { Direction } from 'types';
+import { Grid } from './Grid';
+import { PointCloud } from './PointCloud';
 
 export const PlotScene = () => {
   // const theme = useTheme();
@@ -14,6 +15,7 @@ export const PlotScene = () => {
       <Grid direction={Direction.Up} size={size} gridInterval={gridInterval} />
       <Grid direction={Direction.Right} size={size} gridInterval={gridInterval} />
       <Grid direction={Direction.Forward} size={size} gridInterval={gridInterval} />
+      <PointCloud points={[]} />
     </group>
   );
 };
