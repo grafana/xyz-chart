@@ -1,15 +1,15 @@
-import React, { useRef } from "react";
-import { BufferGeometry, Vector3 } from "three";
-import { Direction, GridProps } from "types";
-import { createLineGeometry } from "utils";
-import { Axis } from "./Axis";
+import React, { useRef } from 'react';
+import { BufferGeometry, Vector3 } from 'three';
+import { Direction, GridProps } from 'types';
+import { createLineGeometry } from 'utils';
+import { Axis } from './Axis';
 
 export const Grid = (props: GridProps) => {
   const ref = useRef<any>(null);
 
   const createGeometry = () => {
     let lineGeometries: BufferGeometry[] = [];
-  
+
     for (let i = 0; i < props.size; i = i + props.gridInterval) {
       switch (props.direction) {
         case Direction.Up:
@@ -28,23 +28,21 @@ export const Grid = (props: GridProps) => {
     }
 
     return lineGeometries;
-  }
+  };
 
   const geometry = createGeometry();
 
   return (
     <>
       <group>
-        {
-          geometry.map((lineGeo, index) => {
-            return (
-              <line_ ref={ref} geometry={lineGeo} key={index}>
-                <lineBasicMaterial attach="material" color={'#808080'}/>
-              </line_>
-            );
-          })
-        }
-        <Axis direction={props.direction} size={props.size} gridInterval={props.gridInterval}/>
+        {geometry.map((lineGeo, index) => {
+          return (
+            <line_ ref={ref} geometry={lineGeo} key={index}>
+              <lineBasicMaterial attach="material" color={'#808080'} />
+            </line_>
+          );
+        })}
+        <Axis direction={props.direction} size={props.size} gridInterval={props.gridInterval} />
       </group>
     </>
   );

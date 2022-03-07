@@ -17,11 +17,11 @@ export const Label = (props: LabelProps) => {
     size: 1,
     height: 0,
     curveSegments: 12,
-		bevelEnabled: false,
-		bevelThickness: 0,
-		bevelSize: 8,
-		bevelOffset: 0,
-		bevelSegments: 5
+    bevelEnabled: false,
+    bevelThickness: 0,
+    bevelSize: 8,
+    bevelOffset: 0,
+    bevelSegments: 5,
   };
 
   return (
