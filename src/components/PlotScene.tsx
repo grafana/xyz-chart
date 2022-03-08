@@ -1,3 +1,4 @@
+import { LABEL_INTERVAL, SCENE_SCALE } from "consts";
 import React from "react";
 import { Direction } from "types";
 import { Grid } from "./Grid";
@@ -6,8 +7,8 @@ export const PlotScene = () => {
   // const theme = useTheme();
   // const styles = getStyles();
 
-  const size = 10;
-  const gridInterval = 1;
+  const size = SCENE_SCALE;
+  const gridInterval = LABEL_INTERVAL;
 
   return (
     <group>
