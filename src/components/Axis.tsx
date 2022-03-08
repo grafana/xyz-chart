@@ -1,5 +1,5 @@
 import { Line } from '@react-three/drei';
-import { INTERVAL_INDEX_LENGTH, SCENE_SCALE } from 'consts';
+import { INTERVAL_INDEX_LENGTH, LABEL_DISTANCE_FROM_GRID, SCENE_SCALE } from 'consts';
 import React from 'react';
 import { Euler, Vector3 } from 'three';
 import { Direction, AxisProps, AxisData } from 'types';
@@ -10,7 +10,6 @@ export const Axis = (props: AxisProps) => {
     let startVec: [number, number, number], endVec: [number, number, number];
     const intervalGeometries = [];
     const intervalLabelPos = [];
-    const intervalLabelText = [];
     const labelRotation = new Euler();
 
     switch (props.direction) {
@@ -23,12 +22,11 @@ export const Axis = (props: AxisProps) => {
             [props.size, i, 0],
             [props.size + (INTERVAL_INDEX_LENGTH * SCENE_SCALE) / 10, i, 0],
           ]);
-          intervalLabelPos.push(new Vector3(props.size + SCENE_SCALE / 10, i, 0));
-          intervalLabelText.push('TEST');
+          intervalLabelPos.push(new Vector3(props.size + LABEL_DISTANCE_FROM_GRID, i, 0));
         }
 
         break;
-      case Direction.Right:
+      case Direction.Forward:
         startVec = [0, 0, props.size];
         endVec = [props.size, 0, props.size];
 
@@ -37,13 +35,12 @@ export const Axis = (props: AxisProps) => {
             [props.size, 0, i],
             [props.size + (INTERVAL_INDEX_LENGTH * SCENE_SCALE) / 10, 0, i],
           ]);
-          intervalLabelPos.push(new Vector3(props.size + SCENE_SCALE / 10, 0, i));
-          intervalLabelText.push('TEST');
+          intervalLabelPos.push(new Vector3(props.size + LABEL_DISTANCE_FROM_GRID, 0, i));
           labelRotation.set(-Math.PI / 2, 0, 0);
         }
 
         break;
-      case Direction.Forward:
+      case Direction.Right:
         startVec = [props.size, 0, 0];
         endVec = [props.size, 0, props.size];
 
@@ -52,8 +49,7 @@ export const Axis = (props: AxisProps) => {
             [i, 0, props.size],
             [i, 0, props.size + (INTERVAL_INDEX_LENGTH * SCENE_SCALE) / 10],
           ]);
-          intervalLabelPos.push(new Vector3(i, 0, props.size + SCENE_SCALE / 10));
-          intervalLabelText.push('TEST');
+          intervalLabelPos.push(new Vector3(i, 0, props.size + LABEL_DISTANCE_FROM_GRID));
           labelRotation.set(-Math.PI / 2, 0, Math.PI / 2);
         }
 
@@ -62,10 +58,10 @@ export const Axis = (props: AxisProps) => {
 
     const axisPoints = [startVec, endVec];
 
-    return { axisPoints, intervalGeometries, intervalLabelPos, intervalLabelText, labelRotation };
+    return { axisPoints, intervalGeometries, intervalLabelPos, labelRotation };
   };
 
-  const { axisPoints, intervalGeometries, intervalLabelPos, intervalLabelText, labelRotation } = getAxisData();
+  const { axisPoints, intervalGeometries, intervalLabelPos, labelRotation } = getAxisData();
   const color = props.color ?? 'white';
 
   return (
@@ -75,7 +71,12 @@ export const Axis = (props: AxisProps) => {
         return (
           <group key={index}>
             <Line points={points as [number, number, number][]} color={color} lineWidth={2.5} dashed={false} />
-            <Label position={intervalLabelPos[index]} text={intervalLabelText[index]} rotation={labelRotation} />
+            <Label
+              direction={props.direction}
+              position={intervalLabelPos[index]}
+              text={props.intervalLabels[index]}
+              rotation={labelRotation}
+            />
           </group>
         );
       })}

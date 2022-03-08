@@ -1,6 +1,7 @@
 import { BufferGeometry, Vector3 } from 'three';
 import { DataFrame, GrafanaTheme2, Field, FieldType, ArrayVector } from '@grafana/data';
-import { PointData } from 'types';
+import { IntervalLabels, PointData } from 'types';
+import { LABEL_INTERVAL, SCENE_SCALE } from 'consts';
 
 export function createLineGeometry(startVec: Vector3, endVec: Vector3): BufferGeometry {
   const points = [];
@@ -88,7 +89,7 @@ export function prepData(frames: DataFrame[]): PointData {
       scaleFactors[i] = {
         min: min,
         max: max,
-        factor: (max - min) / 10, // Currently scaled to 10
+        factor: (max - min) / SCENE_SCALE,
       };
     }
   }
@@ -119,4 +120,43 @@ export function prepData(frames: DataFrame[]): PointData {
   }
 
   return { points: new Float32Array(points), colors: new Float32Array(colors) };
+}
+
+export function getIntervalLabels(frames: DataFrame[]): IntervalLabels {
+  const xLabels = [];
+  const yLabels = [];
+  const zLabels = [];
+  const intervalFactor = Math.floor(SCENE_SCALE / LABEL_INTERVAL);
+
+  for (let frame of frames) {
+    const interval = Math.floor((frame.length - 1) / intervalFactor) === 0 ? 1 : Math.floor((frame.length - 1) / intervalFactor);
+
+    const yLabelValues = [];
+    const zLabelValues = [];
+
+    for (let i = 0; i < frame.length; i += interval) {
+      xLabels.push(new Date(frame.fields[0].values.get(i)).toDateString());
+
+      const yVal = frame.fields[1].values.get(i) as number;
+      const zVal = frame.fields[2].values.get(i) as number;
+
+      if (yVal) {
+        yLabelValues.push(yVal);        
+      }
+
+      if (zVal) {
+        zLabelValues.push(zVal);
+      }
+    }
+
+    yLabelValues.sort((a,b) => a - b);
+    zLabelValues.sort((a,b) => a - b);
+
+    for (let i = 0; i < yLabelValues.length; i++) {
+      yLabels.push(yLabelValues[i] ? yLabelValues[i].toString() : "No value");
+      zLabels.push(zLabelValues[i] ? zLabelValues[i].toString() : "No value");
+    }
+  }
+
+  return { xLabels, yLabels, zLabels };
 }

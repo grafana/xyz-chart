@@ -47,7 +47,12 @@ export const Grid = (props: GridProps) => {
             </line_>
           );
         })}
-        <Axis direction={props.direction} size={props.size} gridInterval={props.gridInterval} />
+        <Axis
+          direction={props.direction}
+          size={props.size}
+          gridInterval={props.gridInterval}
+          intervalLabels={props.intervalLabels}
+        />
       </group>
     </>
   );

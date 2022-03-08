@@ -2,12 +2,28 @@ import React from 'react';
 import Roboto from '../fonts/Roboto.json';
 import { TextGeometry } from 'three-stdlib';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
-import { LabelProps } from 'types';
+import { Direction, LabelProps } from 'types';
 import { SCENE_SCALE } from 'consts';
 
 export const Label = (props: LabelProps) => {
   const font = new FontLoader().parse(Roboto);
   const labelSize = (SCENE_SCALE * 0.3) / 10;
+
+  const calculateLabelOffset = () => {
+    textGeometry.computeBoundingBox();
+
+    switch (props.direction) {
+      case Direction.Up:
+        textGeometry.translate(textGeometry.boundingBox!.max.x, 0, 0);
+        break;
+      case Direction.Forward:
+        textGeometry.translate(textGeometry.boundingBox!.max.x, 0, 0);
+        break;
+      case Direction.Right:
+        textGeometry.translate(textGeometry.boundingBox!.min.x, 0, 0);
+        break;
+    }
+  }
 
   const textOptions: any = {
     font,
@@ -20,7 +36,10 @@ export const Label = (props: LabelProps) => {
     bevelOffset: 0,
   };
 
-  const textGeometry = new TextGeometry(props.text, textOptions).center();
+  let text = props.text ?? 'No value';
+  const textGeometry = new TextGeometry(text, textOptions).center();
+
+  calculateLabelOffset();
 
   return (
     <mesh position={props.position} rotation={props.rotation ?? undefined} geometry={textGeometry}>
