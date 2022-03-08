@@ -6,7 +6,6 @@ import { prepare3DScatterPlotDisplayValues } from 'utils';
 import { CameraControls } from 'components/CameraControls';
 import { PlotCanvas } from 'components/PlotCanvas';
 
-
 interface Props extends PanelProps<SimpleOptions> {}
 
 export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
@@ -17,7 +16,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
   return (
     <>
       <CameraControls />
-      <PlotCanvas frames={ frames } />
+      <PlotCanvas frames={frames} />
     </>
   );
 };
