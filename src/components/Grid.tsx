@@ -4,6 +4,11 @@ import { Direction, GridProps } from 'types';
 import { createLineGeometry } from 'utils';
 import { Axis } from './Axis';
 
+/* 
+  Refactor and use <Line/> from drei package. Check Axis.tsx for example
+  Three.line does not support line width in WebGL, but drei's implementation does.
+  So I used a thicker line for axis and left the grid with the old implementation.
+*/
 export const Grid = (props: GridProps) => {
   const ref = useRef<any>(null);
 

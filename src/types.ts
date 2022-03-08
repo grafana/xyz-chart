@@ -1,5 +1,5 @@
 import { extend, ReactThreeFiber } from '@react-three/fiber';
-import { BufferGeometry, Line, Vector3 } from 'three';
+import { Euler, Line, Vector3 } from 'three';
 
 type SeriesSize = 'sm' | 'md' | 'lg';
 
@@ -23,6 +23,7 @@ export interface SimpleOptions {
 export interface LabelProps {
   position: Vector3;
   text: string;
+  rotation?: Euler;
 }
 
 export interface AxisProps {
@@ -45,13 +46,14 @@ export enum Direction {
 }
 
 export interface AxisData {
-  axisGeometry: BufferGeometry;
-  intervalGeometries: BufferGeometry[];
+  axisPoints: [number, number, number][];
+  intervalGeometries: number[][][];
   intervalLabelPos: Vector3[];
   intervalLabelText: string[];
+  labelRotation: Euler;
 }
 
 export interface PointData {
-  points: Float32Array,
-  colors: Float32Array
+  points: Float32Array;
+  colors: Float32Array;
 }

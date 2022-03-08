@@ -1,79 +1,81 @@
-import React, { useRef } from 'react';
-import { Vector3 } from 'three';
+import { Line } from '@react-three/drei';
+import { INTERVAL_INDEX_LENGTH, SCENE_SCALE } from 'consts';
+import React from 'react';
+import { Euler, Vector3 } from 'three';
 import { Direction, AxisProps, AxisData } from 'types';
-import { createLineGeometry } from 'utils';
 import { Label } from './Label';
 
 export const Axis = (props: AxisProps) => {
-  const ref = useRef<any>(null);
-
   const getAxisData = (): AxisData => {
-    let startVec, endVec;
+    let startVec: [number, number, number], endVec: [number, number, number];
     const intervalGeometries = [];
     const intervalLabelPos = [];
     const intervalLabelText = [];
-    let intervalStartVec, intervalEndVec;
+    const labelRotation = new Euler();
 
     switch (props.direction) {
       case Direction.Up:
-        startVec = new Vector3(props.size, 0, 0);
-        endVec = new Vector3(props.size, props.size, 0);
-
-        intervalStartVec = new Vector3(props.size, 0, 0);
-        intervalEndVec = new Vector3(props.size + 0.2, 0, 0);
+        startVec = [props.size, 0, 0];
+        endVec = [props.size, props.size, 0];
 
         for (let i = 0; i < props.size; i = i + props.gridInterval) {
-          intervalStartVec.y = i;
-          intervalEndVec.y = i;
-
-          intervalGeometries.push(createLineGeometry(intervalStartVec, intervalEndVec));
-          intervalLabelPos.push(new Vector3(intervalEndVec.x + 0.3, intervalEndVec.y, intervalEndVec.z));
+          intervalGeometries.push([
+            [props.size, i, 0],
+            [props.size + (INTERVAL_INDEX_LENGTH * SCENE_SCALE) / 10, i, 0],
+          ]);
+          intervalLabelPos.push(new Vector3(props.size + SCENE_SCALE / 10, i, 0));
           intervalLabelText.push('TEST');
         }
 
         break;
       case Direction.Right:
-        startVec = new Vector3(0, 0, props.size);
-        endVec = new Vector3(props.size, 0, props.size);
+        startVec = [0, 0, props.size];
+        endVec = [props.size, 0, props.size];
 
-        intervalStartVec = new Vector3(0, 0, props.size);
-        intervalEndVec = new Vector3(props.size, 0, props.size + 0.2);
-
-        for (let i = 0; i < props.size; i = i + props.gridInterval) {
-          intervalStartVec.x = i;
-          intervalEndVec.x = i;
-
-          intervalGeometries.push(createLineGeometry(intervalStartVec, intervalEndVec));
-          intervalLabelPos.push(new Vector3(intervalEndVec.x + 0.3, intervalEndVec.y, intervalEndVec.z));
+        for (let i = props.gridInterval; i < props.size; i = i + props.gridInterval) {
+          intervalGeometries.push([
+            [props.size, 0, i],
+            [props.size + (INTERVAL_INDEX_LENGTH * SCENE_SCALE) / 10, 0, i],
+          ]);
+          intervalLabelPos.push(new Vector3(props.size + SCENE_SCALE / 10, 0, i));
           intervalLabelText.push('TEST');
+          labelRotation.set(-Math.PI / 2, 0, 0);
         }
+
         break;
       case Direction.Forward:
-        startVec = new Vector3(props.size, 0, 0);
-        endVec = new Vector3(props.size, 0, props.size);
+        startVec = [props.size, 0, 0];
+        endVec = [props.size, 0, props.size];
+
+        for (let i = 0; i < props.size; i = i + props.gridInterval) {
+          intervalGeometries.push([
+            [i, 0, props.size],
+            [i, 0, props.size + (INTERVAL_INDEX_LENGTH * SCENE_SCALE) / 10],
+          ]);
+          intervalLabelPos.push(new Vector3(i, 0, props.size + SCENE_SCALE / 10));
+          intervalLabelText.push('TEST');
+          labelRotation.set(-Math.PI / 2, 0, Math.PI / 2);
+        }
+
         break;
     }
 
-    const axisGeometry = createLineGeometry(startVec, endVec);
+    const axisPoints = [startVec, endVec];
 
-    return { axisGeometry, intervalGeometries, intervalLabelPos, intervalLabelText } as AxisData;
+    return { axisPoints, intervalGeometries, intervalLabelPos, intervalLabelText, labelRotation };
   };
 
-  const { axisGeometry, intervalGeometries, intervalLabelPos, intervalLabelText } = getAxisData();
+  const { axisPoints, intervalGeometries, intervalLabelPos, intervalLabelText, labelRotation } = getAxisData();
   const color = props.color ?? 'white';
 
   return (
     <group key={'axis_' + props.direction}>
-      <line_ ref={ref} geometry={axisGeometry}>
-        <lineBasicMaterial attach="material" color={color} />
-      </line_>
-      {intervalGeometries.map((geometry, index) => {
+      <Line points={axisPoints} color={color} lineWidth={2.5} dashed={false} />
+      {intervalGeometries.map((points, index) => {
         return (
           <group key={index}>
-            <line_ ref={ref} geometry={geometry}>
-              <lineBasicMaterial attach="material" color={color} />
-            </line_>
-            <Label position={intervalLabelPos[index]} text={intervalLabelText[index]} />
+            <Line points={points as [number, number, number][]} color={color} lineWidth={2.5} dashed={false} />
+            <Label position={intervalLabelPos[index]} text={intervalLabelText[index]} rotation={labelRotation} />
           </group>
         );
       })}
