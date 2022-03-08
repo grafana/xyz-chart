@@ -29,7 +29,7 @@ export const Axis = (props: AxisProps) => {
         startVec = [0, 0, props.size];
         endVec = [props.size, 0, props.size];
 
-        for (let i = props.gridInterval; i < props.size + props.gridInterval; i = i + props.gridInterval) {
+        for (let i = props.gridInterval; i < props.size; i = i + props.gridInterval) {
           intervalGeometries.push([[props.size, 0, i], [props.size + (INTERVAL_INDEX_LENGTH * SCENE_SCALE / 10), 0, i]]);
           intervalLabelPos.push(new Vector3(props.size + (SCENE_SCALE / 10), 0, i));
           intervalLabelText.push("TEST");
