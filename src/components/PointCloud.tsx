@@ -8,7 +8,7 @@ import { hexToRgb } from '../utils';
 import OptionsContext from 'optionsContext';
 import React, { useRef, useContext, useEffect } from 'react';
 import { PointData, RGBColor } from 'types';
-import { BufferAttribute, BufferGeometry } from 'three';
+import { BufferAttribute } from 'three';
 
 interface Props {
   points: PointData;
