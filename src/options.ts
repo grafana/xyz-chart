@@ -125,6 +125,5 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
 
 const gridCategory = ['Grid Options'];
 const labelCategory = ['Label Options'];
-const categoryStyles = ['Scatter panel styles'];
 const particleCategory = ['Particle Options'];
 const cameraCategory = ['Camera Options'];
