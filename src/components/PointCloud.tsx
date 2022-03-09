@@ -4,8 +4,11 @@
  * sane default for materials, geometries, etc.
  */
 
-import React from 'react';
-import { PointData } from 'types';
+import { hexToRgb } from '../utils';
+import OptionsContext from 'optionsContext';
+import React, { useRef, useContext, useEffect } from 'react';
+import { PointData, RGBColor } from 'types';
+import { BufferAttribute, BufferGeometry } from 'three';
 
 interface Props {
   points: PointData;
@@ -14,6 +17,19 @@ interface Props {
 }
 
 export const PointCloud: React.FC<Props> = ({ points }) => {
+  const colorRef = useRef({} as BufferAttribute);
+  const dataPointColor: string = useContext(OptionsContext).dataPointColor;
+
+  useEffect(() => {
+    if (colorRef.current) {
+      const color: RGBColor = hexToRgb(dataPointColor);
+      for (let i = 0; i< colorRef.current.array.length; i++) {
+        colorRef.current.setXYZ(i, color.r, color.g, color.b);
+        colorRef.current.needsUpdate = true;
+      }
+    }
+  }, [dataPointColor]);
+
   return (
     <points>
       <bufferGeometry attach="geometry">
@@ -24,13 +40,14 @@ export const PointCloud: React.FC<Props> = ({ points }) => {
           itemSize={3}
         />
         <bufferAttribute
+          ref={colorRef}
           attachObject={['attributes', 'color']}
           count={points.colors.length / 3}
           array={points.colors}
           itemSize={3}
         />
       </bufferGeometry>
-      <pointsMaterial attach="material" vertexColors size={0.1} sizeAttenuation={true} color={'#FF0000'} />
+      <pointsMaterial attach="material" vertexColors size={0.9} sizeAttenuation={true}/>
     </points>
   );
 };

@@ -27,7 +27,7 @@ export const Axis = (props: AxisProps) => {
           intervalLabelPos.push(new Vector3(props.size + LABEL_DISTANCE_FROM_GRID, i, 0));
         }
 
-        color = options.yAxisColor ? options.yAxisColor : options.themeColor ?? WHITE;
+        color = options.showColorSettings ? options.yAxisColor : options.themeColor ?? WHITE;
 
         break;
       case Direction.Forward:
@@ -43,7 +43,7 @@ export const Axis = (props: AxisProps) => {
           labelRotation.set(-Math.PI / 2, 0, 0);
         }
 
-        color = options.zAxisColor ? options.zAxisColor : options.themeColor ?? WHITE;
+        color = options.showColorSettings ? options.zAxisColor : options.themeColor ?? WHITE;
 
         break;
       case Direction.Right:
@@ -59,7 +59,7 @@ export const Axis = (props: AxisProps) => {
           labelRotation.set(-Math.PI / 2, 0, Math.PI / 2);
         }
 
-        color = options.xAxisColor ? options.xAxisColor : options.themeColor ?? WHITE;
+        color = options.showColorSettings ? options.xAxisColor : options.themeColor ?? WHITE;
 
         break;
     }

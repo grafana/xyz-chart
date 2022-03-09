@@ -44,7 +44,7 @@ export const Label = (props: LabelProps) => {
   const textGeometry = new TextGeometry(text, textOptions).center();
   calculateLabelOffset();
 
-  let color = options.labelColor ?? WHITE;
+  let color = options.showColorSettings ? options.labelColor : options.themeColor ?? WHITE;
 
   return (
     <mesh position={props.position} rotation={props.rotation ?? undefined} geometry={textGeometry}>
