@@ -19,6 +19,7 @@ export const PlotScene: React.FC<Props> = ({ frames }) => {
   const dataPointColor = options.dataPointColor;
 
   const [pointData, setPointData] = useState(prepData(frames, size, dataPointColor));
+  const [oldPointData, setOldPointData] = useState(null as any);
   const [intervalLabels, setIntervalLabels] = useState(
     getIntervalLabels(frames, size, gridInterval, options.labelDateFormat)
   );
@@ -32,9 +33,14 @@ export const PlotScene: React.FC<Props> = ({ frames }) => {
     setIntervalLabels(getIntervalLabels(frames, size, gridInterval, dateFormat));
   }, [dateFormat]);
 
+  useEffect(() => {
+    setOldPointData(pointData);
+    setPointData(prepData(frames, size, dataPointColor));
+  }, [frames]);
+
   return (
     <>
-      <PointCloud points={pointData}/>
+      <PointCloud currentPoints={pointData} oldPoints={oldPointData}/>
       <group>
         <Grid
           direction={Direction.Up}
