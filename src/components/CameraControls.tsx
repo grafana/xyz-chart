@@ -1,9 +1,13 @@
 import React from 'react';
 import { ToolbarButtonRow, ToolbarButton } from '@grafana/ui';
+import { CameraOptions } from 'types';
 
-interface Props {}
+interface Props {
+  cameraOpts: CameraOptions;
+  updateCameraOpts: Function;
+}
 
-export const CameraControls: React.FC<Props> = ({}) => {
+export const CameraControls: React.FC<Props> = ({cameraOpts, updateCameraOpts}) => {
   const style: any = {
     position: 'absolute',
     zIndex: 1,
@@ -11,11 +15,10 @@ export const CameraControls: React.FC<Props> = ({}) => {
       
   return (
     <ToolbarButtonRow style={style}>
-      <ToolbarButton>Orbit</ToolbarButton>
-      <ToolbarButton>Overview</ToolbarButton>
-      <ToolbarButton>X</ToolbarButton>
-      <ToolbarButton>Y</ToolbarButton>
-      <ToolbarButton>Z</ToolbarButton>
+      <ToolbarButton onClick={() => updateCameraOpts({type: "perspective"})}>3D</ToolbarButton>
+      <ToolbarButton onClick={() => updateCameraOpts({type: "orthographic", viewPlane: "x"})}>X</ToolbarButton>
+      <ToolbarButton onClick={() => updateCameraOpts({type: "orthographic", viewPlane: "y"})}>Y</ToolbarButton>
+      <ToolbarButton onClick={() => updateCameraOpts({type: "orthographic", viewPlane: "z"})}>Z</ToolbarButton>
     </ToolbarButtonRow>
   );
 };

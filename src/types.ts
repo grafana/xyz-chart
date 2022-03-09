@@ -82,3 +82,8 @@ export interface RGBColor {
   g: number;
   b: number;
 }
+
+export interface CameraOptions {
+  type: "perspective" | "orthographic";
+  viewPlane?: "x" | "y" | "z";
+}

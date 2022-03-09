@@ -1,30 +1,94 @@
+import React from 'react';
+import { OrthographicCamera, PerspectiveCamera } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import OptionsContext from 'optionsContext';
 import { useEffect, useContext } from 'react';
-import { OrbitControls } from 'three-stdlib';
+import { Vector3 } from '@react-three/fiber';
+import { OrbitControls, MapControls } from 'three-stdlib';
+import { CameraOptions } from 'types';
 //import { ScatterPlotOptions } from 'types';
 
-export const Camera = () => {
+interface Props {
+  cameraOpts: CameraOptions;
+}
+
+export const Camera: React.FC<Props> = ({cameraOpts}) => {
   const { camera, gl } = useThree();
   const { sceneScale } = useContext(OptionsContext);
+  const midpoint = sceneScale - sceneScale / 2;
+  const isOrtho = cameraOpts.type === "orthographic";
+  let cameraPos: Vector3;
+  let lookAt: Vector3;
 
-  const cameraPos = [
-    sceneScale * 1.4,
-    sceneScale - sceneScale / 2,
-    sceneScale * 1.4
-  ] as const;
-  camera.position.set(...cameraPos);
+  if (isOrtho) {
+    switch (cameraOpts.viewPlane) {
+      case "x":
+        cameraPos = [midpoint, midpoint, sceneScale];
+        lookAt = [midpoint, midpoint, 0];
+        break;
+      case "y":
+        cameraPos = [sceneScale, midpoint, midpoint];
+        lookAt = [0, midpoint, midpoint];
+        break;
+      case "z":
+        cameraPos = [midpoint, sceneScale, midpoint];
+        lookAt = [midpoint, 0, midpoint];
+        break;
+      default:
+        cameraPos = [midpoint, midpoint, sceneScale];
+        lookAt = [midpoint, midpoint, 0];
+        break;
+    }
+    
+  }
+  else {
+    cameraPos = [
+      sceneScale * 1.4,
+      sceneScale - sceneScale / 2,
+      sceneScale * 1.4
+    ];
+
+    lookAt = [0, 0, 0];
+  }
 
   useEffect(() => {
-    const controls = new OrbitControls(camera, gl.domElement);
+    let controls: OrbitControls | MapControls | null = null;
 
-    controls.minDistance = 3;
-    controls.maxDistance = sceneScale * 2;
-    controls.target.set(0, 0, 0);
+    if (isOrtho) {
+      controls = new MapControls(camera, gl.domElement);
+      
+      // @ts-ignore
+      camera.position.set(...cameraPos);
+      // @ts-ignore
+      controls.target.set(...lookAt);
+      controls.update();
+    }
+    else {
+      controls = new OrbitControls(camera, gl.domElement);
+      controls.minDistance = 3;
+      controls.maxDistance = sceneScale * 2;
+
+      // @ts-ignore
+      camera.position.set(...cameraPos);
+      // @ts-ignore
+      controls.target.set(...lookAt);
+      controls.update();
+    }
+    
 
     return () => {
-      controls.dispose();
+      if (controls !== null) {
+        controls.dispose();
+      }
     };
-  }, [camera, gl, sceneScale]);
-  return null;
+  }, [camera, gl, sceneScale, cameraOpts]);
+
+  return (
+    <>
+      <PerspectiveCamera fov={ 75 } makeDefault={ !isOrtho } />
+      <OrthographicCamera zoom={ 20 } makeDefault={ isOrtho } />
+    </>
+  );
 };
+
+//function getCameraPositionAndTarget(isOrtho)
