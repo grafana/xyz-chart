@@ -1,7 +1,6 @@
 import { BufferGeometry, Vector3 } from 'three';
 import { DataFrame, GrafanaTheme2, Field, FieldType, ArrayVector } from '@grafana/data';
 import { IntervalLabels, PointData } from 'types';
-import { LABEL_INTERVAL, SCENE_SCALE } from 'consts';
 
 export function createLineGeometry(startVec: Vector3, endVec: Vector3): BufferGeometry {
   const points = [];
@@ -73,7 +72,7 @@ type ScaleFactors = {
 /**
  * Take sparse frame data and format for display with R3F.
  */
-export function prepData(frames: DataFrame[]): PointData {
+export function prepData(frames: DataFrame[], sceneScale: number): PointData {
   const points = [],
     colors = [];
   let scaleFactors: ScaleFactors = {};
@@ -89,7 +88,7 @@ export function prepData(frames: DataFrame[]): PointData {
       scaleFactors[i] = {
         min: min,
         max: max,
-        factor: (max - min) / SCENE_SCALE,
+        factor: (max - min) / sceneScale,
       };
     }
   }
@@ -122,11 +121,11 @@ export function prepData(frames: DataFrame[]): PointData {
   return { points: new Float32Array(points), colors: new Float32Array(colors) };
 }
 
-export function getIntervalLabels(frames: DataFrame[]): IntervalLabels {
+export function getIntervalLabels(frames: DataFrame[], sceneScale: number, labelInterval: number): IntervalLabels {
   const xLabels = [];
   const yLabels = [];
   const zLabels = [];
-  const intervalFactor = Math.floor(SCENE_SCALE / LABEL_INTERVAL);
+  const intervalFactor = Math.floor(sceneScale / labelInterval);
 
   for (let frame of frames) {
     const interval = Math.floor((frame.length - 1) / intervalFactor) === 0 ? 1 : Math.floor((frame.length - 1) / intervalFactor);

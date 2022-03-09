@@ -1,7 +1,7 @@
-import { WHITE } from 'consts';
-import React, { useRef } from 'react';
+import OptionsContext from 'optionsContext';
+import React, { useRef, useContext } from 'react';
 import { BufferGeometry, Vector3 } from 'three';
-import { Direction, GridProps } from 'types';
+import { Direction, GridProps, ScatterPlotOptions } from 'types';
 import { createLineGeometry } from 'utils';
 import { Axis } from './Axis';
 
@@ -36,8 +36,10 @@ export const Grid = (props: GridProps) => {
     return lineGeometries;
   };
 
+  const options: ScatterPlotOptions = useContext(OptionsContext);
+
   const geometry = createGeometry();
-  const color = props.color ?? WHITE;
+  const color = options.themeColor;
 
   return (
     <>
@@ -54,7 +56,6 @@ export const Grid = (props: GridProps) => {
           size={props.size}
           gridInterval={props.gridInterval}
           intervalLabels={props.intervalLabels}
-          color={color}
         />
       </group>
     </>

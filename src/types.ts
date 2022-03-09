@@ -1,8 +1,6 @@
 import { extend, ReactThreeFiber } from '@react-three/fiber';
 import { Euler, Line, Vector3 } from 'three';
 
-type SeriesSize = 'sm' | 'md' | 'lg';
-
 // <line /> is being reserved by dom, so we need to alias it
 extend({ Line_: Line });
 
@@ -19,10 +17,12 @@ export interface ScatterPlotOptions {
   yAxisColor: string;
   zAxisColor: string;
   labelColor: string;
+  showColorSettings: boolean;
   dataPointColor: string;
   sceneScale: number;
   labelInterval: number;
   labelDateFormat: string;
+  themeColor: string;
 }
 
 export interface LabelProps {
@@ -30,19 +30,16 @@ export interface LabelProps {
   text: string;
   rotation?: Euler;
   direction: Direction;
-  color?: string;
 }
 
 export interface AxisProps {
   direction: Direction;
-  color?: string;
   size: number;
   gridInterval: number;
   intervalLabels: any[];
 }
 
 export interface GridProps {
-  color?: string;
   direction: Direction;
   size: number;
   gridInterval: number;
@@ -60,6 +57,7 @@ export interface AxisData {
   intervalGeometries: number[][][];
   intervalLabelPos: Vector3[];
   labelRotation: Euler;
+  color: string;
 }
 
 export interface PointData {
