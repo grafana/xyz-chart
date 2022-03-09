@@ -14,10 +14,15 @@ declare global {
   }
 }
 
-export interface SimpleOptions {
-  text: string;
-  showSeriesCount: boolean;
-  seriesCountSize: SeriesSize;
+export interface ScatterPlotOptions {
+  xAxisColor: string;
+  yAxisColor: string;
+  zAxisColor: string;
+  labelColor: string;
+  dataPointColor: string;
+  sceneScale: number;
+  labelInterval: number;
+  labelDateFormat: string;
 }
 
 export interface LabelProps {
@@ -25,6 +30,7 @@ export interface LabelProps {
   text: string;
   rotation?: Euler;
   direction: Direction;
+  color?: string;
 }
 
 export interface AxisProps {
@@ -36,6 +42,7 @@ export interface AxisProps {
 }
 
 export interface GridProps {
+  color?: string;
   direction: Direction;
   size: number;
   gridInterval: number;

@@ -1,3 +1,4 @@
+import { WHITE } from 'consts';
 import React, { useRef } from 'react';
 import { BufferGeometry, Vector3 } from 'three';
 import { Direction, GridProps } from 'types';
@@ -36,6 +37,7 @@ export const Grid = (props: GridProps) => {
   };
 
   const geometry = createGeometry();
+  const color = props.color ?? WHITE;
 
   return (
     <>
@@ -43,7 +45,7 @@ export const Grid = (props: GridProps) => {
         {geometry.map((lineGeo, index) => {
           return (
             <line_ ref={ref} geometry={lineGeo} key={index}>
-              <lineBasicMaterial attach="material" color={'#808080'} />
+              <lineBasicMaterial attach="material" color={color} />
             </line_>
           );
         })}
@@ -52,6 +54,7 @@ export const Grid = (props: GridProps) => {
           size={props.size}
           gridInterval={props.gridInterval}
           intervalLabels={props.intervalLabels}
+          color={color}
         />
       </group>
     </>

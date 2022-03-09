@@ -3,7 +3,7 @@ import Roboto from '../fonts/Roboto.json';
 import { TextGeometry } from 'three-stdlib';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { Direction, LabelProps } from 'types';
-import { SCENE_SCALE } from 'consts';
+import { SCENE_SCALE, WHITE } from 'consts';
 
 export const Label = (props: LabelProps) => {
   const font = new FontLoader().parse(Roboto);
@@ -37,13 +37,14 @@ export const Label = (props: LabelProps) => {
   };
 
   let text = props.text ?? 'No value';
+  let color = props.color ?? WHITE;
   const textGeometry = new TextGeometry(text, textOptions).center();
 
   calculateLabelOffset();
 
   return (
     <mesh position={props.position} rotation={props.rotation ?? undefined} geometry={textGeometry}>
-      <meshStandardMaterial attach="material" />
+      <meshStandardMaterial attach="material" color={color}/>
     </mesh>
   );
 };

@@ -1,5 +1,5 @@
 import { Line } from '@react-three/drei';
-import { INTERVAL_INDEX_LENGTH, LABEL_DISTANCE_FROM_GRID, SCENE_SCALE } from 'consts';
+import { INTERVAL_INDEX_LENGTH, LABEL_DISTANCE_FROM_GRID, SCENE_SCALE, WHITE } from 'consts';
 import React from 'react';
 import { Euler, Vector3 } from 'three';
 import { Direction, AxisProps, AxisData } from 'types';
@@ -62,7 +62,7 @@ export const Axis = (props: AxisProps) => {
   };
 
   const { axisPoints, intervalGeometries, intervalLabelPos, labelRotation } = getAxisData();
-  const color = props.color ?? 'white';
+  const color = props.color ?? WHITE;
 
   return (
     <group key={'axis_' + props.direction}>
@@ -76,6 +76,7 @@ export const Axis = (props: AxisProps) => {
               position={intervalLabelPos[index]}
               text={props.intervalLabels[index]}
               rotation={labelRotation}
+              color={color}
             />
           </group>
         );
