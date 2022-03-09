@@ -14,6 +14,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@grafana/data": "latest",
+    "@grafana/runtime": "^8.4.3",
     "@grafana/toolkit": "latest",
     "@grafana/ui": "^8.4.3",
     "emotion": "10.0.27"
@@ -25,6 +26,7 @@
     "@react-three/drei": "^8.16.0",
     "@react-three/fiber": "^7.0.26",
     "@types/three": "^0.138.0",
+    "moment": "^2.29.1",
     "three": "^0.138.3",
     "three-stdlib": "^2.8.8"
   }

@@ -1,7 +1,7 @@
 import { BufferGeometry, Vector3 } from 'three';
 import { DataFrame, GrafanaTheme2, Field, FieldType, ArrayVector } from '@grafana/data';
-import { IntervalLabels, PointData } from 'types';
-import { LABEL_INTERVAL, SCENE_SCALE } from 'consts';
+import { IntervalLabels, PointData, RGBColor } from 'types';
+import moment from 'moment';
 
 export function createLineGeometry(startVec: Vector3, endVec: Vector3): BufferGeometry {
   const points = [];
@@ -73,7 +73,7 @@ type ScaleFactors = {
 /**
  * Take sparse frame data and format for display with R3F.
  */
-export function prepData(frames: DataFrame[]): PointData {
+export function prepData(frames: DataFrame[], sceneScale: number, dataPointColor: string): PointData {
   const points = [],
     colors = [];
   let scaleFactors: ScaleFactors = {};
@@ -89,7 +89,7 @@ export function prepData(frames: DataFrame[]): PointData {
       scaleFactors[i] = {
         min: min,
         max: max,
-        factor: (max - min) / SCENE_SCALE,
+        factor: (max - min) / sceneScale,
       };
     }
   }
@@ -113,20 +113,22 @@ export function prepData(frames: DataFrame[]): PointData {
         }
       }
 
-      colors.push(1);
-      colors.push(0.5);
-      colors.push(0.5);
+      const normalizedColor: RGBColor = hexToRgb(dataPointColor);
+
+      colors.push(normalizedColor.r);
+      colors.push(normalizedColor.g);
+      colors.push(normalizedColor.b);
     }
   }
 
   return { points: new Float32Array(points), colors: new Float32Array(colors) };
 }
 
-export function getIntervalLabels(frames: DataFrame[]): IntervalLabels {
+export function getIntervalLabels(frames: DataFrame[], sceneScale: number, labelInterval: number, dateFormat: string): IntervalLabels {
   const xLabels = [];
   const yLabels = [];
   const zLabels = [];
-  const intervalFactor = Math.floor(SCENE_SCALE / LABEL_INTERVAL);
+  const intervalFactor = Math.floor(sceneScale / labelInterval);
 
   for (let frame of frames) {
     const interval = Math.floor((frame.length - 1) / intervalFactor) === 0 ? 1 : Math.floor((frame.length - 1) / intervalFactor);
@@ -135,7 +137,7 @@ export function getIntervalLabels(frames: DataFrame[]): IntervalLabels {
     const zLabelValues = [];
 
     for (let i = 0; i < frame.length; i += interval) {
-      xLabels.push(new Date(frame.fields[0].values.get(i)).toDateString());
+      xLabels.push(moment(new Date(frame.fields[0].values.get(i))).format(dateFormat));
 
       const yVal = frame.fields[1].values.get(i) as number;
       const zVal = frame.fields[2].values.get(i) as number;
@@ -159,4 +161,18 @@ export function getIntervalLabels(frames: DataFrame[]): IntervalLabels {
   }
 
   return { xLabels, yLabels, zLabels };
+}
+
+export function hexToRgb(hexColor: string): RGBColor {
+  let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hexColor);
+
+  if (result === null) {
+    return { r: 1, g: 1, b: 1};
+  }
+
+  let r = parseInt(result[1], 16);
+  let g = parseInt(result[2], 16);
+  let b = parseInt(result[3], 16);
+
+  return { r: r / 255, g: g / 255, b: b / 255};
 }
