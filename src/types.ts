@@ -23,6 +23,12 @@ export interface ScatterPlotOptions {
   labelInterval: number;
   labelDateFormat: string;
   themeColor: string;
+  enableOrbitControls: boolean;
+  enableOrthographc: boolean
+  cameraFov: number;
+  cameraX: number;
+  cameraY: number;
+  cameraZ: number;
 }
 
 export interface LabelProps {
