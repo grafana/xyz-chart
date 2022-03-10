@@ -1,5 +1,5 @@
 import { DataFrame } from '@grafana/data';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, RefObject, ReactNode, Suspense } from 'react';
 import { Direction, ScatterPlotOptions } from 'types';
 import { getIntervalLabels, prepData } from 'utils';
 import { Grid } from './Grid';
@@ -8,9 +8,10 @@ import OptionsContext from 'optionsContext';
 
 interface Props {
   frames: DataFrame[];
+  lights: RefObject<ReactNode>[];
 }
 
-export const PlotScene: React.FC<Props> = ({ frames }) => {
+export const PlotScene: React.FC<Props> = ({ frames, lights }) => {
   const options: ScatterPlotOptions = useContext(OptionsContext);
 
   const size = options.sceneScale;
@@ -19,6 +20,7 @@ export const PlotScene: React.FC<Props> = ({ frames }) => {
   const dataPointColor = options.dataPointColor;
 
   const [pointData, setPointData] = useState(prepData(frames, size, dataPointColor));
+  const [oldPointData, setOldPointData] = useState(null as any);
   const [intervalLabels, setIntervalLabels] = useState(
     getIntervalLabels(frames, size, gridInterval, options.labelDateFormat)
   );
@@ -32,9 +34,16 @@ export const PlotScene: React.FC<Props> = ({ frames }) => {
     setIntervalLabels(getIntervalLabels(frames, size, gridInterval, dateFormat));
   }, [dateFormat]);
 
+  useEffect(() => {
+    setOldPointData(pointData);
+    setPointData(prepData(frames, size, dataPointColor));
+  }, [frames]);
+
   return (
     <>
-      <PointCloud points={pointData}/>
+      <Suspense fallback={null}>
+        <PointCloud currentPoints={pointData} oldPoints={oldPointData} lights={lights} />
+      </Suspense>
       <group>
         <Grid
           direction={Direction.Up}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { createRef, RefObject, ReactNode, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Camera } from 'components/Camera';
 import { PlotScene } from 'components/PlotScene';
@@ -16,7 +16,10 @@ interface Props {
 export const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
   const [cameraOpts, updateCameraOpts] = useState({type: "perspective" as const});
   options.cameraOpts = cameraOpts;
-  
+  let ambLightRef: RefObject<ReactNode> = createRef();
+  let pntLightRef: RefObject<ReactNode> = createRef();
+    
+
   return (
     <>
       <CameraControls cameraOpts={cameraOpts} updateCameraOpts={updateCameraOpts} />
@@ -27,9 +30,9 @@ export const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
         */}
         <OptionsProvider value={options}>
           <Camera cameraOpts={cameraOpts} />
-          <ambientLight intensity={0.3} color={WHITE} />
-          <pointLight intensity={1.0} position={[10, 10, 10]} />
-          <PlotScene frames={frames} />
+          <ambientLight ref={ambLightRef} intensity={0.3} color={WHITE} />
+          <pointLight ref={pntLightRef} intensity={1.0} position={[10, 10, 10]} />
+          <PlotScene frames={frames} lights={[ambLightRef, pntLightRef]} />
         </OptionsProvider>
       </Canvas>
     </>
