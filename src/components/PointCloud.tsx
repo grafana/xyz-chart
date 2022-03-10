@@ -6,7 +6,15 @@
 
 import { hexToRgb } from '../utils';
 import OptionsContext from 'optionsContext';
-import React, { useRef, useContext, useEffect, useState, RefObject, ReactNode } from 'react';
+import React, { 
+  useRef, 
+  useContext, 
+  useEffect, 
+  useCallback,
+  useState, 
+  RefObject, 
+  ReactNode 
+} from 'react';
 import { PointData, RGBColor } from 'types';
 import { PointsMaterial } from 'three';
 import { useFrame } from '@react-three/fiber';
@@ -22,7 +30,7 @@ interface Props {
   onPointerOut?: Function;
 }
 
-export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights}) => {
+export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights }) => {
   const colorAttrRef: any = useRef(null);
   const pointsRef = useRef(null);
   const materialRef = useRef({} as PointsMaterial);
@@ -78,12 +86,28 @@ export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights})
     )
   }
 
-  // console.log(circleTexture);
+  const hover = useCallback(e => {
+    e.stopPropagation();
+    colorAttrRef.current.array[e.index * 3] = 1
+    colorAttrRef.current.array[e.index * 3 + 1] = 1
+    colorAttrRef.current.array[e.index * 3 + 2] = 1
+    colorAttrRef.current.needsUpdate = true;
+  }, []);
+
+  const unhover = useCallback(e => {
+    e.stopPropagation();
+
+    const color: RGBColor = hexToRgb(dataPointColor);
+    colorAttrRef.current.array[e.index * 3] = color.r
+    colorAttrRef.current.array[e.index * 3 + 1] = color.g
+    colorAttrRef.current.array[e.index * 3 + 2] = color.b
+    colorAttrRef.current.needsUpdate = true;
+  }, [])
 
   return (
     <>
       {points && (
-          <points ref={pointsRef}>
+          <points ref={pointsRef} onPointerOver={ hover }  onPointerOut={ unhover }>
             <bufferGeometry attach="geometry">
               <bufferAttribute
                 attachObject={['attributes', 'position']}
@@ -105,8 +129,8 @@ export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights})
               opacity={0}
               transparent
               vertexColors
-              size={0.8}
-              sizeAttenuation={true}
+              size={6}
+              sizeAttenuation={false}
               map={circleTexture}
             />
           </points>

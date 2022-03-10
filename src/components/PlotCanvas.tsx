@@ -24,7 +24,7 @@ export const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
   return (
     <>
       <CameraControls cameraOpts={cameraOpts} updateCameraOpts={updateCameraOpts} />
-      <Canvas linear flat>
+      <Canvas mode="concurrent" raycaster={{ params: { Points: { threshold: 0.2 } } }} linear flat>
         {/* 
           Context does not work outside of Canvas. Seems Canvas is outside parent component in DOM 
           https://github.com/facebook/react/issues/17126
@@ -35,7 +35,7 @@ export const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
           <ambientLight ref={ambLightRef} intensity={0.3} color={WHITE} />
           <pointLight ref={pntLightRef} intensity={1.0} position={[10, 10, 10]} />
           <PlotScene frames={frames} lights={[ambLightRef, pntLightRef]} />
-        </OptionsProvider>
+        </OptionsProvider>  
       </Canvas>
     </>
   );
