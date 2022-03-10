@@ -1,5 +1,5 @@
 import { DataFrame } from '@grafana/data';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, RefObject, ReactNode, Suspense } from 'react';
 import { Direction, ScatterPlotOptions } from 'types';
 import { getIntervalLabels, prepData } from 'utils';
 import { Grid } from './Grid';
@@ -8,9 +8,10 @@ import OptionsContext from 'optionsContext';
 
 interface Props {
   frames: DataFrame[];
+  lights: RefObject<ReactNode>[];
 }
 
-export const PlotScene: React.FC<Props> = ({ frames }) => {
+export const PlotScene: React.FC<Props> = ({ frames, lights }) => {
   const options: ScatterPlotOptions = useContext(OptionsContext);
 
   const size = options.sceneScale;
@@ -40,7 +41,9 @@ export const PlotScene: React.FC<Props> = ({ frames }) => {
 
   return (
     <>
-      <PointCloud currentPoints={pointData} oldPoints={oldPointData}/>
+      <Suspense fallback={null}>
+        <PointCloud currentPoints={pointData} oldPoints={oldPointData} lights={lights} />
+      </Suspense>
       <group>
         <Grid
           direction={Direction.Up}

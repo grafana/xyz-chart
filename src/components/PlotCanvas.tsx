@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef, RefObject, ReactNode } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Camera } from 'components/Camera';
 import { PlotScene } from 'components/PlotScene';
@@ -13,6 +13,9 @@ interface Props {
 }
 
 export const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
+  let ambLightRef: RefObject<ReactNode> = createRef();
+  let pntLightRef: RefObject<ReactNode> = createRef();
+
   return (
     <Canvas>
       {/* 
@@ -21,9 +24,9 @@ export const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
       */}
       <OptionsProvider value={options}>
         <Camera />
-        <ambientLight intensity={0.3} color={WHITE} />
-        <pointLight intensity={1.0} position={[10, 10, 10]} />
-        <PlotScene frames={frames} />
+        <ambientLight ref={ambLightRef} intensity={0.3} color={WHITE} />
+        <pointLight ref={pntLightRef} intensity={1.0} position={[10, 10, 10]} />
+        <PlotScene frames={frames} lights={[ambLightRef, pntLightRef]} />
       </OptionsProvider>
     </Canvas>
   );
