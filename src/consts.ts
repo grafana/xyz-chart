@@ -19,3 +19,8 @@ export const OPTION_COLORS = [
   {label: 'Black', value: '#000000'},
   {label: 'White', value: '#ffffff'},
 ]
+
+
+export const CAMERA = {
+  
+}

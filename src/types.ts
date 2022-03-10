@@ -23,6 +23,13 @@ export interface ScatterPlotOptions {
   labelInterval: number;
   labelDateFormat: string;
   themeColor: string;
+  enableOrbitControls: boolean;
+  enableOrthographc: boolean
+  cameraFov: number;
+  cameraX: number;
+  cameraY: number;
+  cameraZ: number;
+  cameraOpts: CameraOptions;
 }
 
 export interface LabelProps {
@@ -75,4 +82,9 @@ export interface RGBColor {
   r: number;
   g: number;
   b: number;
+}
+
+export interface CameraOptions {
+  type: "perspective" | "orthographic";
+  viewPlane?: "x" | "y" | "z";
 }
