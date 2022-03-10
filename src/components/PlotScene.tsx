@@ -1,5 +1,5 @@
 import { DataFrame } from '@grafana/data';
-import React, { useContext, useEffect, useState, RefObject, ReactNode } from 'react';
+import React, { useContext, useEffect, useState, RefObject, ReactNode, Suspense } from 'react';
 import { Direction, ScatterPlotOptions } from 'types';
 import { getIntervalLabels, prepData } from 'utils';
 import { Grid } from './Grid';
@@ -41,7 +41,9 @@ export const PlotScene: React.FC<Props> = ({ frames, lights }) => {
 
   return (
     <>
-      <PointCloud currentPoints={pointData} oldPoints={oldPointData} lights={lights} />
+      <Suspense fallback={null}>
+        <PointCloud currentPoints={pointData} oldPoints={oldPointData} lights={lights} />
+      </Suspense>
       <group>
         <Grid
           direction={Direction.Up}

@@ -10,6 +10,7 @@ import React, { useRef, useContext, useEffect, useState, RefObject, ReactNode } 
 import { PointData, RGBColor } from 'types';
 import { PointsMaterial } from 'three';
 import { useFrame } from '@react-three/fiber';
+import { useTexture } from '@react-three/drei';
 import { lerp } from 'three/src/math/MathUtils';
 import { EffectComposer, SelectiveBloom } from '@react-three/postprocessing';
 
@@ -27,9 +28,8 @@ export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights})
   const materialRef = useRef({} as PointsMaterial);
   const dataPointColor: string = useContext(OptionsContext).dataPointColor;
   const [points, setPoints] = useState(null as any);
+  const circleTexture = useTexture('/public/plugins/grafana-labs-grafana-3-d-scatter-panel/img/circle.png');
   let showPoints = true;
-
-  console.log(lights);
 
   useEffect(() => {
     if (colorAttrRef.current) {
@@ -78,7 +78,7 @@ export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights})
     )
   }
 
-  console.log(bloom);
+  // console.log(circleTexture);
 
   return (
     <>
@@ -105,8 +105,9 @@ export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights})
               opacity={0}
               transparent
               vertexColors
-              size={0.9}
+              size={0.8}
               sizeAttenuation={true}
+              map={circleTexture}
             />
           </points>
       )}
