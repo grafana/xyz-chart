@@ -6,6 +6,7 @@ import { useEffect, useContext } from 'react';
 import { Vector3 } from '@react-three/fiber';
 import { OrbitControls, MapControls } from 'three-stdlib';
 import { CameraOptions } from 'types';
+import { HUD } from 'components/HUD';
 
 interface Props {
   cameraOpts: CameraOptions;
@@ -85,8 +86,12 @@ export const Camera: React.FC<Props> = ({cameraOpts}) => {
 
   return (
     <>
-      <PerspectiveCamera fov={ 75 } makeDefault={ !isOrtho } />
-      <OrthographicCamera zoom={ 3.5 } makeDefault={ isOrtho } />
+      <PerspectiveCamera fov={ 75 } makeDefault={ !isOrtho }>
+        <HUD />
+      </PerspectiveCamera>
+      <OrthographicCamera zoom={ 3.5 } makeDefault={ isOrtho }>
+        {/* <HUD /> */}
+      </OrthographicCamera>
     </>
   );
 };
