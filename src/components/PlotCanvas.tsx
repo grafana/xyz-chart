@@ -7,6 +7,7 @@ import { DataFrame } from '@grafana/data';
 import { WHITE } from 'consts';
 import { ScatterPlotOptions } from 'types';
 import { OptionsProvider } from 'optionsContext';
+import { SkyBox } from './SkyBox';
 
 interface Props {
   frames: DataFrame[];
@@ -23,12 +24,13 @@ export const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
   return (
     <>
       <CameraControls cameraOpts={cameraOpts} updateCameraOpts={updateCameraOpts} />
-      <Canvas>
+      <Canvas linear flat>
         {/* 
           Context does not work outside of Canvas. Seems Canvas is outside parent component in DOM 
           https://github.com/facebook/react/issues/17126
         */}
         <OptionsProvider value={options}>
+          <SkyBox />
           <Camera cameraOpts={cameraOpts} />
           <ambientLight ref={ambLightRef} intensity={0.3} color={WHITE} />
           <pointLight ref={pntLightRef} intensity={1.0} position={[10, 10, 10]} />

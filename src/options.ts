@@ -1,6 +1,15 @@
-import { PanelOptionsEditorBuilder } from "@grafana/data";
-import { LABEL_INTERVAL_DEFAULT, OPTION_COLORS, SCENE_MAX, SCENE_MIN, SCENE_SCALE_DEFAULT, WHITE } from "consts";
-import { ScatterPlotOptions } from "types";
+import { PanelOptionsEditorBuilder } from '@grafana/data';
+import {
+  DEFAULT_SKYBOX,
+  LABEL_INTERVAL_DEFAULT,
+  OPTION_COLORS,
+  SCENE_MAX,
+  SCENE_MIN,
+  SCENE_SCALE_DEFAULT,
+  SKYBOXES,
+  WHITE,
+} from 'consts';
+import { ScatterPlotOptions } from 'types';
 
 export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOptions>) => {
   return builder
@@ -42,7 +51,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
         options: OPTION_COLORS,
       },
       defaultValue: WHITE,
-      showIf: config => config.showColorSettings,
+      showIf: (config) => config.showColorSettings,
     })
     .addSelect({
       category: gridCategory,
@@ -52,7 +61,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
         options: OPTION_COLORS,
       },
       defaultValue: WHITE,
-      showIf: config => config.showColorSettings,
+      showIf: (config) => config.showColorSettings,
     })
     .addSelect({
       category: gridCategory,
@@ -62,7 +71,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
         options: OPTION_COLORS,
       },
       defaultValue: WHITE,
-      showIf: config => config.showColorSettings,
+      showIf: (config) => config.showColorSettings,
     })
     .addTextInput({
       category: labelCategory,
@@ -97,6 +106,22 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
       // },
       defaultValue: '#ff0000',
     })
+    .addBooleanSwitch({
+      category: categoryStyles,
+      path: 'hasSkybox',
+      name: 'Use Skybox',
+      defaultValue: false,
+    })
+    .addSelect({
+      category: categoryStyles,
+      path: 'skybox',
+      name: 'Skybox',
+      settings: {
+        options: SKYBOXES,
+      },
+      defaultValue: DEFAULT_SKYBOX,
+      showIf: (config) => config.hasSkybox,
+    })
     .addNumberInput({
       category: cameraCategory,
       path: 'cameraFov',
@@ -120,9 +145,10 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
       path: 'cameraZ',
       name: 'Camera Z Position',
       defaultValue: 0,
-    })
-}
+    });
+};
 
+const categoryStyles = ['Scatter panel styles'];
 const gridCategory = ['Grid Options'];
 const labelCategory = ['Label Options'];
 const particleCategory = ['Particle Options'];
