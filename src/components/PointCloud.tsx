@@ -30,7 +30,7 @@ interface Props {
   onPointerOut?: Function;
 }
 
-export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights }) => {
+export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights, onPointerOut, onPointerOver }) => {
   const colorAttrRef: any = useRef(null);
   const pointsRef = useRef(null);
   const materialRef = useRef({} as PointsMaterial);
@@ -92,6 +92,10 @@ export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights }
     colorAttrRef.current.array[e.index * 3 + 1] = 1
     colorAttrRef.current.array[e.index * 3 + 2] = 1
     colorAttrRef.current.needsUpdate = true;
+
+    if (onPointerOver) {
+      onPointerOver(e);
+    }
   }, []);
 
   const unhover = useCallback(e => {
@@ -102,6 +106,10 @@ export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights }
     colorAttrRef.current.array[e.index * 3 + 1] = color.g
     colorAttrRef.current.array[e.index * 3 + 2] = color.b
     colorAttrRef.current.needsUpdate = true;
+
+    if (onPointerOut) {
+      onPointerOut(e);
+    }
   }, [])
 
   return (

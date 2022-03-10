@@ -23,6 +23,7 @@ export interface ScatterPlotOptions {
   labelInterval: number;
   labelDateFormat: string;
   themeColor: string;
+  hudBgColor: string;
   hasSkybox: boolean;
   skybox: string;
   enableOrbitControls: boolean;

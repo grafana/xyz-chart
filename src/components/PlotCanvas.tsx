@@ -16,10 +16,20 @@ interface Props {
 
 export const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
   const [cameraOpts, updateCameraOpts] = useState({type: "perspective" as const});
+  const [activeIdx, updateActiveIdx] = useState(null);
+
   options.cameraOpts = cameraOpts;
   let ambLightRef: RefObject<ReactNode> = createRef();
   let pntLightRef: RefObject<ReactNode> = createRef();
     
+
+  const onPointerOver = (e: any) => {
+    updateActiveIdx(e.index);
+  }
+
+  const onPointerOut = (e: any) => {
+    updateActiveIdx(null);
+  }
 
   return (
     <>
@@ -31,10 +41,14 @@ export const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
         */}
         <OptionsProvider value={options}>
           <SkyBox />
-          <Camera cameraOpts={cameraOpts} />
+          <Camera frames={ frames } activeIdx={ activeIdx } cameraOpts={ cameraOpts } />
           <ambientLight ref={ambLightRef} intensity={0.3} color={WHITE} />
           <pointLight ref={pntLightRef} intensity={1.0} position={[10, 10, 10]} />
-          <PlotScene frames={frames} lights={[ambLightRef, pntLightRef]} />
+          <PlotScene 
+            onPointerOver={ onPointerOver }
+            onPointerOut={ onPointerOut }
+            frames={ frames } 
+            lights={ [ambLightRef, pntLightRef] } />
         </OptionsProvider>  
       </Canvas>
     </>
