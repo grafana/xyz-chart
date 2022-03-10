@@ -26,6 +26,7 @@ export const PlotScene: React.FC<Props> = ({ frames, lights }) => {
   );
 
   useEffect(() => {
+    setOldPointData(null);
     setPointData(prepData(frames, size, dataPointColor));
     setIntervalLabels(getIntervalLabels(frames, size, gridInterval, dateFormat));
   }, [size, gridInterval]);
@@ -37,6 +38,7 @@ export const PlotScene: React.FC<Props> = ({ frames, lights }) => {
   useEffect(() => {
     setOldPointData(pointData);
     setPointData(prepData(frames, size, dataPointColor));
+    setIntervalLabels(getIntervalLabels(frames, size, gridInterval, dateFormat));
   }, [frames]);
 
   return (

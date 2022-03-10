@@ -151,8 +151,8 @@ export function getIntervalLabels(frames: DataFrame[], sceneScale: number, label
       }
     }
 
-    yLabelValues.sort((a,b) => a - b);
-    zLabelValues.sort((a,b) => a - b);
+    yLabelValues.sort((a,b) => b - a);
+    zLabelValues.sort((a,b) => b - a);
 
     for (let i = 0; i < yLabelValues.length; i++) {
       yLabels.push(yLabelValues[i] ? yLabelValues[i].toString() : "No value");
