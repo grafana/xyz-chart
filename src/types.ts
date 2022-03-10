@@ -23,6 +23,8 @@ export interface ScatterPlotOptions {
   labelInterval: number;
   labelDateFormat: string;
   themeColor: string;
+  hasSkybox: boolean;
+  skybox: string;
 }
 
 export interface LabelProps {

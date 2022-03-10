@@ -13,9 +13,17 @@ export const LABEL_DISTANCE_FROM_GRID = 2;
 export const BLACK = '#000000';
 export const WHITE = '#ffffff';
 export const OPTION_COLORS = [
-  {label: 'Red', value: '#ff0000'},
-  {label: 'Green', value: '#00ff00'},
-  {label: 'Blue', value: '#0000ff'},
-  {label: 'Black', value: '#000000'},
-  {label: 'White', value: '#ffffff'},
-]
+  { label: 'Red', value: '#ff0000' },
+  { label: 'Green', value: '#00ff00' },
+  { label: 'Blue', value: '#0000ff' },
+  { label: 'Black', value: '#000000' },
+  { label: 'White', value: '#ffffff' },
+];
+
+//SkyBox
+export const SKYBOXES = [
+  { label: 'Grafana', value: 'grafana' },
+  { label: 'Hackathon', value: 'hackathon' },
+  { label: 'Universe', value: 'universe' },
+];
+export const DEFAULT_SKYBOX = 'grafana';

@@ -1,6 +1,15 @@
-import { PanelOptionsEditorBuilder } from "@grafana/data";
-import { LABEL_INTERVAL_DEFAULT, OPTION_COLORS, SCENE_MAX, SCENE_MIN, SCENE_SCALE_DEFAULT, WHITE } from "consts";
-import { ScatterPlotOptions } from "types";
+import { PanelOptionsEditorBuilder } from '@grafana/data';
+import {
+  DEFAULT_SKYBOX,
+  LABEL_INTERVAL_DEFAULT,
+  OPTION_COLORS,
+  SCENE_MAX,
+  SCENE_MIN,
+  SCENE_SCALE_DEFAULT,
+  SKYBOXES,
+  WHITE,
+} from 'consts';
+import { ScatterPlotOptions } from 'types';
 
 export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOptions>) => {
   return builder
@@ -51,7 +60,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
         options: OPTION_COLORS,
       },
       defaultValue: WHITE,
-      showIf: config => config.showColorSettings,
+      showIf: (config) => config.showColorSettings,
     })
     .addSelect({
       category: categoryStyles,
@@ -61,7 +70,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
         options: OPTION_COLORS,
       },
       defaultValue: WHITE,
-      showIf: config => config.showColorSettings,
+      showIf: (config) => config.showColorSettings,
     })
     .addSelect({
       category: categoryStyles,
@@ -71,7 +80,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
         options: OPTION_COLORS,
       },
       defaultValue: WHITE,
-      showIf: config => config.showColorSettings,
+      showIf: (config) => config.showColorSettings,
     })
     .addSelect({
       category: categoryStyles,
@@ -81,7 +90,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
         options: OPTION_COLORS,
       },
       defaultValue: WHITE,
-      showIf: config => config.showColorSettings,
+      showIf: (config) => config.showColorSettings,
     })
     .addSelect({
       category: categoryStyles,
@@ -92,6 +101,22 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
       },
       defaultValue: '#ff0000',
     })
-}
+    .addBooleanSwitch({
+      category: categoryStyles,
+      path: 'hasSkybox',
+      name: 'Use Skybox',
+      defaultValue: false,
+    })
+    .addSelect({
+      category: categoryStyles,
+      path: 'skybox',
+      name: 'Skybox',
+      settings: {
+        options: SKYBOXES,
+      },
+      defaultValue: DEFAULT_SKYBOX,
+      showIf: (config) => config.hasSkybox,
+    });
+};
 
 const categoryStyles = ['Scatter panel styles'];
