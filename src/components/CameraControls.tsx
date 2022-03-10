@@ -13,6 +13,8 @@ export const CameraControls: React.FC<Props> = ({cameraOpts, updateCameraOpts}) 
   const style: any = {
     position: 'absolute',
     zIndex: 1,
+    top: '10px',
+    left: '10px'
   };
       
   return (
