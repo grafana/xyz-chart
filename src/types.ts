@@ -39,6 +39,7 @@ export interface LabelProps {
   text: string;
   rotation?: Euler;
   direction: Direction;
+  labelSize?: number;
 }
 
 export interface AxisProps {
