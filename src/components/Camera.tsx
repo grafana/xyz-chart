@@ -55,6 +55,8 @@ export const Camera: React.FC<Props> = ({cameraOpts}) => {
 
     if (isOrtho) {
       controls = new MapControls(camera, gl.domElement);
+      controls.enableRotate = false;
+      controls.screenSpacePanning = true;
       
       // @ts-ignore
       camera.position.set(...cameraPos);
