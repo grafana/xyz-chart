@@ -16,7 +16,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
     .addSliderInput({
       path: 'sceneScale',
       name: 'Grid Scale',
-      category: categoryStyles,
+      category: gridCategory,
       defaultValue: SCENE_SCALE_DEFAULT,
       settings: {
         min: SCENE_MIN,
@@ -28,7 +28,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
     .addSliderInput({
       path: 'labelInterval',
       name: 'Label Interval',
-      category: categoryStyles,
+      category: gridCategory,
       defaultValue: LABEL_INTERVAL_DEFAULT,
       settings: {
         min: 1,
@@ -37,23 +37,14 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
         ariaLabelForHandle: 'Label Interval',
       },
     })
-    .addTextInput({
-      category: categoryStyles,
-      path: 'labelDateFormat',
-      name: 'Label Date Format',
-      settings: {
-        placeholder: 'Enter date format',
-      },
-      defaultValue: 'YYYY-MM-DD',
-    })
     .addBooleanSwitch({
-      category: categoryStyles,
+      category: gridCategory,
       path: 'showColorSettings',
       name: 'Show Color Settings',
       defaultValue: false,
     })
     .addSelect({
-      category: categoryStyles,
+      category: gridCategory,
       path: 'xAxisColor',
       name: 'X Axis Color',
       settings: {
@@ -63,7 +54,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
       showIf: (config) => config.showColorSettings,
     })
     .addSelect({
-      category: categoryStyles,
+      category: gridCategory,
       path: 'yAxisColor',
       name: 'Y Axis Color',
       settings: {
@@ -73,7 +64,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
       showIf: (config) => config.showColorSettings,
     })
     .addSelect({
-      category: categoryStyles,
+      category: gridCategory,
       path: 'zAxisColor',
       name: 'Z Axis Color',
       settings: {
@@ -82,23 +73,37 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
       defaultValue: WHITE,
       showIf: (config) => config.showColorSettings,
     })
+    .addTextInput({
+      category: labelCategory,
+      path: 'labelDateFormat',
+      name: 'Label Date Format',
+      settings: {
+        placeholder: 'Enter date format',
+      },
+      defaultValue: 'YYYY-MM-DD',
+    })
     .addSelect({
-      category: categoryStyles,
+      category: labelCategory,
       path: 'labelColor',
       name: 'Label Color',
       settings: {
         options: OPTION_COLORS,
       },
       defaultValue: WHITE,
-      showIf: (config) => config.showColorSettings,
     })
-    .addSelect({
-      category: categoryStyles,
+    .addNumberInput({
+      category: particleCategory,
+      path: 'particleSize',
+      name: 'Particle Size',
+      defaultValue: 2,
+    })
+    .addColorPicker({
+      category: particleCategory,
       path: 'dataPointColor',
-      name: 'Datapoint Color',
-      settings: {
-        options: OPTION_COLORS,
-      },
+      name: 'Particle Color',
+      // settings: {
+      //   options: OPTION_COLORS,
+      // },
       defaultValue: '#ff0000',
     })
     .addBooleanSwitch({
@@ -116,7 +121,35 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
       },
       defaultValue: DEFAULT_SKYBOX,
       showIf: (config) => config.hasSkybox,
+    })
+    .addNumberInput({
+      category: cameraCategory,
+      path: 'cameraFov',
+      name: 'Camera Field of View',
+      defaultValue: 75
+    })
+    .addNumberInput({
+      category: cameraCategory,
+      path: 'cameraX',
+      name: 'Camera X Position',
+      defaultValue: 0,
+    })
+    .addNumberInput({
+      category: cameraCategory,
+      path: 'cameraY',
+      name: 'Camera Y Position',
+      defaultValue: 0,
+    })
+    .addNumberInput({
+      category: cameraCategory,
+      path: 'cameraZ',
+      name: 'Camera Z Position',
+      defaultValue: 0,
     });
 };
 
 const categoryStyles = ['Scatter panel styles'];
+const gridCategory = ['Grid Options'];
+const labelCategory = ['Label Options'];
+const particleCategory = ['Particle Options'];
+const cameraCategory = ['Camera Options'];
