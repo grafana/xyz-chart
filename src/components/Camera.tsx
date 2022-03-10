@@ -6,7 +6,6 @@ import { useEffect, useContext } from 'react';
 import { Vector3 } from '@react-three/fiber';
 import { OrbitControls, MapControls } from 'three-stdlib';
 import { CameraOptions } from 'types';
-//import { ScatterPlotOptions } from 'types';
 
 interface Props {
   cameraOpts: CameraOptions;
@@ -23,11 +22,11 @@ export const Camera: React.FC<Props> = ({cameraOpts}) => {
   if (isOrtho) {
     switch (cameraOpts.viewPlane) {
       case "x":
-        cameraPos = [midpoint, midpoint, sceneScale];
+        cameraPos = [midpoint, midpoint, sceneScale * 3];
         lookAt = [midpoint, midpoint, 0];
         break;
       case "y":
-        cameraPos = [sceneScale, midpoint, midpoint];
+        cameraPos = [sceneScale * 3, midpoint, midpoint];
         lookAt = [0, midpoint, midpoint];
         break;
       case "z":
@@ -75,7 +74,6 @@ export const Camera: React.FC<Props> = ({cameraOpts}) => {
       controls.update();
     }
     
-
     return () => {
       if (controls !== null) {
         controls.dispose();
@@ -86,9 +84,7 @@ export const Camera: React.FC<Props> = ({cameraOpts}) => {
   return (
     <>
       <PerspectiveCamera fov={ 75 } makeDefault={ !isOrtho } />
-      <OrthographicCamera zoom={ 20 } makeDefault={ isOrtho } />
+      <OrthographicCamera zoom={ 3.5 } makeDefault={ isOrtho } />
     </>
   );
 };
-
-//function getCameraPositionAndTarget(isOrtho)

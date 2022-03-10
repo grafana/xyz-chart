@@ -29,6 +29,7 @@ export interface ScatterPlotOptions {
   cameraX: number;
   cameraY: number;
   cameraZ: number;
+  cameraOpts: CameraOptions;
 }
 
 export interface LabelProps {

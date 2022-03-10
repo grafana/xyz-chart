@@ -15,7 +15,8 @@ interface Props {
 
 export const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
   const [cameraOpts, updateCameraOpts] = useState({type: "perspective" as const});
-
+  options.cameraOpts = cameraOpts;
+  
   return (
     <>
       <CameraControls cameraOpts={cameraOpts} updateCameraOpts={updateCameraOpts} />
