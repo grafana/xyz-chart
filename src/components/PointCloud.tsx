@@ -16,13 +16,12 @@ import { EffectComposer, SelectiveBloom } from '@react-three/postprocessing';
 
 interface Props {
   currentPoints: PointData;
-  oldPoints: PointData;
   lights: RefObject<ReactNode>[];
   onPointerOver?: Function;
   onPointerOut?: Function;
 }
 
-export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights}) => {
+export const PointCloud: React.FC<Props> = ({ currentPoints, lights}) => {
   const colorAttrRef: any = useRef(null);
   const pointsRef = useRef(null);
   const materialRef = useRef({} as PointsMaterial);
@@ -41,16 +40,9 @@ export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights})
     }
   }, [dataPointColor]);
 
-  /*
-    I assume there's a better way to do this (one that doesn't double the datapoints set)
-  but I couldn't find it and went with this solution to fade out old data and fade in the new
-  */
   useEffect(() => {
-    if (oldPoints) {
-      setPoints(oldPoints);
-    }
-
     showPoints = false;
+    console.log(currentPoints);
 
     setTimeout(() => {
       setPoints(currentPoints);
@@ -78,8 +70,6 @@ export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights})
     )
   }
 
-  // console.log(circleTexture);
-
   return (
     <>
       {points && (
@@ -105,7 +95,7 @@ export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights})
               opacity={0}
               transparent
               vertexColors
-              size={0.8}
+              size={1.5}
               sizeAttenuation={true}
               map={circleTexture}
             />

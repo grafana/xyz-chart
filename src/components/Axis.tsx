@@ -40,12 +40,18 @@ export const Axis = (props: AxisProps) => {
         startVec = [props.size, 0, 0];
         endVec = [props.size, 0, props.size];
 
-        for (let i = props.gridInterval; i < props.size; i = i + props.gridInterval) {
+        for (let i = 0; i < props.size; i = i + props.gridInterval) {
           intervalGeometries.push([
             [props.size, 0, i],
             [props.size + (INTERVAL_INDEX_LENGTH * options.sceneScale) / 10, 0, i],
           ]);
-          intervalLabelPos.push(new Vector3(props.size + LABEL_DISTANCE_FROM_GRID, 0, i));
+
+          if (i == 0) {
+            intervalLabelPos.push(new Vector3(props.size + LABEL_DISTANCE_FROM_GRID, -1, i + 3));
+          } else {
+            intervalLabelPos.push(new Vector3(props.size + LABEL_DISTANCE_FROM_GRID, 0, i));
+          }
+
           if (options.cameraOpts.type == "orthographic" && options.cameraOpts.viewPlane == 'y') {
             labelRotation.set(Math.PI, Math.PI / 2, Math.PI / 1.5);
           } else {
