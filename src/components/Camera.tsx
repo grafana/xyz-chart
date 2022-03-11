@@ -6,12 +6,16 @@ import { useEffect, useContext } from 'react';
 import { Vector3 } from '@react-three/fiber';
 import { OrbitControls, MapControls } from 'three-stdlib';
 import { CameraOptions } from 'types';
+import { HUD } from 'components/HUD';
+import { DataFrame } from '@grafana/data';
 
 interface Props {
+  frames: DataFrame[];
   cameraOpts: CameraOptions;
+  activeIdx: number | null;
 }
 
-export const Camera: React.FC<Props> = ({cameraOpts}) => {
+export const Camera: React.FC<Props> = ({cameraOpts, frames, activeIdx }) => {
   const { camera, gl } = useThree();
   const { sceneScale } = useContext(OptionsContext);
   const midpoint = sceneScale - sceneScale / 2;
@@ -85,8 +89,12 @@ export const Camera: React.FC<Props> = ({cameraOpts}) => {
 
   return (
     <>
-      <PerspectiveCamera fov={ 75 } makeDefault={ !isOrtho } />
-      <OrthographicCamera zoom={ 3.5 } makeDefault={ isOrtho } />
+      <PerspectiveCamera fov={ 75 } makeDefault={ !isOrtho }>
+        {!isOrtho && activeIdx && <HUD position={[-2.25, -2.5, -5]} size={[4, 2]} frames={ frames } activeIdx={ activeIdx }/>}
+      </PerspectiveCamera>
+      <OrthographicCamera zoom={ 3.5 } makeDefault={ isOrtho }>
+        {/* {isOrtho && activeIdx && <HUD position={[0,0, -100]} size={[200, 100]} frames={ frames } activeIdx={ activeIdx } />} */}
+      </OrthographicCamera>
     </>
   );
 };

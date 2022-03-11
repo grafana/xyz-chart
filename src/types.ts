@@ -24,6 +24,7 @@ export interface ScatterPlotOptions {
   labelInterval: number;
   labelDateFormat: string;
   themeColor: string;
+  hudBgColor: string;
   hasSkybox: boolean;
   skybox: string;
   enableOrbitControls: boolean;
@@ -40,6 +41,7 @@ export interface LabelProps {
   text: string;
   rotation?: Euler;
   direction: Direction;
+  labelSize?: number;
 }
 
 export interface AxisProps {

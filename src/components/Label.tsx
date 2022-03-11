@@ -11,7 +11,8 @@ export const Label = (props: LabelProps) => {
   const options: ScatterPlotOptions = useContext(OptionsContext);
 
   const font = new FontLoader().parse(Roboto);
-  const labelSize = (options.sceneScale * 0.3) / 10;
+  const labelSize = props.labelSize ? props.labelSize : (options.sceneScale * 0.3) / 10;
+  
 
   const calculateLabelOffset = () => {
     textGeometry.computeBoundingBox();

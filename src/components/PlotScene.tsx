@@ -9,9 +9,11 @@ import OptionsContext from 'optionsContext';
 interface Props {
   frames: DataFrame[];
   lights: RefObject<ReactNode>[];
+  onPointerOver?: Function;
+  onPointerOut?: Function;
 }
 
-export const PlotScene: React.FC<Props> = ({ frames, lights }) => {
+export const PlotScene: React.FC<Props> = ({ frames, lights, onPointerOut, onPointerOver }) => {
   const options: ScatterPlotOptions = useContext(OptionsContext);
 
   const size = options.sceneScale;
@@ -37,7 +39,11 @@ export const PlotScene: React.FC<Props> = ({ frames, lights }) => {
   return (
     <>
       <Suspense fallback={null}>
-        <PointCloud currentPoints={pointData} lights={lights} />
+        <PointCloud 
+          onPointerOver={ onPointerOver }
+          onPointerOut={ onPointerOut }
+          currentPoints={ pointData } 
+          lights={ lights } />
       </Suspense>
       <group>
         <Grid

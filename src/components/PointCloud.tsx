@@ -6,7 +6,15 @@
 
 import { hexToRgb } from '../utils';
 import OptionsContext from 'optionsContext';
-import React, { useRef, useContext, useEffect, useState, RefObject, ReactNode } from 'react';
+import React, { 
+  useRef, 
+  useContext, 
+  useEffect, 
+  useCallback,
+  useState, 
+  RefObject, 
+  ReactNode 
+} from 'react';
 import { PointData, RGBColor } from 'types';
 import { PointsMaterial } from 'three';
 import { useFrame } from '@react-three/fiber';
@@ -21,7 +29,7 @@ interface Props {
   onPointerOut?: Function;
 }
 
-export const PointCloud: React.FC<Props> = ({ currentPoints, lights}) => {
+export const PointCloud: React.FC<Props> = ({ currentPoints, lights, onPointerOut, onPointerOver }) => {
   const colorAttrRef: any = useRef(null);
   const pointsRef = useRef(null);
   const posRef: any = useRef(null);
@@ -83,10 +91,36 @@ export const PointCloud: React.FC<Props> = ({ currentPoints, lights}) => {
     )
   }
 
+  const hover = useCallback(e => {
+    e.stopPropagation();
+    colorAttrRef.current.array[e.index * 3] = 1
+    colorAttrRef.current.array[e.index * 3 + 1] = 1
+    colorAttrRef.current.array[e.index * 3 + 2] = 1
+    colorAttrRef.current.needsUpdate = true;
+
+    if (onPointerOver) {
+      onPointerOver(e);
+    }
+  }, []);
+
+  const unhover = useCallback(e => {
+    e.stopPropagation();
+
+    const color: RGBColor = hexToRgb(options.dataPointColor);
+    colorAttrRef.current.array[e.index * 3] = color.r
+    colorAttrRef.current.array[e.index * 3 + 1] = color.g
+    colorAttrRef.current.array[e.index * 3 + 2] = color.b
+    colorAttrRef.current.needsUpdate = true;
+
+    if (onPointerOut) {
+      onPointerOut(e);
+    }
+  }, [])
+
   return (
     <>
       {points && (
-          <points ref={pointsRef}>
+          <points ref={pointsRef} onPointerOver={ hover }  onPointerOut={ unhover }>
             <bufferGeometry attach="geometry">
               <bufferAttribute
                 ref={posRef}
