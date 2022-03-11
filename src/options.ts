@@ -137,4 +137,4 @@ const categoryStyles = ['Scatter panel styles'];
 const gridCategory = ['Grid Options'];
 const labelCategory = ['Label Options'];
 const particleCategory = ['Particle Options'];
-const cameraCategory = ['Camera Options'];
+// const cameraCategory = ['Camera Options'];
