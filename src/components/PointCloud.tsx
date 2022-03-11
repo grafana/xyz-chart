@@ -24,28 +24,41 @@ interface Props {
 export const PointCloud: React.FC<Props> = ({ currentPoints, lights}) => {
   const colorAttrRef: any = useRef(null);
   const pointsRef = useRef(null);
+  const posRef: any = useRef(null);
   const materialRef = useRef({} as PointsMaterial);
-  const dataPointColor: string = useContext(OptionsContext).dataPointColor;
+  const options: any = useContext(OptionsContext);
   const [points, setPoints] = useState(null as any);
   const circleTexture = useTexture('/public/plugins/grafana-labs-grafana-3-d-scatter-panel/img/circle.png');
   let showPoints = true;
 
   useEffect(() => {
     if (colorAttrRef.current) {
-      const color: RGBColor = hexToRgb(dataPointColor);
+      const color: RGBColor = hexToRgb(options.dataPointColor);
       for (let i = 0; i < colorAttrRef.current.array.length; i++) {
         colorAttrRef.current.setXYZ(i, color.r, color.g, color.b);
         colorAttrRef.current.needsUpdate = true;
       }
     }
-  }, [dataPointColor]);
+  }, [options.dataPointColor]);
+
+  useEffect(() => {
+      if (materialRef.current) {
+        materialRef.current.size = options.particleSize
+        materialRef.current.needsUpdate = true;
+      }
+  }, [options.particleSize])
 
   useEffect(() => {
     showPoints = false;
-    console.log(currentPoints);
 
     setTimeout(() => {
       setPoints(currentPoints);
+      if (posRef.current) {
+        for (let i = 0; i < currentPoints.points.length; i+=3) {
+          posRef.current.setXYZ(i, currentPoints.points[i], currentPoints.points[i+1], currentPoints.points[i+2]);
+          posRef.current.needsUpdate = true;
+        }
+      }
       showPoints = true;
     }, 500);
   }, [currentPoints]);
@@ -76,6 +89,7 @@ export const PointCloud: React.FC<Props> = ({ currentPoints, lights}) => {
           <points ref={pointsRef}>
             <bufferGeometry attach="geometry">
               <bufferAttribute
+                ref={posRef}
                 attachObject={['attributes', 'position']}
                 count={points.points.length / 3}
                 array={points.points}
@@ -95,7 +109,7 @@ export const PointCloud: React.FC<Props> = ({ currentPoints, lights}) => {
               opacity={0}
               transparent
               vertexColors
-              size={1.5}
+              size={options.particleSize}
               sizeAttenuation={true}
               map={circleTexture}
             />

@@ -4,6 +4,7 @@ import OptionsContext from 'optionsContext';
 import React, { useContext } from 'react';
 import { Euler, Vector3 } from 'three';
 import { Direction, AxisProps, AxisData, ScatterPlotOptions } from 'types';
+import { convertTextColorToHex } from 'utils';
 import { Label } from './Label';
 
 export const Axis = (props: AxisProps) => {
@@ -33,7 +34,7 @@ export const Axis = (props: AxisProps) => {
           }
         }
 
-        color = options.showColorSettings ? options.yAxisColor : options.themeColor ?? WHITE;
+        color = options.showColorSettings ? convertTextColorToHex(options.yAxisColor) : options.themeColor ?? WHITE;
 
         break;
       case Direction.Forward:
@@ -59,7 +60,7 @@ export const Axis = (props: AxisProps) => {
           }
         }
 
-        color = options.showColorSettings ? options.zAxisColor : options.themeColor ?? WHITE;
+        color = options.showColorSettings ? convertTextColorToHex(options.zAxisColor) : options.themeColor ?? WHITE;
 
         break;
       case Direction.Right:
@@ -81,7 +82,7 @@ export const Axis = (props: AxisProps) => {
           }
         }
 
-        color = options.showColorSettings ? options.xAxisColor : options.themeColor ?? WHITE;
+        color = options.showColorSettings ? convertTextColorToHex(options.xAxisColor) : options.themeColor ?? WHITE;
 
         break;
     }
