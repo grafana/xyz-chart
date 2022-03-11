@@ -90,10 +90,10 @@ export const Camera: React.FC<Props> = ({cameraOpts, frames, activeIdx }) => {
   return (
     <>
       <PerspectiveCamera fov={ 75 } makeDefault={ !isOrtho }>
-        {activeIdx && <HUD frames={ frames } activeIdx={ activeIdx }/>}
+        {!isOrtho && activeIdx && <HUD position={[-2.25, -2.5, -5]} size={[2, 1]} frames={ frames } activeIdx={ activeIdx }/>}
       </PerspectiveCamera>
       <OrthographicCamera zoom={ 3.5 } makeDefault={ isOrtho }>
-        {/* <HUD /> */}
+        {/* {isOrtho && activeIdx && <HUD position={[0,0, -100]} size={[200, 100]} frames={ frames } activeIdx={ activeIdx } />} */}
       </OrthographicCamera>
     </>
   );

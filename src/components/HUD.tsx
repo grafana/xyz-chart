@@ -16,9 +16,11 @@ import { DataFrame } from '@grafana/data';
 interface HUDProps {
     frames: DataFrame[];
     activeIdx: number | null;
+    position: [number, number, number];
+    size: [number, number];
 };
 
-export const HUD: React.FC<HUDProps> = ({ frames, activeIdx }) => {
+export const HUD: React.FC<HUDProps> = ({ frames, activeIdx, position, size }) => {
   
   const options: ScatterPlotOptions = useContext(OptionsContext);
 
@@ -35,12 +37,12 @@ export const HUD: React.FC<HUDProps> = ({ frames, activeIdx }) => {
 
   return (
     
-    <mesh position={[-2.25, -2.5, -5]}>
+    <mesh position={ position }>
         {/* <line_ geometry={lineGeom}> 
             <lineBasicMaterial attach="material" />
         </line_> */}
 
-        <planeGeometry args={[2, 1]} />
+        <planeGeometry args={size} />
         <meshBasicMaterial
                 color={options.hudBgColor} 
                 side={ DoubleSide } 
