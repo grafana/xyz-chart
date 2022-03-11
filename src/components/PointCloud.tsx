@@ -11,31 +11,29 @@ import React, {
   useContext, 
   useEffect, 
   useCallback,
-  useState, 
   RefObject, 
   ReactNode 
 } from 'react';
 import { PointData, RGBColor } from 'types';
-import { PointsMaterial } from 'three';
+import { BufferAttribute, PointsMaterial } from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import { lerp } from 'three/src/math/MathUtils';
 import { EffectComposer, SelectiveBloom } from '@react-three/postprocessing';
 
 interface Props {
-  currentPoints: PointData;
+  points: PointData;
   lights: RefObject<ReactNode>[];
   onPointerOver?: Function;
   onPointerOut?: Function;
 }
 
-export const PointCloud: React.FC<Props> = ({ currentPoints, lights, onPointerOut, onPointerOver }) => {
+export const PointCloud: React.FC<Props> = ({ points, lights, onPointerOut, onPointerOver }) => {
   const colorAttrRef: any = useRef(null);
-  const pointsRef = useRef(null);
+  const pointsRef: any = useRef(null);
   const posRef: any = useRef(null);
   const materialRef = useRef({} as PointsMaterial);
   const options: any = useContext(OptionsContext);
-  const [points, setPoints] = useState(null as any);
   const circleTexture = useTexture('/public/plugins/grafana-labs-grafana-3-d-scatter-panel/img/circle.png');
   let showPoints = true;
 
@@ -60,16 +58,17 @@ export const PointCloud: React.FC<Props> = ({ currentPoints, lights, onPointerOu
     showPoints = false;
 
     setTimeout(() => {
-      setPoints(currentPoints);
-      if (posRef.current) {
-        for (let i = 0; i < currentPoints.points.length; i+=3) {
-          posRef.current.setXYZ(i, currentPoints.points[i], currentPoints.points[i+1], currentPoints.points[i+2]);
-          posRef.current.needsUpdate = true;
-        }
+      if (pointsRef.current) {
+        const posAttr = new BufferAttribute(points.points, 3);
+        const colorAttr = new BufferAttribute(points.colors, 3);
+        pointsRef.current.geometry.setAttribute('position', posAttr);
+        pointsRef.current.geometry.setAttribute('color', colorAttr);
+        pointsRef.current.geometry.attributes.position.needsUpdate = true;
       }
+
       showPoints = true;
     }, 500);
-  }, [currentPoints]);
+  }, [points]);
 
   useFrame(
     (state, delta) => (materialRef.current.opacity = lerp(materialRef.current.opacity, showPoints ? 1 : 0, 0.1))
@@ -119,36 +118,34 @@ export const PointCloud: React.FC<Props> = ({ currentPoints, lights, onPointerOu
 
   return (
     <>
-      {points && (
-          <points ref={pointsRef} onPointerOver={ hover }  onPointerOut={ unhover }>
-            <bufferGeometry attach="geometry">
-              <bufferAttribute
-                ref={posRef}
-                attachObject={['attributes', 'position']}
-                count={points.points.length / 3}
-                array={points.points}
-                itemSize={3}
-              />
-              <bufferAttribute
-                ref={colorAttrRef}
-                attachObject={['attributes', 'color']}
-                count={points.colors.length / 3}
-                array={points.colors}
-                itemSize={3}
-              />
-            </bufferGeometry>
-            <pointsMaterial
-              ref={materialRef}
-              attach="material"
-              opacity={0}
-              transparent
-              vertexColors
-              size={options.particleSize}
-              sizeAttenuation={true}
-              map={circleTexture}
+      <points ref={pointsRef} onPointerOver={ hover }  onPointerOut={ unhover }>
+          <bufferGeometry attach="geometry">
+            <bufferAttribute
+              ref={posRef}
+              attachObject={['attributes', 'position']}
+              count={points.points.length / 3}
+              array={points.points}
+              itemSize={3}
             />
-          </points>
-      )}
+            <bufferAttribute
+              ref={colorAttrRef}
+              attachObject={['attributes', 'color']}
+              count={points.colors.length / 3}
+              array={points.colors}
+              itemSize={3}
+            />
+          </bufferGeometry>
+          <pointsMaterial
+            ref={materialRef}
+            attach="material"
+            opacity={0}
+            transparent
+            vertexColors
+            size={options.particleSize}
+            sizeAttenuation={true}
+            map={circleTexture}
+          />
+        </points>
       {bloom}
     </>
   );

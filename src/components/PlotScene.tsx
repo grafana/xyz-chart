@@ -27,8 +27,10 @@ export const PlotScene: React.FC<Props> = ({ frames, lights, onPointerOut, onPoi
   );
 
   useEffect(() => {
-    setIntervalLabels(getIntervalLabels(frames, size, gridInterval, dateFormat));
-    const dataScene = intervalLabels.xLabels.length * gridInterval - gridInterval;
+    const newLabels = getIntervalLabels(frames, size, gridInterval, dateFormat);
+    const dataScene = newLabels.xLabels.length * gridInterval - gridInterval;
+
+    setIntervalLabels(newLabels);
     setPointData(prepData(frames, dataScene, dataPointColor));
   }, [size, gridInterval, frames]);
 
@@ -39,11 +41,7 @@ export const PlotScene: React.FC<Props> = ({ frames, lights, onPointerOut, onPoi
   return (
     <>
       <Suspense fallback={null}>
-        <PointCloud 
-          onPointerOver={ onPointerOver }
-          onPointerOut={ onPointerOut }
-          currentPoints={ pointData } 
-          lights={ lights } />
+        <PointCloud onPointerOver={onPointerOver} onPointerOut={onPointerOut} points={pointData} lights={lights} />
       </Suspense>
       <group>
         <Grid
