@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
-  "name": "grafana-3d-scatter-panel",
+  "name": "3D Scatter Plot",
   "id": "grafana-labs-grafana-3-d-scatter-panel",
   "info": {
     "description": "",
@@ -17,11 +17,11 @@
     "links": [
       {
         "name": "Website",
-        "url": "https://github.com/grafana/grafana-starter-panel"
+        "url": "https://github.com/grafana/3d-scatter-panel"
       },
       {
         "name": "License",
-        "url": "https://github.com/grafana/grafana-starter-panel/blob/master/LICENSE"
+        "url": "https://github.com/grafana/3d-scatter-panel/blob/master/LICENSE"
       }
     ],
     "screenshots": [],

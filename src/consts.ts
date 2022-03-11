@@ -13,13 +13,6 @@ export const DEFAULT_POINT_SIZE = 1;
 //Colors
 export const BLACK = '#000000';
 export const WHITE = '#ffffff';
-export const OPTION_COLORS = [
-  { label: 'Red', value: '#ff0000' },
-  { label: 'Green', value: '#00ff00' },
-  { label: 'Blue', value: '#0000ff' },
-  { label: 'Black', value: '#000000' },
-  { label: 'White', value: '#ffffff' },
-];
 export const COLOR_PICKER_OPTIONS: any = 
   {
     ['super-light-red']: '#FFA6B0',
