@@ -1,6 +1,6 @@
 {
   "name": "grafana-labs-grafana-3-d-scatter-panel",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "scripts": {
     "build": "grafana-toolkit plugin:build",

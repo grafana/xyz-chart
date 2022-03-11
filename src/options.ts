@@ -1,8 +1,8 @@
 import { PanelOptionsEditorBuilder } from '@grafana/data';
 import {
+  DEFAULT_POINT_SIZE,
   DEFAULT_SKYBOX,
   LABEL_INTERVAL_DEFAULT,
-  OPTION_COLORS,
   SCENE_MAX,
   SCENE_MIN,
   SCENE_SCALE_DEFAULT,
@@ -43,33 +43,24 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
       name: 'Show Color Settings',
       defaultValue: false,
     })
-    .addSelect({
+    .addColorPicker({
       category: gridCategory,
       path: 'xAxisColor',
       name: 'X Axis Color',
-      settings: {
-        options: OPTION_COLORS,
-      },
       defaultValue: WHITE,
       showIf: (config) => config.showColorSettings,
     })
-    .addSelect({
+    .addColorPicker({
       category: gridCategory,
       path: 'yAxisColor',
       name: 'Y Axis Color',
-      settings: {
-        options: OPTION_COLORS,
-      },
       defaultValue: WHITE,
       showIf: (config) => config.showColorSettings,
     })
-    .addSelect({
+    .addColorPicker({
       category: gridCategory,
       path: 'zAxisColor',
       name: 'Z Axis Color',
-      settings: {
-        options: OPTION_COLORS,
-      },
       defaultValue: WHITE,
       showIf: (config) => config.showColorSettings,
     })
@@ -82,28 +73,22 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
       },
       defaultValue: 'YYYY-MM-DD',
     })
-    .addSelect({
+    .addColorPicker({
       category: labelCategory,
       path: 'labelColor',
       name: 'Label Color',
-      settings: {
-        options: OPTION_COLORS,
-      },
       defaultValue: WHITE,
     })
     .addNumberInput({
       category: particleCategory,
       path: 'particleSize',
       name: 'Particle Size',
-      defaultValue: 2,
+      defaultValue: DEFAULT_POINT_SIZE,
     })
     .addColorPicker({
       category: particleCategory,
       path: 'dataPointColor',
       name: 'Particle Color',
-      // settings: {
-      //   options: OPTION_COLORS,
-      // },
       defaultValue: '#ff0000',
     })
     .addBooleanSwitch({

@@ -24,44 +24,49 @@ import { EffectComposer, SelectiveBloom } from '@react-three/postprocessing';
 
 interface Props {
   currentPoints: PointData;
-  oldPoints: PointData;
   lights: RefObject<ReactNode>[];
   onPointerOver?: Function;
   onPointerOut?: Function;
 }
 
-export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights, onPointerOut, onPointerOver }) => {
+export const PointCloud: React.FC<Props> = ({ currentPoints, lights, onPointerOut, onPointerOver }) => {
   const colorAttrRef: any = useRef(null);
   const pointsRef = useRef(null);
+  const posRef: any = useRef(null);
   const materialRef = useRef({} as PointsMaterial);
-  const dataPointColor: string = useContext(OptionsContext).dataPointColor;
+  const options: any = useContext(OptionsContext);
   const [points, setPoints] = useState(null as any);
   const circleTexture = useTexture('/public/plugins/grafana-labs-grafana-3-d-scatter-panel/img/circle.png');
   let showPoints = true;
 
   useEffect(() => {
     if (colorAttrRef.current) {
-      const color: RGBColor = hexToRgb(dataPointColor);
+      const color: RGBColor = hexToRgb(options.dataPointColor);
       for (let i = 0; i < colorAttrRef.current.array.length; i++) {
         colorAttrRef.current.setXYZ(i, color.r, color.g, color.b);
         colorAttrRef.current.needsUpdate = true;
       }
     }
-  }, [dataPointColor]);
+  }, [options.dataPointColor]);
 
-  /*
-    I assume there's a better way to do this (one that doesn't double the datapoints set)
-  but I couldn't find it and went with this solution to fade out old data and fade in the new
-  */
   useEffect(() => {
-    if (oldPoints) {
-      setPoints(oldPoints);
-    }
+      if (materialRef.current) {
+        materialRef.current.size = options.particleSize
+        materialRef.current.needsUpdate = true;
+      }
+  }, [options.particleSize])
 
+  useEffect(() => {
     showPoints = false;
 
     setTimeout(() => {
       setPoints(currentPoints);
+      if (posRef.current) {
+        for (let i = 0; i < currentPoints.points.length; i+=3) {
+          posRef.current.setXYZ(i, currentPoints.points[i], currentPoints.points[i+1], currentPoints.points[i+2]);
+          posRef.current.needsUpdate = true;
+        }
+      }
       showPoints = true;
     }, 500);
   }, [currentPoints]);
@@ -101,7 +106,7 @@ export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights, 
   const unhover = useCallback(e => {
     e.stopPropagation();
 
-    const color: RGBColor = hexToRgb(dataPointColor);
+    const color: RGBColor = hexToRgb(options.dataPointColor);
     colorAttrRef.current.array[e.index * 3] = color.r
     colorAttrRef.current.array[e.index * 3 + 1] = color.g
     colorAttrRef.current.array[e.index * 3 + 2] = color.b
@@ -118,6 +123,7 @@ export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights, 
           <points ref={pointsRef} onPointerOver={ hover }  onPointerOut={ unhover }>
             <bufferGeometry attach="geometry">
               <bufferAttribute
+                ref={posRef}
                 attachObject={['attributes', 'position']}
                 count={points.points.length / 3}
                 array={points.points}
@@ -137,8 +143,8 @@ export const PointCloud: React.FC<Props> = ({ currentPoints, oldPoints, lights, 
               opacity={0}
               transparent
               vertexColors
-              size={6}
-              sizeAttenuation={false}
+              size={options.particleSize}
+              sizeAttenuation={true}
               map={circleTexture}
             />
           </points>

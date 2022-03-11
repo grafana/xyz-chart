@@ -22,24 +22,19 @@ export const PlotScene: React.FC<Props> = ({ frames, lights, onPointerOut, onPoi
   const dataPointColor = options.dataPointColor;
 
   const [pointData, setPointData] = useState(prepData(frames, size, dataPointColor));
-  const [oldPointData, setOldPointData] = useState(null as any);
   const [intervalLabels, setIntervalLabels] = useState(
     getIntervalLabels(frames, size, gridInterval, options.labelDateFormat)
   );
 
   useEffect(() => {
-    setPointData(prepData(frames, size, dataPointColor));
     setIntervalLabels(getIntervalLabels(frames, size, gridInterval, dateFormat));
-  }, [size, gridInterval]);
+    const dataScene = intervalLabels.xLabels.length * gridInterval - gridInterval;
+    setPointData(prepData(frames, dataScene, dataPointColor));
+  }, [size, gridInterval, frames]);
 
   useEffect(() => {
     setIntervalLabels(getIntervalLabels(frames, size, gridInterval, dateFormat));
   }, [dateFormat]);
-
-  useEffect(() => {
-    setOldPointData(pointData);
-    setPointData(prepData(frames, size, dataPointColor));
-  }, [frames]);
 
   return (
     <>
@@ -48,7 +43,6 @@ export const PlotScene: React.FC<Props> = ({ frames, lights, onPointerOut, onPoi
           onPointerOver={ onPointerOver }
           onPointerOut={ onPointerOut }
           currentPoints={ pointData } 
-          oldPoints={ oldPointData } 
           lights={ lights } />
       </Suspense>
       <group>
