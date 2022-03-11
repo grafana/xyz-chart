@@ -82,6 +82,11 @@ export function prepData(frames: DataFrame[], sceneScale: number, dataPointColor
   // Create scaling factor to map data coordinates to
   // chart coords, assuming as single data frame (although that's silly)
   for (let frame of frames) {
+    if (frame.fields.length < 3) {
+      return{ points: new Float32Array(), colors: new Float32Array() };
+    }
+
+
     for (let i = 0; i < 3; i++) {
       let vals = frame.fields[i].values.toArray();
       const max = Math.max(...vals);
@@ -136,6 +141,10 @@ export function getIntervalLabels(frames: DataFrame[], sceneScale: number, label
 
     const yLabelValues = [];
     const zLabelValues = [];
+
+    if (frame.fields.length < 3) {
+      return{ xLabels: [], yLabels: [], zLabels: [] };
+    }
 
     for (let i = 0; i < frame.length; i += interval) {
       xLabels.push(moment(new Date(frame.fields[0].values.get(i))).format(dateFormat));

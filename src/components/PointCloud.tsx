@@ -38,13 +38,12 @@ export const PointCloud: React.FC<Props> = ({ points, lights, onPointerOut, onPo
   let showPoints = true;
 
   useEffect(() => {
-    if (colorAttrRef.current) {
-      const color: RGBColor = hexToRgb(options.dataPointColor);
-      for (let i = 0; i < colorAttrRef.current.array.length; i++) {
-        colorAttrRef.current.setXYZ(i, color.r, color.g, color.b);
-        colorAttrRef.current.needsUpdate = true;
+    const color: RGBColor = hexToRgb(options.dataPointColor);
+      const colorAttr = pointsRef.current.geometry.getAttribute('color');
+      for (let i = 0; i < colorAttr.array.length; i++) {
+        colorAttr.setXYZ(i, color.r, color.g, color.b);
+        colorAttr.needsUpdate = true;
       }
-    }
   }, [options.dataPointColor]);
 
   useEffect(() => {
@@ -92,10 +91,12 @@ export const PointCloud: React.FC<Props> = ({ points, lights, onPointerOut, onPo
 
   const hover = useCallback(e => {
     e.stopPropagation();
-    colorAttrRef.current.array[e.index * 3] = 1
-    colorAttrRef.current.array[e.index * 3 + 1] = 1
-    colorAttrRef.current.array[e.index * 3 + 2] = 1
-    colorAttrRef.current.needsUpdate = true;
+    const colorAttr = pointsRef.current.geometry.getAttribute('color');
+    colorAttr.array[e.index * 3] = 1
+    colorAttr.array[e.index * 3 + 1] = 1
+    colorAttr.array[e.index * 3 + 2] = 1
+    colorAttr.needsUpdate = true;
+    pointsRef.current.geometry.setAttribute('color', colorAttr);
 
     if (onPointerOver) {
       onPointerOver(e);
@@ -106,10 +107,12 @@ export const PointCloud: React.FC<Props> = ({ points, lights, onPointerOut, onPo
     e.stopPropagation();
 
     const color: RGBColor = hexToRgb(options.dataPointColor);
-    colorAttrRef.current.array[e.index * 3] = color.r
-    colorAttrRef.current.array[e.index * 3 + 1] = color.g
-    colorAttrRef.current.array[e.index * 3 + 2] = color.b
-    colorAttrRef.current.needsUpdate = true;
+    const colorAttr = pointsRef.current.geometry.getAttribute('color');
+    colorAttr.array[e.index * 3] = color.r
+    colorAttr.array[e.index * 3 + 1] = color.g
+    colorAttr.array[e.index * 3 + 2] = color.b
+    colorAttr.needsUpdate = true;
+    pointsRef.current.geometry.setAttribute('color', colorAttr);
 
     if (onPointerOut) {
       onPointerOut(e);
