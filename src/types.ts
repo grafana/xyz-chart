@@ -19,6 +19,7 @@ export interface ScatterPlotOptions {
   labelColor: string;
   showColorSettings: boolean;
   dataPointColor: string;
+  particleSize: number;
   sceneScale: number;
   labelInterval: number;
   labelDateFormat: string;

@@ -32,7 +32,7 @@ export const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
         <OptionsProvider value={options}>
           <SkyBox />
           <Camera cameraOpts={cameraOpts} />
-          <ambientLight ref={ambLightRef} intensity={0.3} color={WHITE} />
+          <ambientLight ref={ambLightRef} intensity={0.8} color={WHITE} />
           <pointLight ref={pntLightRef} intensity={1.0} position={[10, 10, 10]} />
           <PlotScene frames={frames} lights={[ambLightRef, pntLightRef]} />
         </OptionsProvider>

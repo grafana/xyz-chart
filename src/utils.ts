@@ -2,6 +2,7 @@ import { BufferGeometry, Vector3 } from 'three';
 import { DataFrame, GrafanaTheme2, Field, FieldType, ArrayVector } from '@grafana/data';
 import { IntervalLabels, PointData, RGBColor } from 'types';
 import moment from 'moment';
+import { COLOR_PICKER_OPTIONS } from 'consts';
 
 export function createLineGeometry(startVec: Vector3, endVec: Vector3): BufferGeometry {
   const points = [];
@@ -155,8 +156,8 @@ export function getIntervalLabels(frames: DataFrame[], sceneScale: number, label
     zLabelValues.sort((a,b) => a - b);
 
     for (let i = 0; i < yLabelValues.length; i++) {
-      yLabels.push(yLabelValues[i] ? yLabelValues[i].toString() : "No value");
-      zLabels.push(zLabelValues[i] ? zLabelValues[i].toString() : "No value");
+      yLabels.push(yLabelValues[i] ? yLabelValues[i].toString() : "Empty value");
+      zLabels.push(zLabelValues[i] ? zLabelValues[i].toString() : "Empty value");
     }
   }
 
@@ -164,7 +165,9 @@ export function getIntervalLabels(frames: DataFrame[], sceneScale: number, label
 }
 
 export function hexToRgb(hexColor: string): RGBColor {
-  let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hexColor);
+  const color = convertTextColorToHex(hexColor);
+
+  let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
 
   if (result === null) {
     return { r: 1, g: 1, b: 1};
@@ -175,4 +178,12 @@ export function hexToRgb(hexColor: string): RGBColor {
   let b = parseInt(result[3], 16);
 
   return { r: r / 255, g: g / 255, b: b / 255};
+}
+
+export function convertTextColorToHex(color: string): string {
+  if (color[0] == '#') {
+    return color;
+  }
+
+  return COLOR_PICKER_OPTIONS[color];
 }

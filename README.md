@@ -1,44 +1,28 @@
-# Grafana Panel Plugin Template
+# Grafana 3D Scatter Plot Panel Plugin
 
-[![Build](https://github.com/grafana/grafana-starter-panel/workflows/CI/badge.svg)](https://github.com/grafana/grafana-starter-panel/actions?query=workflow%3A%22CI%22)
+This was created as part of the Q1 2022 Grafana Hackathon.
 
-This template is a starting point for building Grafana Panel Plugins in Grafana 7.0+
+Built with [R3F](#https://github.com/pmndrs/react-three-fiber).
 
-## What is Grafana Panel Plugin?
+The Scatter Plot Plugin can plot data points in 3D space in perspective view and also allows limiting the data to a 2D scene on the axis desired *(XYZ)* in orthographic view.
 
-Panels are the building blocks of Grafana. They allow you to visualize data in different ways. While Grafana has several types of panels already built-in, you can also build your own panel, to add support for other visualizations.
+## Features:
+   * Switch between 3D and 2D scenes on selected axis
+   * Ability to zoom, pan and rotate the 3D scene
+   * Ability to zoom and pan the 2D scene
+   * Show extra information when hovering a data point
+   * Real-time refresh when data changes or when grid rescales
 
-For more information about panels, refer to the documentation on [Panels](https://grafana.com/docs/grafana/latest/features/panels/panels/)
+## There are multiple customization options:
+   * Grid scale
+   * Label intervals
+   * XYZ axis colors
+   * Label colors and date formatting
+   * Particle size and colors
+   * Skybox presets
+   * Camera positioning and FOV
 
-## Getting started
+## Future improvements:
+   * Add multiple dimensions e.g: color and data point size
+   * Draw lines on the grids showing where a data point hits when hovered
 
-1. Install dependencies
-
-   ```bash
-   yarn install
-   ```
-
-2. Build plugin in development mode or run in watch mode
-
-   ```bash
-   yarn dev
-   ```
-
-   or
-
-   ```bash
-   yarn watch
-   ```
-
-3. Build plugin in production mode
-
-   ```bash
-   yarn build
-   ```
-
-## Learn more
-
-- [Build a panel plugin tutorial](https://grafana.com/tutorials/build-a-panel-plugin)
-- [Grafana documentation](https://grafana.com/docs/)
-- [Grafana Tutorials](https://grafana.com/tutorials/) - Grafana Tutorials are step-by-step guides that help you make the most of Grafana
-- [Grafana UI Library](https://developers.grafana.com/ui) - UI components to help you build interfaces using Grafana Design System
