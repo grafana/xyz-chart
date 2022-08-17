@@ -3,7 +3,7 @@ import Roboto from '../fonts/Roboto.json';
 import { TextGeometry } from 'three-stdlib';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { Direction, LabelProps, ScatterPlotOptions } from 'types';
-import { WHITE } from 'consts';
+import { SCENE_SCALE, WHITE } from 'consts';
 import OptionsContext from 'optionsContext';
 import { convertTextColorToHex } from 'utils';
 
@@ -11,7 +11,7 @@ export const Label = (props: LabelProps) => {
   const options: ScatterPlotOptions = useContext(OptionsContext);
 
   const font = new FontLoader().parse(Roboto);
-  const labelSize = props.labelSize ? props.labelSize : (options.sceneScale * 0.3) / 10;
+  const labelSize = props.labelSize ? props.labelSize : (SCENE_SCALE * 0.2) / 10;
   
 
   const calculateLabelOffset = () => {
@@ -41,7 +41,7 @@ export const Label = (props: LabelProps) => {
     bevelOffset: 0,
   };
 
-  let text = props.text ?? 'No value';
+  let text = props.text;
 
   const textGeometry = new TextGeometry(text, textOptions).center();
   calculateLabelOffset();

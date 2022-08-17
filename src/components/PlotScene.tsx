@@ -5,6 +5,7 @@ import { getIntervalLabels, prepData } from 'utils';
 import { Grid } from './Grid';
 import { PointCloud } from './PointCloud';
 import OptionsContext from 'optionsContext';
+import { LABEL_INT, SCENE_SCALE } from 'consts';
 
 interface Props {
   frames: DataFrame[];
@@ -16,8 +17,9 @@ interface Props {
 export const PlotScene: React.FC<Props> = ({ frames, lights, onPointerOut, onPointerOver }) => {
   const options: ScatterPlotOptions = useContext(OptionsContext);
 
-  const size = options.sceneScale;
-  const gridInterval = options.labelInterval;
+  //TODO refactor scene size, label intervals, grids will be fixed like XY Chart
+  const size = SCENE_SCALE;
+  const gridInterval = LABEL_INT;
   const dateFormat = options.labelDateFormat;
   const dataPointColor = options.dataPointColor;
 
@@ -28,10 +30,9 @@ export const PlotScene: React.FC<Props> = ({ frames, lights, onPointerOut, onPoi
 
   useEffect(() => {
     const newLabels = getIntervalLabels(frames, size, gridInterval, dateFormat);
-    const dataScene = newLabels.xLabels.length * gridInterval - gridInterval;
 
     setIntervalLabels(newLabels);
-    setPointData(prepData(frames, dataScene, dataPointColor));
+    setPointData(prepData(frames, size, dataPointColor));
   }, [size, gridInterval, frames]);
 
   useEffect(() => {

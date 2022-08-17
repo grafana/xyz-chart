@@ -20,18 +20,19 @@ export const Axis = (props: AxisProps) => {
         startVec = [props.size, 0, 0];
         endVec = [props.size, props.size, 0];
 
-        for (let i = 0; i < props.size; i = i + props.gridInterval) {
+        for (let i = 0; i < props.size + props.gridInterval; i = i + props.gridInterval) {
           intervalGeometries.push([
             [props.size, i, 0],
             [props.size + (INTERVAL_INDEX_LENGTH * options.sceneScale) / 10, i, 0],
           ]);
-          intervalLabelPos.push(new Vector3(props.size + LABEL_DISTANCE_FROM_GRID, i, 0));
 
-          if (options.cameraOpts.type == "orthographic" && options.cameraOpts.viewPlane == 'y') {
-            labelRotation.set(0, Math.PI / 2, 0);
+          if (i === 0) {
+            intervalLabelPos.push(new Vector3(props.size + LABEL_DISTANCE_FROM_GRID, i + 0.5, -1));
           } else {
-            labelRotation.set(0, 0, 0);
+            intervalLabelPos.push(new Vector3(props.size + LABEL_DISTANCE_FROM_GRID, i, 0));
           }
+
+          labelRotation.set(0, 0, 0);
         }
 
         color = options.showColorSettings ? convertTextColorToHex(options.yAxisColor) : options.themeColor ?? WHITE;
@@ -41,23 +42,19 @@ export const Axis = (props: AxisProps) => {
         startVec = [props.size, 0, 0];
         endVec = [props.size, 0, props.size];
 
-        for (let i = 0; i < props.size; i = i + props.gridInterval) {
+        for (let i = 0; i < props.size + props.gridInterval; i = i + props.gridInterval) {
           intervalGeometries.push([
             [props.size, 0, i],
             [props.size + (INTERVAL_INDEX_LENGTH * options.sceneScale) / 10, 0, i],
           ]);
 
-          if (i == 0) {
-            intervalLabelPos.push(new Vector3(props.size + LABEL_DISTANCE_FROM_GRID, -1, i + 3));
+          if (i === 0) {
+            intervalLabelPos.push(new Vector3(props.size + LABEL_DISTANCE_FROM_GRID, -0.5, i + 1));
           } else {
             intervalLabelPos.push(new Vector3(props.size + LABEL_DISTANCE_FROM_GRID, 0, i));
           }
 
-          if (options.cameraOpts.type == "orthographic" && options.cameraOpts.viewPlane == 'y') {
-            labelRotation.set(Math.PI, Math.PI / 2, Math.PI / 1.5);
-          } else {
-            labelRotation.set(-Math.PI / 2, 0, 0);
-          }
+          labelRotation.set(-Math.PI / 2, 0, 0);
         }
 
         color = options.showColorSettings ? convertTextColorToHex(options.zAxisColor) : options.themeColor ?? WHITE;
@@ -67,19 +64,13 @@ export const Axis = (props: AxisProps) => {
         startVec = [0, 0, props.size];
         endVec = [props.size, 0, props.size];
 
-        for (let i = 0; i < props.size; i = i + props.gridInterval) {
+        for (let i = 0; i < props.size + props.gridInterval; i = i + props.gridInterval) {
           intervalGeometries.push([
             [i, 0, props.size],
             [i, 0, props.size + (INTERVAL_INDEX_LENGTH * options.sceneScale) / 10],
           ]);
           intervalLabelPos.push(new Vector3(i, 0, props.size + LABEL_DISTANCE_FROM_GRID));
-          if (options.cameraOpts.type == "orthographic" && options.cameraOpts.viewPlane == 'z') {
-            labelRotation.set(-Math.PI / 2, 0, Math.PI / 3);
-          } else if (options.cameraOpts.type == "orthographic" && options.cameraOpts.viewPlane == 'x') {
-            labelRotation.set(0, 0, Math.PI / 3);
-          } else {
-            labelRotation.set(-Math.PI / 2, 0, Math.PI / 2);
-          }
+          labelRotation.set(-Math.PI / 2, 0, Math.PI / 2);
         }
 
         color = options.showColorSettings ? convertTextColorToHex(options.xAxisColor) : options.themeColor ?? WHITE;

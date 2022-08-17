@@ -1,13 +1,13 @@
 import React from 'react';
 import { OrthographicCamera, PerspectiveCamera } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
-import OptionsContext from 'optionsContext';
-import { useEffect, useContext } from 'react';
+import { useEffect } from 'react';
 import { Vector3 } from '@react-three/fiber';
 import { OrbitControls, MapControls } from 'three-stdlib';
 import { CameraOptions } from 'types';
 import { HUD } from 'components/HUD';
 import { DataFrame } from '@grafana/data';
+import { SCENE_SCALE } from 'consts';
 
 interface Props {
   frames: DataFrame[];
@@ -17,7 +17,8 @@ interface Props {
 
 export const Camera: React.FC<Props> = ({cameraOpts, frames, activeIdx }) => {
   const { camera, gl } = useThree();
-  const { sceneScale } = useContext(OptionsContext);
+  // const { sceneScale } = useContext(OptionsContext);
+  const sceneScale = SCENE_SCALE;
   const midpoint = sceneScale - sceneScale / 2;
   const isOrtho = cameraOpts.type === "orthographic";
   let cameraPos: Vector3;

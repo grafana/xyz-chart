@@ -8,6 +8,7 @@ import { hexToRgb } from '../utils';
 import OptionsContext from 'optionsContext';
 import React, { 
   useRef, 
+  useState,
   useContext, 
   useEffect, 
   useCallback,
@@ -15,11 +16,12 @@ import React, {
   ReactNode 
 } from 'react';
 import { PointData, RGBColor } from 'types';
-import { BufferAttribute, PointsMaterial } from 'three';
+import { BufferAttribute, PointsMaterial, Vector3 } from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import { lerp } from 'three/src/math/MathUtils';
 import { EffectComposer, SelectiveBloom } from '@react-three/postprocessing';
+import { PointHoverAxes } from './PointHoverAxes';
 
 interface Props {
   points: PointData;
@@ -35,6 +37,7 @@ export const PointCloud: React.FC<Props> = ({ points, lights, onPointerOut, onPo
   const materialRef = useRef({} as PointsMaterial);
   const options: any = useContext(OptionsContext);
   const circleTexture = useTexture('/public/plugins/grafana-labs-grafana-3-d-scatter-panel/img/circle.png');
+  const [hoveredPointPos, setHoveredStatePos] = useState<Vector3 | null>(null);
   let showPoints = true;
 
   useEffect(() => {
@@ -101,6 +104,11 @@ export const PointCloud: React.FC<Props> = ({ points, lights, onPointerOut, onPo
     if (onPointerOver) {
       onPointerOver(e);
     }
+
+    const posAttr = pointsRef.current.geometry.getAttribute('position');
+    const pointPos = new Vector3(posAttr.getX(e.index), posAttr.getY(e.index), posAttr.getZ(e.index));
+
+    setHoveredStatePos(pointPos);
   }, []);
 
   const unhover = useCallback(e => {
@@ -117,11 +125,13 @@ export const PointCloud: React.FC<Props> = ({ points, lights, onPointerOut, onPo
     if (onPointerOut) {
       onPointerOut(e);
     }
+
+    setHoveredStatePos(null);
   }, [])
 
   return (
     <>
-      <points ref={pointsRef} onPointerOver={ hover }  onPointerOut={ unhover }>
+      <points ref={pointsRef} onPointerOver={ hover } onPointerOut={ unhover }>
           <bufferGeometry attach="geometry">
             <bufferAttribute
               ref={posRef}
@@ -149,6 +159,9 @@ export const PointCloud: React.FC<Props> = ({ points, lights, onPointerOut, onPo
             map={circleTexture}
           />
         </points>
+      {hoveredPointPos !== null && (
+        <PointHoverAxes pointVector={hoveredPointPos}/>
+      )}
       {bloom}
     </>
   );

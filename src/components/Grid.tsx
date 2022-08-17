@@ -39,7 +39,7 @@ export const Grid = (props: GridProps) => {
   const options: ScatterPlotOptions = useContext(OptionsContext);
 
   const geometry = createGeometry();
-  const color = options.themeColor;
+  const color = "#808080";
 
   return (
     <>

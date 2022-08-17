@@ -34,7 +34,8 @@ export const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
   return (
     <>
       <CameraControls cameraOpts={cameraOpts} updateCameraOpts={updateCameraOpts} />
-      <Canvas mode="concurrent" raycaster={{ params: { Points: { threshold: 0.2 } } }} linear flat>
+      {/* TODO: raycaster threshold depends on particle size. is threshold too small, hover won't work, if threshold too large, will hover when outside point */}
+      <Canvas mode="concurrent" raycaster={{ params: { Points: { threshold: 3 } } }} linear flat>
         {/* 
           Context does not work outside of Canvas. Seems Canvas is outside parent component in DOM 
           https://github.com/facebook/react/issues/17126
