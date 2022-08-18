@@ -19,8 +19,6 @@ export function createLineGeometry(startVec: Vector3, endVec: Vector3): BufferGe
 export function prepare3DScatterPlotDisplayValues(series: DataFrame[], theme: GrafanaTheme2): DataFrame[] {
   let copy: Field;
   const frames: DataFrame[] = [];
-  let hasTimeField = false,
-    hasValueField = false;
 
   for (let frame of series) {
     const fields: Field[] = [];
@@ -28,12 +26,10 @@ export function prepare3DScatterPlotDisplayValues(series: DataFrame[], theme: Gr
     for (const field of frame.fields) {
       switch (field.type) {
         case FieldType.time:
-          hasTimeField = true;
           fields.push(field);
           break;
 
         case FieldType.number:
-          hasValueField = true;
           copy = {
             ...field,
             values: new ArrayVector(
@@ -49,15 +45,15 @@ export function prepare3DScatterPlotDisplayValues(series: DataFrame[], theme: Gr
 
           fields.push(copy);
           break;
+        default:
+          return []; //error invalid field type
       }
     }
 
-    if (hasTimeField && hasValueField) {
-      frames.push({
-        ...frame,
-        fields,
-      });
-    }
+    frames.push({
+      ...frame,
+      fields,
+    });
   }
 
   return frames;
@@ -131,44 +127,53 @@ export function prepData(frames: DataFrame[], sceneScale: number, dataPointColor
 }
 
 export function getIntervalLabels(frames: DataFrame[], sceneScale: number, labelInterval: number, dateFormat: string): IntervalLabels {
-  const xLabels = [];
-  const yLabels = [];
-  const zLabels = [];
+  const xLabels: string[] = [];
+  const yLabels: string[] = [];
+  const zLabels: string[] = [];
   const intervalFactor = Math.floor(sceneScale / labelInterval);
 
-  for (let frame of frames) {
-    const interval = Math.floor((frame.length - 1) / intervalFactor) === 0 ? 1 : Math.floor((frame.length - 1) / intervalFactor);
-
-    const yLabelValues = [];
-    const zLabelValues = [];
-
-    if (frame.fields.length < 3) {
-      return{ xLabels: [], yLabels: [], zLabels: [] };
-    }
-
-    for (let i = 0; i < frame.length; i += interval) {
-      xLabels.push(moment(new Date(frame.fields[0].values.get(i))).format(dateFormat));
-
-      const yVal = frame.fields[1].values.get(i) as number;
-      const zVal = frame.fields[2].values.get(i) as number;
-
-      if (yVal) {
-        yLabelValues.push(yVal);        
-      }
-
-      if (zVal) {
-        zLabelValues.push(zVal);
-      }
-    }
-
-    yLabelValues.sort((a,b) => a - b);
-    zLabelValues.sort((a,b) => a - b);
-
-    for (let i = 0; i < yLabelValues.length; i++) {
-      yLabels.push(yLabelValues[i] ? yLabelValues[i].toString() : "Empty value");
-      zLabels.push(zLabelValues[i] ? zLabelValues[i].toString() : "Empty value");
-    }
+  if (frames.length === 0) {
+    return { xLabels, yLabels, zLabels };
   }
+
+  //build labels based on first frame
+  const frame = frames[0]
+
+  const xVals = frame.fields[0].values.toArray();
+  const yVals = frame.fields[1].values.toArray();
+  const zVals = frame.fields[2].values.toArray();
+
+  const xMin = Math.min(...xVals);
+  const xMax = Math.max(...xVals);
+  const xFactor = (xMax - xMin) / intervalFactor;
+
+  const yMin = Math.min(...yVals);
+  const yMax = Math.max(...yVals);
+  const yFactor = (yMax - yMin) / intervalFactor;
+
+  const zMin = Math.min(...zVals);
+  const zMax = Math.max(...zVals);
+  const zFactor = (zMax - zMin) / intervalFactor;
+
+  for (let i = 0; i < intervalFactor; i++) {
+    if (frame.fields[0].type === FieldType.time) {   
+      xLabels.push(moment.unix((xMin + i * xFactor) / 1000).format(dateFormat));
+    } else {
+      xLabels.push((xMin + i * xFactor).toFixed(2));
+    }
+
+    yLabels.push((yMin + i * yFactor).toFixed(2));
+    zLabels.push((zMin + i * zFactor).toFixed(2));
+  }
+
+  if (frame.fields[0].type === FieldType.time) {      
+    xLabels.push(moment.unix(xMax / 1000).format(dateFormat));
+  } else {
+    xLabels.push(xMax.toFixed(2));
+  }
+
+  yLabels.push(yMax.toFixed(2));
+  zLabels.push(zMax.toFixed(2));
 
   return { xLabels, yLabels, zLabels };
 }

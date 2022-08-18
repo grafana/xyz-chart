@@ -8,6 +8,7 @@ import { hexToRgb } from '../utils';
 import OptionsContext from 'optionsContext';
 import React, { 
   useRef, 
+  useState,
   useContext, 
   useEffect, 
   useCallback,
@@ -15,26 +16,30 @@ import React, {
   ReactNode 
 } from 'react';
 import { PointData, RGBColor } from 'types';
-import { BufferAttribute, PointsMaterial } from 'three';
+import { BufferAttribute, PointsMaterial, Vector3 } from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import { lerp } from 'three/src/math/MathUtils';
 import { EffectComposer, SelectiveBloom } from '@react-three/postprocessing';
+import { PointHoverAxes } from './PointHoverAxes';
+import { HUD } from './HUD';
+import { DataFrame } from '@grafana/data';
 
 interface Props {
   points: PointData;
   lights: RefObject<ReactNode>[];
-  onPointerOver?: Function;
-  onPointerOut?: Function;
+  frames: DataFrame[];
 }
 
-export const PointCloud: React.FC<Props> = ({ points, lights, onPointerOut, onPointerOver }) => {
+export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
   const colorAttrRef: any = useRef(null);
   const pointsRef: any = useRef(null);
   const posRef: any = useRef(null);
   const materialRef = useRef({} as PointsMaterial);
   const options: any = useContext(OptionsContext);
   const circleTexture = useTexture('/public/plugins/grafana-labs-grafana-3-d-scatter-panel/img/circle.png');
+  const [hoveredPointPos, setHoveredStatePos] = useState<Vector3 | null>(null);
+  const [hoveredPointData, setHoveredPointData] = useState<string[]>([]);
   let showPoints = true;
 
   useEffect(() => {
@@ -98,10 +103,18 @@ export const PointCloud: React.FC<Props> = ({ points, lights, onPointerOut, onPo
     colorAttr.needsUpdate = true;
     pointsRef.current.geometry.setAttribute('color', colorAttr);
 
-    if (onPointerOver) {
-      onPointerOver(e);
+      let hudData = [];
+      for (let field of frames[0].fields) {
+        hudData.push(`${field.name}: ${field.values.get(e.index)}`);
     }
-  }, []);
+
+    setHoveredPointData(hudData);
+
+    const posAttr = pointsRef.current.geometry.getAttribute('position');
+    const pointPos = new Vector3(posAttr.getX(e.index), posAttr.getY(e.index), posAttr.getZ(e.index));
+
+    setHoveredStatePos(pointPos);
+  }, [frames]);
 
   const unhover = useCallback(e => {
     e.stopPropagation();
@@ -114,14 +127,13 @@ export const PointCloud: React.FC<Props> = ({ points, lights, onPointerOut, onPo
     colorAttr.needsUpdate = true;
     pointsRef.current.geometry.setAttribute('color', colorAttr);
 
-    if (onPointerOut) {
-      onPointerOut(e);
-    }
-  }, [])
+    setHoveredPointData([]);
+    setHoveredStatePos(null);
+  }, [frames])
 
   return (
     <>
-      <points ref={pointsRef} onPointerOver={ hover }  onPointerOut={ unhover }>
+      <points ref={pointsRef} onPointerOver={ hover } onPointerOut={ unhover }>
           <bufferGeometry attach="geometry">
             <bufferAttribute
               ref={posRef}
@@ -149,6 +161,12 @@ export const PointCloud: React.FC<Props> = ({ points, lights, onPointerOut, onPo
             map={circleTexture}
           />
         </points>
+      {hoveredPointPos !== null && (
+        <>
+          <PointHoverAxes pointVector={hoveredPointPos}/>
+          <HUD pointPos={hoveredPointPos} xValue={hoveredPointData[0]} yValue={hoveredPointData[1]} zValue={hoveredPointData[2]}/>
+        </>
+      )}
       {bloom}
     </>
   );

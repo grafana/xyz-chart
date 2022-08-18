@@ -10,6 +10,9 @@ export const LABEL_INTERVAL = 10;
 export const LABEL_DISTANCE_FROM_GRID = 2;
 export const DEFAULT_POINT_SIZE = 1;
 
+export const LABEL_INT = 5;
+export const SCENE_SCALE = 100;
+
 //Colors
 export const BLACK = '#000000';
 export const WHITE = '#ffffff';
