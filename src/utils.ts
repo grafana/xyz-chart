@@ -19,8 +19,6 @@ export function createLineGeometry(startVec: Vector3, endVec: Vector3): BufferGe
 export function prepare3DScatterPlotDisplayValues(series: DataFrame[], theme: GrafanaTheme2): DataFrame[] {
   let copy: Field;
   const frames: DataFrame[] = [];
-  let hasTimeField = false,
-    hasValueField = false;
 
   for (let frame of series) {
     const fields: Field[] = [];
@@ -28,12 +26,10 @@ export function prepare3DScatterPlotDisplayValues(series: DataFrame[], theme: Gr
     for (const field of frame.fields) {
       switch (field.type) {
         case FieldType.time:
-          hasTimeField = true;
           fields.push(field);
           break;
 
         case FieldType.number:
-          hasValueField = true;
           copy = {
             ...field,
             values: new ArrayVector(
@@ -49,15 +45,15 @@ export function prepare3DScatterPlotDisplayValues(series: DataFrame[], theme: Gr
 
           fields.push(copy);
           break;
+        default:
+          return []; //error invalid field type
       }
     }
 
-    if (hasTimeField && hasValueField) {
-      frames.push({
-        ...frame,
-        fields,
-      });
-    }
+    frames.push({
+      ...frame,
+      fields,
+    });
   }
 
   return frames;
@@ -160,14 +156,24 @@ export function getIntervalLabels(frames: DataFrame[], sceneScale: number, label
   const zFactor = (zMax - zMin) / intervalFactor;
 
   for (let i = 0; i < intervalFactor; i++) {
-    xLabels.push(moment.unix(xMin + i * xFactor).format(dateFormat));
+    if (frame.fields[0].type === FieldType.time) {   
+      xLabels.push(moment.unix((xMin + i * xFactor) / 1000).format(dateFormat));
+    } else {
+      xLabels.push((xMin + i * xFactor).toFixed(2));
+    }
+
     yLabels.push((yMin + i * yFactor).toFixed(2));
     zLabels.push((zMin + i * zFactor).toFixed(2));
   }
 
-  xLabels.push(moment.unix(xMax).format(dateFormat));
-  yLabels.push((yMax).toFixed(2));
-  zLabels.push((zMax).toFixed(2));
+  if (frame.fields[0].type === FieldType.time) {      
+    xLabels.push(moment.unix(xMax / 1000).format(dateFormat));
+  } else {
+    xLabels.push(xMax.toFixed(2));
+  }
+
+  yLabels.push(yMax.toFixed(2));
+  zLabels.push(zMax.toFixed(2));
 
   return { xLabels, yLabels, zLabels };
 }

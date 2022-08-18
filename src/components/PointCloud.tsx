@@ -114,7 +114,7 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
     const pointPos = new Vector3(posAttr.getX(e.index), posAttr.getY(e.index), posAttr.getZ(e.index));
 
     setHoveredStatePos(pointPos);
-  }, []);
+  }, [frames]);
 
   const unhover = useCallback(e => {
     e.stopPropagation();
@@ -129,7 +129,7 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
 
     setHoveredPointData([]);
     setHoveredStatePos(null);
-  }, [])
+  }, [frames])
 
   return (
     <>
