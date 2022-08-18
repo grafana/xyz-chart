@@ -10,11 +10,9 @@ import { LABEL_INT, SCENE_SCALE } from 'consts';
 interface Props {
   frames: DataFrame[];
   lights: RefObject<ReactNode>[];
-  onPointerOver?: Function;
-  onPointerOut?: Function;
 }
 
-export const PlotScene: React.FC<Props> = ({ frames, lights, onPointerOut, onPointerOver }) => {
+export const PlotScene: React.FC<Props> = ({ frames, lights }) => {
   const options: ScatterPlotOptions = useContext(OptionsContext);
 
   //TODO refactor scene size, label intervals, grids will be fixed like XY Chart
@@ -42,7 +40,7 @@ export const PlotScene: React.FC<Props> = ({ frames, lights, onPointerOut, onPoi
   return (
     <>
       <Suspense fallback={null}>
-        <PointCloud onPointerOver={onPointerOver} onPointerOut={onPointerOut} points={pointData} lights={lights} />
+        <PointCloud frames={frames} points={pointData} lights={lights}/>
       </Suspense>
       <group>
         <Grid

@@ -16,8 +16,7 @@
     "@grafana/data": "latest",
     "@grafana/runtime": "^8.4.3",
     "@grafana/toolkit": "latest",
-    "@grafana/ui": "^8.4.3",
-    "emotion": "10.0.27"
+    "@grafana/ui": "^8.4.3"
   },
   "engines": {
     "node": ">=14"
@@ -30,6 +29,7 @@
     "moment": "^2.29.1",
     "postprocessing": "^6.25.0",
     "three": "^0.138.3",
-    "three-stdlib": "^2.8.8"
+    "three-stdlib": "^2.8.8",
+    "emotion": "^11.0.0"
   }
 }

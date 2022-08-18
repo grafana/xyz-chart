@@ -1,42 +1,53 @@
 import React, { useContext } from 'react';
 import OptionsContext from 'optionsContext';
-import { Vector3, DoubleSide } from 'three';
-import { Label } from 'components/Label';
-import { Direction, ScatterPlotOptions } from 'types';
-import { DataFrame } from '@grafana/data';
+import { ScatterPlotOptions } from 'types';
+import { Html } from '@react-three/drei';
+import { css } from '@emotion/css';
 
 interface HUDProps {
-    frames: DataFrame[];
-    activeIdx: number | null;
-    position: [number, number, number];
-    size: [number, number];
+  pointPos: THREE.Vector3;
+  xValue: string;
+  yValue: string;
+  zValue: string;
 };
 
-export const HUD: React.FC<HUDProps> = ({ frames, activeIdx, position, size }) => {
+export const HUD: React.FC<HUDProps> = ({ pointPos, xValue, yValue, zValue }) => {
   
   const options: ScatterPlotOptions = useContext(OptionsContext);
-
-  let hudData = [];
-  if (activeIdx !== null) {
-    for (let field of frames[0].fields) {
-        hudData.push(`${field.name}: ${field.values.get(activeIdx)}`);
-    }
-  }
+  const styles = getStyles(options);
 
   return (
-    
-    <mesh position={ position }>
-        <planeGeometry args={size} />
-        <meshBasicMaterial
-                color={options.hudBgColor} 
-                side={ DoubleSide } 
-                opacity={0.6} />
-
-        {hudData.map((text, i) => {
-            const labelPos = new Vector3(1.4, 0.35 * i * 1, 0.001);
-            return <Label key={ i } text={ text } position={labelPos} labelSize={0.2} direction={Direction.Right} />
-        })}
-        
-    </mesh>
+    <Html
+      position={pointPos}
+      style={{
+        transform: 'translate3d(-50%, -120%, 0)'
+      }}
+    >
+      <div className={styles.tooltip}>
+        <ul>
+          <li>{xValue}</li>
+          <li>{yValue}</li>
+          <li>{zValue}</li>
+        </ul>
+      </div>
+    </Html>
   );
 };
+
+const getStyles = (options: ScatterPlotOptions) => {
+  return {
+    tooltip: css`
+      padding: 10px;
+      background-color: ${options.hudBgColor};
+      text-align: left;
+      color: white;
+      ul {
+        list-style: none;
+        display: inline-block;
+        li {
+          white-space: nowrap;
+        }
+      }
+    `,
+  };
+}
