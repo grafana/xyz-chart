@@ -30,8 +30,6 @@ export const defaultScatterConfig: ScatterFieldConfig = {
 export interface XYZDimensionConfig {
   frame: number;
   x?: string; // name | first
-  y?: string
-  z?: string;
 }
 
 export interface ScatterPlotOptions extends OptionsWithLegend, OptionsWithTooltip{

@@ -11,7 +11,7 @@ export const ScatterPlotPanel: React.FC<Props> = (props) => {
   console.log(props);
 
   const theme = useTheme2();
-  const frames = useMemo(() => prepare3DScatterPlotDisplayValues(props.data?.series, theme), [props.data, theme]);
+  const frames = useMemo(() => prepare3DScatterPlotDisplayValues(props.data?.series, props.options.dims, theme), [props.data, props.options.dims, theme]);
   const options: ScatterPlotOptions = props.options as ScatterPlotOptions;
   options.themeColor = theme.isDark ? '#ffffff' : '#000000';
   options.hudBgColor = theme.colors.background.secondary;

@@ -1,8 +1,9 @@
 import { BufferGeometry, Vector3 } from 'three';
-import { DataFrame, GrafanaTheme2, Field, FieldType, ArrayVector } from '@grafana/data';
+import { DataFrame, GrafanaTheme2, Field, FieldType, ArrayVector, getFieldDisplayName } from '@grafana/data';
 import { IntervalLabels, PointData, RGBColor } from 'types';
 import moment from 'moment';
 import { COLOR_PICKER_OPTIONS, DATE_FORMAT, LABEL_INTERVAL, SCENE_SCALE } from 'consts';
+import { XYZDimensionConfig } from 'models.gen';
 
 export function createLineGeometry(startVec: Vector3, endVec: Vector3): BufferGeometry {
   const points = [];
@@ -16,47 +17,74 @@ export function createLineGeometry(startVec: Vector3, endVec: Vector3): BufferGe
 /**
  * Take data frames and identify and time and value fields stripping other fields.
  */
-export function prepare3DScatterPlotDisplayValues(series: DataFrame[], theme: GrafanaTheme2): DataFrame[] {
-  let copy: Field;
-  const frames: DataFrame[] = [];
-
-  for (let frame of series) {
-    const fields: Field[] = [];
-
-    for (const field of frame.fields) {
-      switch (field.type) {
-        case FieldType.time:
-          fields.push(field);
-          break;
-
-        case FieldType.number:
-          copy = {
-            ...field,
-            values: new ArrayVector(
-              field.values.toArray().map((v) => {
-                if (!(Number.isFinite(v) || v == null)) {
-                  return null;
-                }
-
-                return v;
-              })
-            ),
-          };
-
-          fields.push(copy);
-          break;
-        default:
-          return []; //error invalid field type
-      }
-    }
-
-    frames.push({
-      ...frame,
-      fields,
-    });
+export function prepare3DScatterPlotDisplayValues(series: DataFrame[], dims: XYZDimensionConfig, theme: GrafanaTheme2): DataFrame[] {
+  if (!series.length) {
+    return [];
   }
 
-  return frames;
+  const dimensions = {
+    frame: dims?.frame ?? 0,
+    x: dims?.x ?? null,
+  }
+
+
+  let copy: Field;
+  const fields: Field[] = [];
+
+  let xField: Field | null = null;
+
+  for (const field of series[dimensions.frame].fields) {
+    const name = getFieldDisplayName(field, series[dimensions.frame], series);
+
+    if (name === dimensions.x || dimensions.x === null) {
+      xField = field;
+
+      if (dimensions.x === null) {
+        dimensions.x = name;
+      }
+
+      continue;
+    }
+
+    switch (field.type) {
+      case FieldType.time:
+        fields.push(field);
+        break;
+
+      case FieldType.number:
+        copy = {
+          ...field,
+          values: new ArrayVector(
+            field.values.toArray().map((v) => {
+              if (!(Number.isFinite(v) || v == null)) {
+                return null;
+              }
+
+              return v;
+            })
+          ),
+        };
+
+        fields.push(copy);
+        break;
+    }
+  }
+
+  if (!xField) {
+    return [];
+  }
+
+  const frame: DataFrame = {
+    ...series[dimensions.frame],
+    fields: [
+      xField,
+      ...fields
+    ],
+  };
+
+  console.log(frame);
+
+  return [frame];
 }
 
 type ScaleFactors = {

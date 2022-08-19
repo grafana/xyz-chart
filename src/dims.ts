@@ -1,14 +1,6 @@
-import { DataFrame, Field, FieldMatcher, FieldType, getFieldDisplayName } from '@grafana/data';
-// import { XYFieldMatchers } from '@grafana/ui/src/components/GraphNG/types';
+import { DataFrame, Field, FieldType, getFieldDisplayName } from '@grafana/data';
 
 import { XYZDimensionConfig } from './models.gen';
-
-//TODO temporary till we move inside grafana core and import it from above
-export interface XYFieldMatchers {
-  x: FieldMatcher; // first match
-  y: FieldMatcher;
-  z: FieldMatcher;
-}
 
 export enum DimensionError {
   NoData,
@@ -17,8 +9,7 @@ export enum DimensionError {
 }
 
 export interface XYZDimensions {
-  frame: DataFrame; // matches order from configs, excluds non-graphable values
-  x: Field;
+  frame: DataFrame;
   error?: DimensionError;
 }
 
@@ -64,7 +55,6 @@ export function getXYZDimensions(cfg?: XYZDimensionConfig, data?: DataFrame[]): 
   }
 
   return {
-    x,
     frame: {
       ...frame,
       fields,
