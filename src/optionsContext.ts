@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScatterPlotOptions } from 'types'
+import { ScatterPlotOptions } from 'models.gen'
 
 const OptionsContext = React.createContext({} as ScatterPlotOptions)
 

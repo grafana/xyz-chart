@@ -2,10 +2,10 @@ import React, { useContext } from 'react';
 import Roboto from '../fonts/Roboto.json';
 import { TextGeometry } from 'three-stdlib';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
-import { Direction, LabelProps, ScatterPlotOptions } from 'types';
+import { Direction, LabelProps } from 'types';
 import { SCENE_SCALE, WHITE } from 'consts';
 import OptionsContext from 'optionsContext';
-import { convertTextColorToHex } from 'utils';
+import { ScatterPlotOptions } from 'models.gen';
 
 export const Label = (props: LabelProps) => {
   const options: ScatterPlotOptions = useContext(OptionsContext);
@@ -46,7 +46,7 @@ export const Label = (props: LabelProps) => {
   const textGeometry = new TextGeometry(text, textOptions).center();
   calculateLabelOffset();
 
-  let color = options.showColorSettings ? convertTextColorToHex(options.labelColor) : options.themeColor ?? WHITE;
+  let color = options.themeColor ?? WHITE;
 
   return (
     <mesh position={props.position} rotation={props.rotation ?? undefined} geometry={textGeometry}>

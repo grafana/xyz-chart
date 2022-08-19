@@ -1,11 +1,11 @@
 import { DataFrame } from '@grafana/data';
 import React, { useContext, useEffect, useState, RefObject, ReactNode, Suspense } from 'react';
-import { Direction, ScatterPlotOptions } from 'types';
+import { Direction } from 'types';
 import { getIntervalLabels, prepData } from 'utils';
 import { Grid } from './Grid';
 import { PointCloud } from './PointCloud';
 import OptionsContext from 'optionsContext';
-import { LABEL_INT, SCENE_SCALE } from 'consts';
+import { ScatterPlotOptions } from 'models.gen';
 
 interface Props {
   frames: DataFrame[];
@@ -15,27 +15,21 @@ interface Props {
 export const PlotScene: React.FC<Props> = ({ frames, lights }) => {
   const options: ScatterPlotOptions = useContext(OptionsContext);
 
-  //TODO refactor scene size, label intervals, grids will be fixed like XY Chart
-  const size = SCENE_SCALE;
-  const gridInterval = LABEL_INT;
-  const dateFormat = options.labelDateFormat;
-  const dataPointColor = options.dataPointColor;
-
-  const [pointData, setPointData] = useState(prepData(frames, size, dataPointColor));
+  const [pointData, setPointData] = useState(prepData(frames, options.pointColor ?? '#ff0000'));
   const [intervalLabels, setIntervalLabels] = useState(
-    getIntervalLabels(frames, size, gridInterval, options.labelDateFormat)
+    getIntervalLabels(frames)
   );
 
   useEffect(() => {
-    const newLabels = getIntervalLabels(frames, size, gridInterval, dateFormat);
+    const newLabels = getIntervalLabels(frames);
 
     setIntervalLabels(newLabels);
-    setPointData(prepData(frames, size, dataPointColor));
-  }, [size, gridInterval, frames]);
+    setPointData(prepData(frames, options.pointColor ?? '#ff0000'));
+  }, [frames]);
 
   useEffect(() => {
-    setIntervalLabels(getIntervalLabels(frames, size, gridInterval, dateFormat));
-  }, [dateFormat]);
+    setIntervalLabels(getIntervalLabels(frames));
+  }, []);
 
   return (
     <>
@@ -45,20 +39,14 @@ export const PlotScene: React.FC<Props> = ({ frames, lights }) => {
       <group>
         <Grid
           direction={Direction.Up}
-          size={size}
-          gridInterval={gridInterval}
           intervalLabels={intervalLabels.yLabels}
         />
         <Grid
           direction={Direction.Right}
-          size={size}
-          gridInterval={gridInterval}
           intervalLabels={intervalLabels.xLabels}
         />
         <Grid
           direction={Direction.Forward}
-          size={size}
-          gridInterval={gridInterval}
           intervalLabels={intervalLabels.zLabels}
         />
       </group>

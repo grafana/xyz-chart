@@ -2,7 +2,7 @@ import { Line } from "@react-three/drei";
 import OptionsContext from "optionsContext";
 import React, { useContext } from "react";
 import { Vector3 } from "three";
-import { ScatterPlotOptions } from "types";
+import { ScatterPlotOptions } from "models.gen";
 
 interface PointHoverAxesProps {
   pointVector: Vector3;

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import OptionsContext from 'optionsContext';
-import { ScatterPlotOptions } from 'types';
+import { ScatterPlotOptions } from 'models.gen';
 import { Html } from '@react-three/drei';
 import { css } from '@emotion/css';
 

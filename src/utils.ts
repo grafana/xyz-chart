@@ -2,7 +2,7 @@ import { BufferGeometry, Vector3 } from 'three';
 import { DataFrame, GrafanaTheme2, Field, FieldType, ArrayVector } from '@grafana/data';
 import { IntervalLabels, PointData, RGBColor } from 'types';
 import moment from 'moment';
-import { COLOR_PICKER_OPTIONS } from 'consts';
+import { COLOR_PICKER_OPTIONS, DATE_FORMAT, LABEL_INTERVAL, SCENE_SCALE } from 'consts';
 
 export function createLineGeometry(startVec: Vector3, endVec: Vector3): BufferGeometry {
   const points = [];
@@ -70,7 +70,7 @@ type ScaleFactors = {
 /**
  * Take sparse frame data and format for display with R3F.
  */
-export function prepData(frames: DataFrame[], sceneScale: number, dataPointColor: string): PointData {
+export function prepData(frames: DataFrame[], dataPointColor: string): PointData {
   const points = [],
     colors = [];
   let scaleFactors: ScaleFactors = {};
@@ -91,7 +91,7 @@ export function prepData(frames: DataFrame[], sceneScale: number, dataPointColor
       scaleFactors[i] = {
         min: min,
         max: max,
-        factor: (max - min) / sceneScale,
+        factor: (max - min) / SCENE_SCALE,
       };
     }
   }
@@ -126,11 +126,11 @@ export function prepData(frames: DataFrame[], sceneScale: number, dataPointColor
   return { points: new Float32Array(points), colors: new Float32Array(colors) };
 }
 
-export function getIntervalLabels(frames: DataFrame[], sceneScale: number, labelInterval: number, dateFormat: string): IntervalLabels {
+export function getIntervalLabels(frames: DataFrame[]): IntervalLabels {
   const xLabels: string[] = [];
   const yLabels: string[] = [];
   const zLabels: string[] = [];
-  const intervalFactor = Math.floor(sceneScale / labelInterval);
+  const intervalFactor = Math.floor(SCENE_SCALE / LABEL_INTERVAL);
 
   if (frames.length === 0) {
     return { xLabels, yLabels, zLabels };
@@ -157,7 +157,7 @@ export function getIntervalLabels(frames: DataFrame[], sceneScale: number, label
 
   for (let i = 0; i < intervalFactor; i++) {
     if (frame.fields[0].type === FieldType.time) {   
-      xLabels.push(moment.unix((xMin + i * xFactor) / 1000).format(dateFormat));
+      xLabels.push(moment.unix((xMin + i * xFactor) / 1000).format(DATE_FORMAT));
     } else {
       xLabels.push((xMin + i * xFactor).toFixed(2));
     }
@@ -167,7 +167,7 @@ export function getIntervalLabels(frames: DataFrame[], sceneScale: number, label
   }
 
   if (frame.fields[0].type === FieldType.time) {      
-    xLabels.push(moment.unix(xMax / 1000).format(dateFormat));
+    xLabels.push(moment.unix(xMax / 1000).format(DATE_FORMAT));
   } else {
     xLabels.push(xMax.toFixed(2));
   }

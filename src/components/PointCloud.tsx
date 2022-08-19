@@ -43,13 +43,13 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
   let showPoints = true;
 
   useEffect(() => {
-    const color: RGBColor = hexToRgb(options.dataPointColor);
+    const color: RGBColor = hexToRgb(options.pointColor ?? '#ff0000');
       const colorAttr = pointsRef.current.geometry.getAttribute('color');
       for (let i = 0; i < colorAttr.array.length; i++) {
         colorAttr.setXYZ(i, color.r, color.g, color.b);
         colorAttr.needsUpdate = true;
       }
-  }, [options.dataPointColor]);
+  }, [options.pointColor]);
 
   useEffect(() => {
       if (materialRef.current) {
@@ -119,7 +119,7 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
   const unhover = useCallback(e => {
     e.stopPropagation();
 
-    const color: RGBColor = hexToRgb(options.dataPointColor);
+    const color: RGBColor = hexToRgb(options.pointColor ?? '#ff0000');
     const colorAttr = pointsRef.current.geometry.getAttribute('color');
     colorAttr.array[e.index * 3] = color.r
     colorAttr.array[e.index * 3 + 1] = color.g

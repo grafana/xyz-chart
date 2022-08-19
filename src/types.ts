@@ -12,29 +12,6 @@ declare global {
   }
 }
 
-export interface ScatterPlotOptions {
-  xAxisColor: string;
-  yAxisColor: string;
-  zAxisColor: string;
-  labelColor: string;
-  showColorSettings: boolean;
-  dataPointColor: string;
-  particleSize: number;
-  sceneScale: number;
-  labelInterval: number;
-  labelDateFormat: string;
-  themeColor: string;
-  hudBgColor: string;
-  hasSkybox: boolean;
-  skybox: string;
-  enableOrbitControls: boolean;
-  enableOrthographc: boolean
-  cameraFov: number;
-  cameraX: number;
-  cameraY: number;
-  cameraZ: number;
-}
-
 export interface LabelProps {
   position: Vector3;
   text: string;
@@ -43,17 +20,8 @@ export interface LabelProps {
   labelSize?: number;
 }
 
-export interface AxisProps {
+export interface GridAxisProps {
   direction: Direction;
-  size: number;
-  gridInterval: number;
-  intervalLabels: any[];
-}
-
-export interface GridProps {
-  direction: Direction;
-  size: number;
-  gridInterval: number;
   intervalLabels: any[];
 }
 
