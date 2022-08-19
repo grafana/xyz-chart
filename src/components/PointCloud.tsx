@@ -37,7 +37,7 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
   const posRef: any = useRef(null);
   const materialRef = useRef({} as PointsMaterial);
   const options: any = useContext(OptionsContext);
-  const circleTexture = useTexture('/public/plugins/grafana-labs-grafana-3-d-scatter-panel/img/circle.png');
+  const circleTexture = useTexture('/public/plugins/grafana-labs-grafana-3-d-scatter-panel/img/particle.png');
   const [hoveredPointPos, setHoveredStatePos] = useState<Vector3 | null>(null);
   const [hoveredPointData, setHoveredPointData] = useState<string[]>([]);
   let showPoints = true;
@@ -97,15 +97,15 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
   const hover = useCallback(e => {
     e.stopPropagation();
     const colorAttr = pointsRef.current.geometry.getAttribute('color');
-    colorAttr.array[e.index * 3] = 1
-    colorAttr.array[e.index * 3 + 1] = 1
-    colorAttr.array[e.index * 3 + 2] = 1
+    colorAttr.array[e.index * 3] = 0.98;
+    colorAttr.array[e.index * 3 + 1] = 0.77;
+    colorAttr.array[e.index * 3 + 2] = 0.35;
     colorAttr.needsUpdate = true;
     pointsRef.current.geometry.setAttribute('color', colorAttr);
 
-      let hudData = [];
-      for (let field of frames[0].fields) {
-        hudData.push(`${field.name}: ${field.values.get(e.index)}`);
+    let hudData = [];
+    for (let field of frames[0].fields) {
+      hudData.push(`${field.name}: ${field.values.get(e.index)}`);
     }
 
     setHoveredPointData(hudData);
