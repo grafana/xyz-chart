@@ -1,7 +1,6 @@
 import { PanelPlugin } from '@grafana/data';
 import { ScatterPlotOptions } from './models.gen';
 import { ScatterPlotPanel } from './ScatterPlotPanel';
-// import { commonOptionsBuilder } from '@grafana/ui';
 import { XYZDimsEditor } from 'XYZDimsEditor';
 
 export const plugin = new PanelPlugin<ScatterPlotOptions>(ScatterPlotPanel).setPanelOptions((builder) => {
@@ -24,28 +23,43 @@ export const plugin = new PanelPlugin<ScatterPlotOptions>(ScatterPlotPanel).setP
       editor: XYZDimsEditor,
       showIf: (cfg) => cfg.mode === 'xyz',
     })
-    // .addFieldNamePicker({
-    //   path: 'series[0].x',
-    //   name: 'X Field',
-    //   showIf: (cfg) => cfg.mode === 'explicit',
-    // })
-    // .addFieldNamePicker({
-    //   path: 'series[0].y',
-    //   name: 'Y Field',
-    //   showIf: (cfg) => cfg.mode === 'explicit',
-    // })
+    .addFieldNamePicker({
+      path: 'series.x',
+      name: 'X Field',
+      showIf: (cfg) => cfg.mode === 'explicit',
+    })
+    .addFieldNamePicker({
+      path: 'series.y',
+      name: 'Y Field',
+      showIf: (cfg) => cfg.mode === 'explicit',
+    })
+    .addFieldNamePicker({
+      path: 'series.z',
+      name: 'Z Field',
+      showIf: (cfg) => cfg.mode === 'explicit',
+    })
+    .addTextInput({
+      path: 'pointColor',
+      name: 'Point color',
+      settings: {},
+    })
+    .addTextInput({
+      path: 'pointSize',
+      name: 'Point size',
+      settings: {},
+    })
+    //TODO use app/feature/dimension/editors when moving under public/plugins/panel
     // .addCustomEditor({
-    //   id: 'seriesZerox.pointColor',
-    //   path: 'series[0].pointColor',
+    //   id: 'pointColor',
+    //   path: 'pointColor',
     //   name: 'Point color',
     //   editor: ColorDimensionEditor,
     //   settings: {},
     //   defaultValue: {},
-    //   showIf: (cfg) => cfg.mode === 'explicit',
     // })
     // .addCustomEditor({
     //   id: 'seriesZerox.pointSize',
-    //   path: 'series[0].pointSize',
+    //   path: 'pointSize',
     //   name: 'Point size',
     //   editor: ScaleDimensionEditor,
     //   settings: {
@@ -57,11 +71,6 @@ export const plugin = new PanelPlugin<ScatterPlotOptions>(ScatterPlotPanel).setP
     //     min: 1,
     //     max: 50,
     //   },
-    //   showIf: (cfg) => cfg.mode === 'explicit',
-    // })
-    ;
-
-  // commonOptionsBuilder.addTooltipOptions(builder);
-  // commonOptionsBuilder.addLegendOptions(builder);
+    // });
 });
 

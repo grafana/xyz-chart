@@ -31,7 +31,6 @@ export const XYZDimsEditor: FC<StandardEditorProps<XYZDimensionConfig, any, Scat
     return [{ value: 0, label: 'First result' }];
   }, [context.data]);
 
-  //parses frame data into a list of valid fields for the x, y, and z axes + finds X field index
   const dims = useMemo(() => getXYZDimensions(value, context.data), [context.data, value]);
 
   const info = useMemo(() => {

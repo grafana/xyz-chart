@@ -1,9 +1,9 @@
 import { BufferGeometry, Vector3 } from 'three';
-import { DataFrame, GrafanaTheme2, Field, FieldType, ArrayVector, getFieldDisplayName } from '@grafana/data';
+import { DataFrame, Field, FieldType, ArrayVector, getFieldDisplayName } from '@grafana/data';
 import { IntervalLabels, PointData, RGBColor } from 'types';
 import moment from 'moment';
 import { COLOR_PICKER_OPTIONS, DATE_FORMAT, LABEL_INTERVAL, SCENE_SCALE } from 'consts';
-import { XYZDimensionConfig } from 'models.gen';
+import { ScatterSeriesConfig, XYZDimensionConfig } from 'models.gen';
 
 export function createLineGeometry(startVec: Vector3, endVec: Vector3): BufferGeometry {
   const points = [];
@@ -14,33 +14,29 @@ export function createLineGeometry(startVec: Vector3, endVec: Vector3): BufferGe
   return new BufferGeometry().setFromPoints(points);
 }
 
-/**
- * Take data frames and identify and time and value fields stripping other fields.
- */
-export function prepare3DScatterPlotDisplayValues(series: DataFrame[], dims: XYZDimensionConfig, theme: GrafanaTheme2): DataFrame[] {
+export function preparePlotByDims(series: DataFrame[], dimensions: XYZDimensionConfig): DataFrame[] {
   if (!series.length) {
     return [];
   }
 
-  const dimensions = {
-    frame: dims?.frame ?? 0,
-    x: dims?.x ?? null,
+  const dims = {
+    frame: dimensions?.frame ?? 0,
+    x: dimensions?.x ?? null,
   }
-
 
   let copy: Field;
   const fields: Field[] = [];
 
   let xField: Field | null = null;
 
-  for (const field of series[dimensions.frame].fields) {
-    const name = getFieldDisplayName(field, series[dimensions.frame], series);
+  for (const field of series[dims.frame].fields) {
+    const name = getFieldDisplayName(field, series[dims.frame], series);
 
-    if (name === dimensions.x || dimensions.x === null) {
+    if (name === dims.x || dims.x === null) {
       xField = field;
 
-      if (dimensions.x === null) {
-        dimensions.x = name;
+      if (dims.x === null) {
+        dims.x = name;
       }
 
       continue;
@@ -75,14 +71,89 @@ export function prepare3DScatterPlotDisplayValues(series: DataFrame[], dims: XYZ
   }
 
   const frame: DataFrame = {
-    ...series[dimensions.frame],
+    ...series[dims.frame],
     fields: [
       xField,
       ...fields
     ],
   };
 
-  console.log(frame);
+  return [frame];
+}
+
+export function preparePlotByExplicitSeries(series: DataFrame[], explicitSeries: ScatterSeriesConfig): DataFrame[] {
+  if (!series.length) {
+    return [];
+  }
+
+  let copy: Field;
+
+  let xField: Field | null = null;
+  let yField: Field | null = null;
+  let zField: Field | null = null;
+
+  for (const frame of series) {
+    for (const field of frame.fields) {
+      const name = getFieldDisplayName(field, series[0], series);
+
+      let f: Field | null = null;
+
+      switch (field.type) {
+        case FieldType.time:
+          f = field;
+          break;
+
+        case FieldType.number:
+          copy = {
+            ...field,
+            values: new ArrayVector(
+              field.values.toArray().map((v) => {
+                if (!(Number.isFinite(v) || v == null)) {
+                  return null;
+                }
+
+                return v;
+              })
+            ),
+          };
+
+          f = copy;
+          break;
+      }
+
+      if (!f) {
+        continue;
+      }
+
+      if (name === explicitSeries.x) {
+        xField = f;
+      }
+      
+      if (name === explicitSeries.y) {
+        yField = f;
+      }
+      
+      if (name === explicitSeries.z) {
+        zField = f;
+      }
+    }
+  }
+
+  if (!xField || !yField || !zField) {
+    return [];
+  }
+
+
+  const frame: DataFrame = {
+    ...series[0],
+    fields: [
+      xField,
+      yField,
+      zField
+    ],
+  };
+
+  console.log(frame)
 
   return [frame];
 }

@@ -156,7 +156,7 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
             opacity={0}
             transparent
             vertexColors
-            size={options.particleSize}
+            size={options.pointSize}
             sizeAttenuation={true}
             map={circleTexture}
           />
