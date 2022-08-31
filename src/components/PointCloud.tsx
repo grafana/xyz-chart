@@ -145,7 +145,7 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames, hoveredPoi
   }, [frames])
 
   return (
-    <>
+    <scene>
       <points ref={pointsRef} onPointerOver={ hover } onPointerOut={ unhover }>
           <bufferGeometry attach="geometry">
             <bufferAttribute
@@ -178,6 +178,6 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames, hoveredPoi
         <PointHoverAxes hoveredPoint={ hoveredPoint } />
       }
       {bloom}
-    </>
+    </scene>
   );
 };

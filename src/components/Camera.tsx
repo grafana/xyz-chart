@@ -49,7 +49,7 @@ export const Camera: React.FC<HUDProps> = ({ hoveredPoint }) => {
 
   return (
     <PerspectiveCamera fov={ 75 }>
-      { hoveredPoint !== null && <HUD hoveredPoint={ hoveredPoint } /> }
+      {/* { hoveredPoint !== null && <HUD hoveredPoint={ hoveredPoint } /> } */}
     </PerspectiveCamera> 
   );
 };
