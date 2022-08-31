@@ -4,7 +4,7 @@ import OptionsContext from "optionsContext";
 import React, { useContext, RefObject, ReactNode } from "react";
 import { Color, Vector3 } from "three";
 import { HoveredPoint, ScatterPlotOptions } from "types";
-import { SCENE_SCALE } from "consts";
+// import { SCENE_SCALE } from "consts";
 
 interface PointHoverAxesProps {
   hoveredPoint: HoveredPoint;
@@ -40,43 +40,7 @@ export const PointHoverAxes: React.FC<PointHoverAxesProps> = ({ hoveredPoint, hu
     -(((rect.y - canvasRect.y) / canvasRect.height)),
     -1
   );
-
-
-  console.log({rect, canvasRect});
-
-  let xSize = ((rect.x - canvasRect.x) / canvasRect.width);
-  let ySize = ((rect.y - canvasRect.y) / canvasRect.height);
-
-  console.log({xSize, ySize});
-
-  let bottomRight = new Vector3( 1, -1, -1 );
-  console.log(bottomRight);
-  bottomRight.unproject(camera);
-  //console.log(camera);
-
-  // canvasPos.unproject(camera);
-
-
-  console.log({
-    pointPos: position,
-    canvasPos,
-    topRight: bottomRight
-  });
   canvasPos.unproject(camera);
-  // console.log(position, canvasPos);
-
-  // canvasPos.sub(camera.position).normalize();
-  const distance = camera.position.z / canvasPos.z;
-  console.log(distance);
-
-  // const finalPoint = canvasPos.copy(camera.position).add(canvasPos.multiplyScalar(distance));
-
-  
-
-  // console.log(hudRef.current, rect, finalPoint);
-  // console.log();
-
-
 
   return (
     <>

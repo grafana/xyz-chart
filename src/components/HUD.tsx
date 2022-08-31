@@ -18,18 +18,10 @@ export const HUD: React.FC<HUDProps> = ({ hoveredPoint, hudRef }) => {
   const displayStyles = {
     display: hoveredPoint !== null ? 'block' : 'none',
   };
-
-  console.log(options);
   // const theme = useTheme2();
-
-  // const hudPos = new Vector3(105, 85, 30);
   
   // const grafYellow = new Color("#FBC55A");
   // const grafOrange = new Color("#FB755A");
-
-  // console.log(hudRef);
-  // console.log(hudEl);
-
 
   return (
       <div ref={ hudRef } className={styles.tooltipWrapper} style={ displayStyles }>

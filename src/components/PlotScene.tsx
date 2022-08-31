@@ -30,9 +30,6 @@ export const PlotScene: React.FC<Props> = ({ frames, lights, hoveredPoint, setHo
     getIntervalLabels(frames, size, gridInterval, options.labelDateFormat)
   );
 
-
-  console.log(hudRef);
-
   useEffect(() => {
     const newLabels = getIntervalLabels(frames, size, gridInterval, dateFormat);
 
