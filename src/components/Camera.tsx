@@ -5,8 +5,14 @@ import { useEffect } from 'react';
 import { Vector3 } from '@react-three/fiber';
 import { OrbitControls, MapControls } from 'three-stdlib';
 import { SCENE_SCALE } from 'consts';
+import { HUD } from './HUD';
+import { HoveredPoint } from 'types';
 
-export const Camera: React.FC = () => {
+interface HUDProps {
+  hoveredPoint: HoveredPoint | null;
+}
+
+export const Camera: React.FC<HUDProps> = ({ hoveredPoint }) => {
   const { camera, gl } = useThree();
   // const { sceneScale } = useContext(OptionsContext);
   const sceneScale = SCENE_SCALE;
@@ -42,7 +48,8 @@ export const Camera: React.FC = () => {
   }, [camera, gl, sceneScale]);
 
   return (
-    <>
-    <PerspectiveCamera fov={ 75 } />
-    </>);
+    <PerspectiveCamera fov={ 75 }>
+      { hoveredPoint !== null && <HUD hoveredPoint={ hoveredPoint } /> }
+    </PerspectiveCamera> 
+  );
 };

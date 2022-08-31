@@ -87,3 +87,8 @@ export interface RGBColor {
   g: number;
   b: number;
 }
+
+export interface HoveredPoint {
+  position: Vector3;
+  data: string[];
+}

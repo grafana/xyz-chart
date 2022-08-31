@@ -1,41 +1,34 @@
 import React, { useContext, useRef } from 'react';
 import OptionsContext from 'optionsContext';
-import { ScatterPlotOptions } from 'types';
-import { Html, Line } from '@react-three/drei';
+import { HoveredPoint, ScatterPlotOptions } from 'types';
+import { Line, Html } from '@react-three/drei';
 import { css } from '@emotion/css';
 import { Color, Vector3 } from 'three';
 import { useTheme2 } from '@grafana/ui';
 
 interface HUDProps {
-  pointPos: THREE.Vector3;
-  xValue: string;
-  yValue: string;
-  zValue: string;
+  hoveredPoint: HoveredPoint;
 };
 
-export const HUD: React.FC<HUDProps> = ({ pointPos, xValue, yValue, zValue }) => {
+export const HUD: React.FC<HUDProps> = ({ hoveredPoint }) => {
   const hudRef = useRef<any>(null);
   const options: ScatterPlotOptions = useContext(OptionsContext);
   const styles = getStyles(options);
-  const theme = useTheme2();
+  // const theme = useTheme2();
 
-  const hudPos = new Vector3(
-    pointPos.x + 10,
-    pointPos.y + 10,
-    pointPos.z
-  );
-
+  const hudPos = new Vector3(105, 85, 30);
+  
   const grafYellow = new Color("#FBC55A");
   const grafOrange = new Color("#FB755A");
 
   return (
     <>
     <Line
-      points={[pointPos, hudPos]}
+      points={[hoveredPoint.position, hudPos]}
       // @ts-ignore
-      vertexColors={[grafYellow, grafOrange]} 
+      vertexColors={ [grafYellow, grafOrange] } 
       color="#FFF"                   // Default
-      lineWidth={1}                   // In pixels (default)
+      lineWidth={ 1 }      // In pixels (default)
       dashed={ false } 
     />
     <Html
@@ -48,15 +41,15 @@ export const HUD: React.FC<HUDProps> = ({ pointPos, xValue, yValue, zValue }) =>
       <div className={styles.tooltipWrapper}>
         <div className={styles.tooltip}>
           <ul>
-            <li>{xValue}</li>
-            <li>{yValue}</li>
-            <li>{zValue}</li>
+            <li>{ hoveredPoint.data[0] }</li>
+            <li>{ hoveredPoint.data[1] }</li>
+            <li>{ hoveredPoint.data[2] }</li>
           </ul>
         </div>
       </div>
     </Html>
     </>
-  );
+    );
 };
 
 const getStyles = (options: ScatterPlotOptions) => {

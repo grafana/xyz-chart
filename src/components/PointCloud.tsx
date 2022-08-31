@@ -8,38 +8,40 @@ import { hexToRgb } from '../utils';
 import OptionsContext from 'optionsContext';
 import React, { 
   useRef, 
-  useState,
+  // useState,
   useContext, 
   useEffect, 
   useCallback,
   RefObject, 
   ReactNode 
 } from 'react';
-import { PointData, RGBColor } from 'types';
+import { HoveredPoint, PointData, RGBColor } from 'types';
 import { BufferAttribute, PointsMaterial, Vector3 } from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import { lerp } from 'three/src/math/MathUtils';
 import { EffectComposer, SelectiveBloom } from '@react-three/postprocessing';
 import { PointHoverAxes } from './PointHoverAxes';
-import { HUD } from './HUD';
+// import { HUD } from './HUD';
 import { DataFrame } from '@grafana/data';
 
 interface Props {
   points: PointData;
   lights: RefObject<ReactNode>[];
   frames: DataFrame[];
+  hoveredPoint: HoveredPoint | null;
+  setHoveredPoint: Function;
 }
 
-export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
+export const PointCloud: React.FC<Props> = ({ points, lights, frames, hoveredPoint, setHoveredPoint }) => {
   const colorAttrRef: any = useRef(null);
   const pointsRef: any = useRef(null);
   const posRef: any = useRef(null);
   const materialRef = useRef({} as PointsMaterial);
   const options: any = useContext(OptionsContext);
   const circleTexture = useTexture('/public/plugins/grafana-labs-grafana-3-d-scatter-panel/img/particle.png');
-  const [hoveredPointPos, setHoveredStatePos] = useState<Vector3 | null>(null);
-  const [hoveredPointData, setHoveredPointData] = useState<string[]>([]);
+  // const [hoveredPointPos, setHoveredStatePos] = useState<Vector3 | null>(null);
+  // const [hoveredPointData, setHoveredPointData] = useState<string[]>([]);
   let showPoints = true;
 
   useEffect(() => {
@@ -96,24 +98,36 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
 
   const hover = useCallback(e => {
     e.stopPropagation();
+
+    // Retrieve color and position attributes from the point cloud
     const colorAttr = pointsRef.current.geometry.getAttribute('color');
+    const posAttr = pointsRef.current.geometry.getAttribute('position');
+
+    // Set the color of the current point
     colorAttr.array[e.index * 3] = 0.98;
     colorAttr.array[e.index * 3 + 1] = 0.77;
     colorAttr.array[e.index * 3 + 2] = 0.35;
     colorAttr.needsUpdate = true;
     pointsRef.current.geometry.setAttribute('color', colorAttr);
 
+    // Retrieve HUD data and point position
     let hudData = [];
     for (let field of frames[0].fields) {
       hudData.push(`${field.name}: ${field.values.get(e.index)}`);
     }
+    const pointPos = new Vector3(
+      posAttr.getX(e.index), 
+      posAttr.getY(e.index), 
+      posAttr.getZ(e.index)
+    );
 
-    setHoveredPointData(hudData);
+    // Update hovered point info
+    setHoveredPoint({
+      position: pointPos,
+      data: hudData
+    });
 
-    const posAttr = pointsRef.current.geometry.getAttribute('position');
-    const pointPos = new Vector3(posAttr.getX(e.index), posAttr.getY(e.index), posAttr.getZ(e.index));
-
-    setHoveredStatePos(pointPos);
+    // setHoveredStatePos(pointPos);
   }, [frames]);
 
   const unhover = useCallback(e => {
@@ -127,8 +141,7 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
     colorAttr.needsUpdate = true;
     pointsRef.current.geometry.setAttribute('color', colorAttr);
 
-    setHoveredPointData([]);
-    setHoveredStatePos(null);
+    setHoveredPoint(null);
   }, [frames])
 
   return (
@@ -161,12 +174,9 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
             map={circleTexture}
           />
         </points>
-      {hoveredPointPos !== null && (
-        <>
-          <PointHoverAxes pointVector={hoveredPointPos}/>
-          <HUD pointPos={hoveredPointPos} xValue={hoveredPointData[0]} yValue={hoveredPointData[1]} zValue={hoveredPointData[2]}/>
-        </>
-      )}
+      {hoveredPoint !== null && 
+        <PointHoverAxes hoveredPoint={ hoveredPoint } />
+      }
       {bloom}
     </>
   );
