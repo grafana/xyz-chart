@@ -1,15 +1,22 @@
+import { useThree } from "@react-three/fiber";
 import { Line } from "@react-three/drei";
 import OptionsContext from "optionsContext";
-import React, { useContext } from "react";
+import React, { useContext, RefObject, ReactNode } from "react";
 import { Color, Vector3 } from "three";
 import { HoveredPoint, ScatterPlotOptions } from "types";
+import { SCENE_SCALE } from "consts";
 
 interface PointHoverAxesProps {
   hoveredPoint: HoveredPoint;
+  hudRef: RefObject<ReactNode>;
+  canvasRef: RefObject<HTMLCanvasElement>;
 }
 
-export const PointHoverAxes: React.FC<PointHoverAxesProps> = ({ hoveredPoint }) => {
+export const PointHoverAxes: React.FC<PointHoverAxesProps> = ({ hoveredPoint, hudRef, canvasRef }) => {
+  const { camera } = useThree();
   const { position } = hoveredPoint;
+  const { current: hudEl } = hudRef;
+  const { current: canvasEl } = canvasRef;
 
   const options: ScatterPlotOptions = useContext(OptionsContext);
 
@@ -20,8 +27,65 @@ export const PointHoverAxes: React.FC<PointHoverAxesProps> = ({ hoveredPoint }) 
   const grafYellow = new Color("#FBC55A");
   const grafOrange = new Color("#FB755A");
 
+  // Retrieve position of the bounding box
+  // of the HUD element
+  // @ts-ignore - 
+  const rect = hudEl.getBoundingClientRect();
+  // @ts-ignore
+  const canvasRect = canvasEl.getBoundingClientRect();
+
+  // Convert canvas coordinates in 3D coords
+  let canvasPos = new Vector3(
+    ((rect.x - canvasRect.x) / canvasRect.width),
+    -(((rect.y - canvasRect.y) / canvasRect.height)),
+    -1
+  );
+
+
+  console.log({rect, canvasRect});
+
+  let xSize = ((rect.x - canvasRect.x) / canvasRect.width);
+  let ySize = ((rect.y - canvasRect.y) / canvasRect.height);
+
+  console.log({xSize, ySize});
+
+  let bottomRight = new Vector3( 1, -1, -1 );
+  console.log(bottomRight);
+  bottomRight.unproject(camera);
+  //console.log(camera);
+
+  // canvasPos.unproject(camera);
+
+
+  console.log({
+    pointPos: position,
+    canvasPos,
+    topRight: bottomRight
+  });
+  canvasPos.unproject(camera);
+  // console.log(position, canvasPos);
+
+  // canvasPos.sub(camera.position).normalize();
+  const distance = camera.position.z / canvasPos.z;
+  console.log(distance);
+
+  // const finalPoint = canvasPos.copy(camera.position).add(canvasPos.multiplyScalar(distance));
+
+  
+
+  // console.log(hudRef.current, rect, finalPoint);
+  // console.log();
+
+
+
   return (
     <>
+      <Line 
+        points={[position, canvasPos]}
+        color={options.themeColor}
+        // @ts-ignore
+        vertexColors={[grafYellow, grafOrange]}
+      />
       <Line 
         points={[position, upPlanePos]} 
         color={options.themeColor}

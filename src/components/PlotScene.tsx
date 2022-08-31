@@ -12,9 +12,11 @@ interface Props {
   lights: RefObject<ReactNode>[];
   hoveredPoint: HoveredPoint | null;
   setHoveredPoint: Function;
+  canvasRef: RefObject<HTMLCanvasElement>;
+  hudRef: any;
 }
 
-export const PlotScene: React.FC<Props> = ({ frames, lights, hoveredPoint, setHoveredPoint }) => {
+export const PlotScene: React.FC<Props> = ({ frames, lights, hoveredPoint, setHoveredPoint, canvasRef, hudRef }) => {
   const options: ScatterPlotOptions = useContext(OptionsContext);
 
   //TODO refactor scene size, label intervals, grids will be fixed like XY Chart
@@ -27,6 +29,9 @@ export const PlotScene: React.FC<Props> = ({ frames, lights, hoveredPoint, setHo
   const [intervalLabels, setIntervalLabels] = useState(
     getIntervalLabels(frames, size, gridInterval, options.labelDateFormat)
   );
+
+
+  console.log(hudRef);
 
   useEffect(() => {
     const newLabels = getIntervalLabels(frames, size, gridInterval, dateFormat);
@@ -44,7 +49,9 @@ export const PlotScene: React.FC<Props> = ({ frames, lights, hoveredPoint, setHo
   return (
     <>
       <Suspense fallback={null}>
-        <PointCloud 
+        <PointCloud
+          canvasRef={ canvasRef }
+          hudRef={ hudRef }
           frames={ frames } 
           points={ pointData } 
           lights={ lights }

@@ -31,9 +31,11 @@ interface Props {
   frames: DataFrame[];
   hoveredPoint: HoveredPoint | null;
   setHoveredPoint: Function;
+  hudRef: RefObject<ReactNode>;
+  canvasRef: RefObject<HTMLCanvasElement>;
 }
 
-export const PointCloud: React.FC<Props> = ({ points, lights, frames, hoveredPoint, setHoveredPoint }) => {
+export const PointCloud: React.FC<Props> = ({ points, lights, frames, hoveredPoint, setHoveredPoint, hudRef, canvasRef }) => {
   const colorAttrRef: any = useRef(null);
   const pointsRef: any = useRef(null);
   const posRef: any = useRef(null);
@@ -175,7 +177,7 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames, hoveredPoi
           />
         </points>
       {hoveredPoint !== null && 
-        <PointHoverAxes hoveredPoint={ hoveredPoint } />
+        <PointHoverAxes canvasRef={ canvasRef } hudRef={ hudRef } hoveredPoint={ hoveredPoint } />
       }
       {bloom}
     </scene>
