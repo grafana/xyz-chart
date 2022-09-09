@@ -9,9 +9,7 @@ import OptionsContext from 'optionsContext';
 import React, { useRef, useState, useContext, useEffect, useCallback, RefObject, ReactNode } from 'react';
 import { PointData, RGBColor } from 'types';
 import { BufferAttribute, PointsMaterial, Vector3 } from 'three';
-import { useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
-import { lerp } from 'three/src/math/MathUtils';
 import { EffectComposer, SelectiveBloom } from '@react-three/postprocessing';
 import { PointHoverAxes } from './PointHoverAxes';
 import { HUD } from './HUD';
@@ -32,7 +30,6 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
   const circleTexture = useTexture('/public/plugins/grafana-labs-grafana-3-d-scatter-panel/img/circle.png');
   const [hoveredPointPos, setHoveredStatePos] = useState<Vector3 | null>(null);
   const [hoveredPointData, setHoveredPointData] = useState<string[]>([]);
-  let showPoints = true;
 
   useEffect(() => {
     const color: RGBColor = hexToRgb(options.pointColor ?? '#ff0000');
@@ -51,25 +48,14 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
   }, [options.pointSize]);
 
   useEffect(() => {
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-    showPoints = false;
-
-    setTimeout(() => {
-      if (pointsRef.current) {
-        const posAttr = new BufferAttribute(points.points, 3);
-        const colorAttr = new BufferAttribute(points.colors, 3);
-        pointsRef.current.geometry.setAttribute('position', posAttr);
-        pointsRef.current.geometry.setAttribute('color', colorAttr);
-        pointsRef.current.geometry.attributes.position.needsUpdate = true;
-      }
-
-      showPoints = true;
-    }, 500);
+    if (pointsRef.current) {
+      const posAttr = new BufferAttribute(points.points, 3);
+      const colorAttr = new BufferAttribute(points.colors, 3);
+      pointsRef.current.geometry.setAttribute('position', posAttr);
+      pointsRef.current.geometry.setAttribute('color', colorAttr);
+      pointsRef.current.geometry.attributes.position.needsUpdate = true;
+    }
   }, [points]);
-
-  useFrame(
-    (state, delta) => (materialRef.current.opacity = lerp(materialRef.current.opacity, showPoints ? 1 : 0, 0.1))
-  );
 
   let bloom = null;
   if (pointsRef.current !== null && lights[0].current !== null) {
@@ -152,7 +138,7 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
         <pointsMaterial
           ref={materialRef}
           attach="material"
-          opacity={0}
+          opacity={1}
           transparent
           vertexColors
           size={options.pointSize}
