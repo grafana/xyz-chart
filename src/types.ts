@@ -5,34 +5,12 @@ import { Euler, Line, Vector3 } from 'three';
 extend({ Line_: Line });
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       line_: ReactThreeFiber.Object3DNode<Line, typeof Line>;
     }
   }
-}
-
-export interface ScatterPlotOptions {
-  xAxisColor: string;
-  yAxisColor: string;
-  zAxisColor: string;
-  labelColor: string;
-  showColorSettings: boolean;
-  dataPointColor: string;
-  particleSize: number;
-  sceneScale: number;
-  labelInterval: number;
-  labelDateFormat: string;
-  themeColor: string;
-  hudBgColor: string;
-  hasSkybox: boolean;
-  skybox: string;
-  enableOrbitControls: boolean;
-  enableOrthographc: boolean
-  cameraFov: number;
-  cameraX: number;
-  cameraY: number;
-  cameraZ: number;
 }
 
 export interface LabelProps {
@@ -43,17 +21,8 @@ export interface LabelProps {
   labelSize?: number;
 }
 
-export interface AxisProps {
+export interface GridAxisProps {
   direction: Direction;
-  size: number;
-  gridInterval: number;
-  intervalLabels: any[];
-}
-
-export interface GridProps {
-  direction: Direction;
-  size: number;
-  gridInterval: number;
   intervalLabels: any[];
 }
 
@@ -64,7 +33,7 @@ export enum Direction {
 }
 
 export interface AxisData {
-  axisPoints: [number, number, number][];
+  axisPoints: Array<[number, number, number]>;
   intervalGeometries: number[][][];
   intervalLabelPos: Vector3[];
   labelRotation: Euler;

@@ -1,8 +1,8 @@
-import { Line } from "@react-three/drei";
-import OptionsContext from "optionsContext";
-import React, { useContext } from "react";
-import { Vector3 } from "three";
-import { ScatterPlotOptions } from "types";
+import { Line } from '@react-three/drei';
+import OptionsContext from 'optionsContext';
+import React, { useContext } from 'react';
+import { Vector3 } from 'three';
+import { ScatterPlotOptions } from 'models.gen';
 
 interface PointHoverAxesProps {
   pointVector: Vector3;
@@ -23,5 +23,5 @@ export const PointHoverAxes = (props: PointHoverAxesProps) => {
       <Line points={[pointVector, forwardPlanePos]} color={options.themeColor} dashed={true} />
       <Line points={[pointVector, rightPlanePos]} color={options.themeColor} dashed={true} />
     </>
-  )
-}
+  );
+};
