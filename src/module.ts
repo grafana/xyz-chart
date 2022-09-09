@@ -6,9 +6,9 @@ import { XYZDimsEditor } from 'XYZDimsEditor';
 export const plugin = new PanelPlugin<ScatterPlotOptions>(ScatterPlotPanel).setPanelOptions((builder) => {
   builder
     .addRadio({
-      path: 'mappingMode',
-      name: 'Mapping mode',
-      defaultValue: defaultScatterConfig.mappingMode,
+      path: 'seriesMapping',
+      name: 'Series mapping',
+      defaultValue: defaultScatterConfig.seriesMapping,
       settings: {
         options: [
           { value: 'auto', label: 'Auto' },
@@ -21,22 +21,22 @@ export const plugin = new PanelPlugin<ScatterPlotOptions>(ScatterPlotPanel).setP
       path: 'dims',
       name: 'Data',
       editor: XYZDimsEditor,
-      showIf: (cfg) => cfg.mappingMode === 'auto',
+      showIf: (cfg) => cfg.seriesMapping === 'auto',
     })
     .addFieldNamePicker({
       path: 'series.x',
       name: 'X Field',
-      showIf: (cfg) => cfg.mappingMode === 'manual',
+      showIf: (cfg) => cfg.seriesMapping === 'manual',
     })
     .addFieldNamePicker({
       path: 'series.y',
       name: 'Y Field',
-      showIf: (cfg) => cfg.mappingMode === 'manual',
+      showIf: (cfg) => cfg.seriesMapping === 'manual',
     })
     .addFieldNamePicker({
       path: 'series.z',
       name: 'Z Field',
-      showIf: (cfg) => cfg.mappingMode === 'manual',
+      showIf: (cfg) => cfg.seriesMapping === 'manual',
     })
     .addColorPicker({
       path: 'pointColor',

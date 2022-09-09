@@ -17,7 +17,7 @@ export interface ScatterPlotOptions {
   themeColor?: string;
   hudBgColor?: string;
 
-  mappingMode: 'auto' | 'manual' | undefined;
+  seriesMapping: 'auto' | 'manual' | undefined;
   dims?: XYZDimensionConfig;
   series?: ScatterSeriesConfig;
 }
@@ -25,5 +25,5 @@ export interface ScatterPlotOptions {
 export const defaultScatterConfig: ScatterPlotOptions = {
   pointColor: 'red',
   pointSize: 5,
-  mappingMode: 'auto',
+  seriesMapping: 'auto',
 };

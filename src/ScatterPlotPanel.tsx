@@ -10,12 +10,12 @@ interface Props extends PanelProps<ScatterPlotOptions> {}
 export const ScatterPlotPanel: React.FC<Props> = (props) => {
   const theme = useTheme2();
   const frames = useMemo(() => {
-    if (props.options.mappingMode === 'manual') {
+    if (props.options.seriesMapping === 'manual') {
       return preparePlotByExplicitSeries(props.data.series, props.options.series!);
     } else {
       return preparePlotByDims(props.data.series, props.options.dims!);
     }
-  }, [props.data, props.options.series, props.options.dims, props.options.mappingMode]);
+  }, [props.data.series, props.options.series, props.options.dims, props.options.seriesMapping]);
 
   const options: ScatterPlotOptions = props.options as ScatterPlotOptions;
   options.themeColor = theme.isDark ? '#ffffff' : '#000000';
