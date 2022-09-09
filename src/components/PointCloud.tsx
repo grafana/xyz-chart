@@ -136,10 +136,10 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
         </>
       )}
       {pointsRef.current !== null && lights[0].current !== null && (
-        <EffectComposer autoClear={false}>
+        <EffectComposer>
           <SelectiveBloom
-            lights={lights}
-            selection={pointsRef}
+            lights={lights[0].current}
+            selection={pointsRef.current}
             kernelSize={2}
             luminanceThreshold={0}
             luminanceSmoothing={0.4}
