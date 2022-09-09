@@ -1,9 +1,3 @@
-/**
- * @file
- * Wraps R3F <points> element and supplies
- * sane default for materials, geometries, etc.
- */
-
 import { hexToRgb } from '../utils';
 import OptionsContext from 'optionsContext';
 import React, { useRef, useState, useContext, useEffect, useCallback, RefObject, ReactNode } from 'react';
@@ -56,22 +50,6 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
       pointsRef.current.geometry.attributes.position.needsUpdate = true;
     }
   }, [points]);
-
-  let bloom = null;
-  if (pointsRef.current !== null && lights[0].current !== null) {
-    bloom = (
-      <EffectComposer>
-        <SelectiveBloom
-          lights={lights}
-          selection={pointsRef}
-          kernelSize={2}
-          luminanceThreshold={0}
-          luminanceSmoothing={0.4}
-          intensity={1}
-        />
-      </EffectComposer>
-    );
-  }
 
   const hover = useCallback(
     (e) => {
@@ -157,7 +135,18 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
           />
         </>
       )}
-      {bloom}
+      {pointsRef.current !== null && lights[0].current !== null && (
+        <EffectComposer autoClear={false}>
+          <SelectiveBloom
+            lights={lights}
+            selection={pointsRef}
+            kernelSize={2}
+            luminanceThreshold={0}
+            luminanceSmoothing={0.4}
+            intensity={1}
+          />
+        </EffectComposer>
+      )}
     </>
   );
 };
