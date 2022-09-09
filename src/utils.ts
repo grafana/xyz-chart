@@ -80,7 +80,7 @@ export function preparePlotByDims(series: DataFrame[], dimensions: XYZDimensionC
 }
 
 export function preparePlotByExplicitSeries(series: DataFrame[], explicitSeries: ScatterSeriesConfig): DataFrame[] {
-  if (!series.length) {
+  if (!series.length || !explicitSeries || (!explicitSeries.x && !explicitSeries.y && !explicitSeries.z)) {
     return [];
   }
 

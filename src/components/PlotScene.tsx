@@ -26,11 +26,6 @@ export const PlotScene: React.FC<Props> = ({ frames, lights }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [frames]);
 
-  useEffect(() => {
-    setIntervalLabels(getIntervalLabels(frames));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <>
       <Suspense fallback={null}>
