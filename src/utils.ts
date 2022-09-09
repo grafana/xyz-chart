@@ -1,6 +1,7 @@
 import { BufferGeometry, Vector3 } from 'three';
 import { DataFrame, Field, FieldType, ArrayVector, getFieldDisplayName } from '@grafana/data';
 import { IntervalLabels, PointData, RGBColor } from 'types';
+//eslint-disable-next-line no-restricted-imports
 import moment from 'moment';
 import { COLOR_PICKER_OPTIONS, DATE_FORMAT, LABEL_INTERVAL, SCENE_SCALE } from 'consts';
 import { ScatterSeriesConfig, XYZDimensionConfig } from 'models.gen';
@@ -22,7 +23,7 @@ export function preparePlotByDims(series: DataFrame[], dimensions: XYZDimensionC
   const dims = {
     frame: dimensions?.frame ?? 0,
     x: dimensions?.x ?? null,
-  }
+  };
 
   let copy: Field;
   const fields: Field[] = [];
@@ -72,10 +73,7 @@ export function preparePlotByDims(series: DataFrame[], dimensions: XYZDimensionC
 
   const frame: DataFrame = {
     ...series[dims.frame],
-    fields: [
-      xField,
-      ...fields
-    ],
+    fields: [xField, ...fields],
   };
 
   return [frame];
@@ -128,11 +126,11 @@ export function preparePlotByExplicitSeries(series: DataFrame[], explicitSeries:
       if (name === explicitSeries.x) {
         xField = f;
       }
-      
+
       if (name === explicitSeries.y) {
         yField = f;
       }
-      
+
       if (name === explicitSeries.z) {
         zField = f;
       }
@@ -143,14 +141,9 @@ export function preparePlotByExplicitSeries(series: DataFrame[], explicitSeries:
     return [];
   }
 
-
   const frame: DataFrame = {
     ...series[0],
-    fields: [
-      xField,
-      yField,
-      zField
-    ],
+    fields: [xField, yField, zField],
   };
 
   return [frame];
@@ -176,9 +169,8 @@ export function prepData(frames: DataFrame[], dataPointColor: string): PointData
   // chart coords, assuming as single data frame (although that's silly)
   for (let frame of frames) {
     if (frame.fields.length < 3) {
-      return{ points: new Float32Array(), colors: new Float32Array() };
+      return { points: new Float32Array(), colors: new Float32Array() };
     }
-
 
     for (let i = 0; i < 3; i++) {
       let vals = frame.fields[i].values.toArray();
@@ -234,7 +226,7 @@ export function getIntervalLabels(frames: DataFrame[]): IntervalLabels {
   }
 
   //build labels based on first frame
-  const frame = frames[0]
+  const frame = frames[0];
 
   if (frame.fields.length < 3) {
     return { xLabels, yLabels, zLabels };
@@ -257,7 +249,7 @@ export function getIntervalLabels(frames: DataFrame[]): IntervalLabels {
   const zFactor = (zMax - zMin) / intervalFactor;
 
   for (let i = 0; i < intervalFactor; i++) {
-    if (frame.fields[0].type === FieldType.time) {   
+    if (frame.fields[0].type === FieldType.time) {
       xLabels.push(moment.unix((xMin + i * xFactor) / 1000).format(DATE_FORMAT));
     } else {
       xLabels.push((xMin + i * xFactor).toFixed(2));
@@ -267,7 +259,7 @@ export function getIntervalLabels(frames: DataFrame[]): IntervalLabels {
     zLabels.push((zMin + i * zFactor).toFixed(2));
   }
 
-  if (frame.fields[0].type === FieldType.time) {      
+  if (frame.fields[0].type === FieldType.time) {
     xLabels.push(moment.unix(xMax / 1000).format(DATE_FORMAT));
   } else {
     xLabels.push(xMax.toFixed(2));
@@ -285,18 +277,18 @@ export function hexToRgb(hexColor: string): RGBColor {
   let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
 
   if (result === null) {
-    return { r: 1, g: 1, b: 1};
+    return { r: 1, g: 1, b: 1 };
   }
 
   let r = parseInt(result[1], 16);
   let g = parseInt(result[2], 16);
   let b = parseInt(result[3], 16);
 
-  return { r: r / 255, g: g / 255, b: b / 255};
+  return { r: r / 255, g: g / 255, b: b / 255 };
 }
 
 export function convertTextColorToHex(color: string): string {
-  if (color[0] == '#') {
+  if (color[0] === '#') {
     return color;
   }
 

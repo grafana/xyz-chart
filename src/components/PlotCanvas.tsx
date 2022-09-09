@@ -26,11 +26,8 @@ export const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
           <Camera />
           <ambientLight ref={ambLightRef} intensity={0.8} color={WHITE} />
           <pointLight ref={pntLightRef} intensity={1.0} position={[10, 10, 10]} />
-          <PlotScene 
-            frames={ frames } 
-            lights={ [ambLightRef, pntLightRef] } 
-            />
-        </OptionsProvider>  
+          <PlotScene frames={frames} lights={[ambLightRef, pntLightRef]} />
+        </OptionsProvider>
       </Canvas>
     </>
   );

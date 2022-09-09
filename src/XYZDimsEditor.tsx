@@ -1,11 +1,6 @@
 import React, { FC, useMemo } from 'react';
 
-import {
-  SelectableValue,
-  getFrameDisplayName,
-  StandardEditorProps,
-  getFieldDisplayName,
-} from '@grafana/data';
+import { SelectableValue, getFrameDisplayName, StandardEditorProps, getFieldDisplayName } from '@grafana/data';
 import { Label, Select } from '@grafana/ui';
 
 import { getXYZDimensions } from './dims';
@@ -48,10 +43,10 @@ export const XYZDimsEditor: FC<StandardEditorProps<XYZDimensionConfig, any, Scat
         : first,
     };
 
-    if (context.data.length == 0) {
+    if (context.data.length === 0) {
       return v;
     }
-    
+
     const frame = context.data ? context.data[value?.frame ?? 0] : undefined;
 
     for (let field of dims.frame.fields) {
@@ -100,7 +95,8 @@ export const XYZDimsEditor: FC<StandardEditorProps<XYZDimensionConfig, any, Scat
           });
         }}
       />
-      <br /><br />
+      <br />
+      <br />
     </div>
   );
 };

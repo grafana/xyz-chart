@@ -5,6 +5,7 @@ import { Euler, Line, Vector3 } from 'three';
 extend({ Line_: Line });
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       line_: ReactThreeFiber.Object3DNode<Line, typeof Line>;
@@ -32,7 +33,7 @@ export enum Direction {
 }
 
 export interface AxisData {
-  axisPoints: [number, number, number][];
+  axisPoints: Array<[number, number, number]>;
   intervalGeometries: number[][][];
   intervalLabelPos: Vector3[];
   labelRotation: Euler;

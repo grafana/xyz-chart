@@ -87,7 +87,7 @@ export const Axis = (props: GridAxisProps) => {
       {intervalGeometries.map((points, index) => {
         return (
           <group key={index}>
-            <Line points={points as [number, number, number][]} color={color} lineWidth={2.5} dashed={false} />
+            <Line points={points as Array<[number, number, number]>} color={color} lineWidth={2.5} dashed={false} />
             <Label
               direction={props.direction}
               position={intervalLabelPos[index]}

@@ -15,7 +15,7 @@ export const ScatterPlotPanel: React.FC<Props> = (props) => {
     } else {
       return preparePlotByDims(props.data.series, props.options.dims!);
     }
-  }, [props.data, props.options.series, props.options.dims]);
+  }, [props.data, props.options.series, props.options.dims, props.options.mappingMode]);
 
   const options: ScatterPlotOptions = props.options as ScatterPlotOptions;
   options.themeColor = theme.isDark ? '#ffffff' : '#000000';
@@ -37,7 +37,5 @@ export const ScatterPlotPanel: React.FC<Props> = (props) => {
     );
   }
 
-  return (
-    <PlotCanvas frames={frames} options={options}/>
-  );
+  return <PlotCanvas frames={frames} options={options} />;
 };

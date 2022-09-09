@@ -37,7 +37,7 @@ export const Grid = (props: GridAxisProps) => {
   };
 
   const geometry = createGeometry();
-  const color = "#808080";
+  const color = '#808080';
 
   return (
     <>
@@ -49,10 +49,7 @@ export const Grid = (props: GridAxisProps) => {
             </line_>
           );
         })}
-        <Axis
-          direction={props.direction}
-          intervalLabels={props.intervalLabels}
-        />
+        <Axis direction={props.direction} intervalLabels={props.intervalLabels} />
       </group>
     </>
   );
