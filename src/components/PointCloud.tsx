@@ -53,10 +53,10 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
 
   useEffect(() => {
       if (materialRef.current) {
-        materialRef.current.size = options.particleSize
+        materialRef.current.size = options.pointSize
         materialRef.current.needsUpdate = true;
       }
-  }, [options.particleSize])
+  }, [options.pointSize])
 
   useEffect(() => {
     showPoints = false;
@@ -129,7 +129,7 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
 
     setHoveredPointData([]);
     setHoveredStatePos(null);
-  }, [frames])
+  }, [frames, options.pointColor])
 
   return (
     <>

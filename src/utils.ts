@@ -153,8 +153,6 @@ export function preparePlotByExplicitSeries(series: DataFrame[], explicitSeries:
     ],
   };
 
-  console.log(frame)
-
   return [frame];
 }
 
@@ -190,7 +188,7 @@ export function prepData(frames: DataFrame[], dataPointColor: string): PointData
       scaleFactors[i] = {
         min: min,
         max: max,
-        factor: (max - min) / SCENE_SCALE,
+        factor: (max - min) / SCENE_SCALE === 0 ? 1 : (max - min) / SCENE_SCALE,
       };
     }
   }
@@ -237,6 +235,10 @@ export function getIntervalLabels(frames: DataFrame[]): IntervalLabels {
 
   //build labels based on first frame
   const frame = frames[0]
+
+  if (frame.fields.length < 3) {
+    return { xLabels, yLabels, zLabels };
+  }
 
   const xVals = frame.fields[0].values.toArray();
   const yVals = frame.fields[1].values.toArray();
