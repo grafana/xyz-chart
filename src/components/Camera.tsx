@@ -6,7 +6,6 @@ import { SCENE_SCALE } from 'consts';
 
 export const Camera: React.FC = () => {
   const { camera, gl } = useThree();
-  // const { sceneScale } = useContext(OptionsContext);
   const sceneScale = SCENE_SCALE;
   let cameraPos: Vector3;
   let lookAt: Vector3;
@@ -36,9 +35,5 @@ export const Camera: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [camera, gl, sceneScale]);
 
-  return (
-    <>
-      <PerspectiveCamera fov={75} />
-    </>
-  );
+  return <PerspectiveCamera fov={75} />;
 };
