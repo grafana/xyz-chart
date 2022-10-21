@@ -4,7 +4,6 @@ import React, { useRef, useState, useContext, useEffect, useCallback, RefObject,
 import { PointData, RGBColor } from 'types';
 import { BufferAttribute, PointsMaterial, Vector3 } from 'three';
 import { useTexture } from '@react-three/drei';
-import { EffectComposer, SelectiveBloom } from '@react-three/postprocessing';
 import { PointHoverAxes } from './PointHoverAxes';
 import { HUD } from './HUD';
 import { DataFrame } from '@grafana/data';
@@ -134,18 +133,6 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
             zValue={hoveredPointData[2]}
           />
         </>
-      )}
-      {pointsRef.current !== null && lights[0].current !== null && (
-        <EffectComposer>
-          <SelectiveBloom
-            lights={lights[0].current}
-            selection={pointsRef.current}
-            kernelSize={2}
-            luminanceThreshold={0}
-            luminanceSmoothing={0.4}
-            intensity={1}
-          />
-        </EffectComposer>
       )}
     </>
   );
