@@ -1,8 +1,8 @@
-import React from 'react'
-import { ScatterPlotOptions } from 'types'
+import React from 'react';
+import { ScatterPlotOptions } from 'types';
 
-const OptionsContext = React.createContext({} as ScatterPlotOptions)
+const OptionsContext = React.createContext({} as ScatterPlotOptions);
 
-export const OptionsProvider = OptionsContext.Provider
+export const OptionsProvider = OptionsContext.Provider;
 
-export default OptionsContext
+export default OptionsContext;

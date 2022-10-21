@@ -18,11 +18,7 @@ export const Camera: React.FC<HUDProps> = ({ hoveredPoint }) => {
   let cameraPos: Vector3;
   let lookAt: Vector3;
 
-  cameraPos = [
-    sceneScale * 1.4,
-    sceneScale - sceneScale / 2,
-    sceneScale * 1.4
-  ];
+  cameraPos = [sceneScale * 1.4, sceneScale - sceneScale / 2, sceneScale * 1.4];
 
   lookAt = [0, 0, 0];
 
@@ -30,15 +26,15 @@ export const Camera: React.FC<HUDProps> = ({ hoveredPoint }) => {
     let controls: OrbitControls | MapControls | null = null;
 
     controls = new OrbitControls(camera, gl.domElement);
-      controls.minDistance = 3;
-      controls.maxDistance = sceneScale * 2;
+    controls.minDistance = 3;
+    controls.maxDistance = sceneScale * 2;
 
-      // @ts-ignore
-      camera.position.set(...cameraPos);
-      // @ts-ignore
-      controls.target.set(...lookAt);
-      controls.update();
-    
+    // @ts-ignore
+    camera.position.set(...cameraPos);
+    // @ts-ignore
+    controls.target.set(...lookAt);
+    controls.update();
+
     return () => {
       if (controls !== null) {
         controls.dispose();
@@ -46,7 +42,5 @@ export const Camera: React.FC<HUDProps> = ({ hoveredPoint }) => {
     };
   }, [camera, gl, sceneScale]);
 
-  return (
-    <PerspectiveCamera fov={ 75 } />
-  );
+  return <PerspectiveCamera fov={75} />;
 };

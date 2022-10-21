@@ -14,7 +14,5 @@ export const ScatterPlotPanel: React.FC<Props> = (props) => {
   options.themeColor = theme.isDark ? '#ffffff' : '#000000';
   options.hudBgColor = theme.colors.background.secondary;
 
-  return (
-    <PlotCanvas frames={frames} options={options}/>
-  );
+  return <PlotCanvas frames={frames} options={options} />;
 };

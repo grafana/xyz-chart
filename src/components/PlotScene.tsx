@@ -9,7 +9,7 @@ import { LABEL_INT, SCENE_SCALE } from 'consts';
 
 interface Props {
   frames: DataFrame[];
-  lights: RefObject<ReactNode>[];
+  lights: Array<RefObject<ReactNode>>;
   hoveredPoint: HoveredPoint | null;
   setHoveredPoint: Function;
   canvasRef: RefObject<HTMLCanvasElement>;
@@ -22,41 +22,35 @@ export const PlotScene: React.FC<Props> = ({ frames, lights, hoveredPoint, setHo
   //TODO refactor scene size, label intervals, grids will be fixed like XY Chart
   const size = SCENE_SCALE;
   const gridInterval = LABEL_INT;
-  const dateFormat = options.labelDateFormat;
   const dataPointColor = options.dataPointColor;
 
   const [pointData, setPointData] = useState(prepData(frames, size, dataPointColor));
-  const [intervalLabels, setIntervalLabels] = useState(
-    getIntervalLabels(frames, size, gridInterval, options.labelDateFormat)
-  );
+  
 
   useEffect(() => {
-    const newLabels = getIntervalLabels(frames, size, gridInterval, dateFormat);
+    // const newLabels = getIntervalLabels(frames, size, gridInterval, dateFormat);
 
-    // setHoveredPoint
+    // // setHoveredPoint
 
-    setIntervalLabels(newLabels);
+    // setIntervalLabels(newLabels);
     setPointData(prepData(frames, size, dataPointColor));
-  }, [size, gridInterval, frames]);
+  }, [size, frames, dataPointColor]);
 
-  useEffect(() => {
-    setIntervalLabels(getIntervalLabels(frames, size, gridInterval, dateFormat));
-  }, [dateFormat]);
 
   return (
     <>
       <Suspense fallback={null}>
         <PointCloud
-          canvasRef={ canvasRef }
-          hudRef={ hudRef }
-          frames={ frames } 
-          points={ pointData } 
-          lights={ lights }
-          hoveredPoint={ hoveredPoint }
-          setHoveredPoint={ setHoveredPoint }
+          canvasRef={canvasRef}
+          hudRef={hudRef}
+          frames={frames}
+          points={pointData}
+          lights={lights}
+          hoveredPoint={hoveredPoint}
+          setHoveredPoint={setHoveredPoint}
         />
       </Suspense>
-      <group>
+      {/* <group>
         <Grid
           direction={Direction.Up}
           size={size}
@@ -75,7 +69,7 @@ export const PlotScene: React.FC<Props> = ({ frames, lights, hoveredPoint, setHo
           gridInterval={gridInterval}
           intervalLabels={intervalLabels.zLabels}
         />
-      </group>
+      </group> */}
     </>
   );
 };

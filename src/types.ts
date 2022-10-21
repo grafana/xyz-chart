@@ -28,7 +28,7 @@ export interface ScatterPlotOptions {
   hasSkybox: boolean;
   skybox: string;
   enableOrbitControls: boolean;
-  enableOrthographc: boolean
+  enableOrthographc: boolean;
   cameraFov: number;
   cameraX: number;
   cameraY: number;
@@ -36,7 +36,7 @@ export interface ScatterPlotOptions {
 }
 
 export interface LabelProps {
-  position: Vector3;
+  position: [number, number, number];
   text: string;
   rotation?: Euler;
   direction: Direction;
@@ -64,9 +64,9 @@ export enum Direction {
 }
 
 export interface AxisData {
-  axisPoints: [number, number, number][];
+  axisPoints: Array<[number, number, number]>;
   intervalGeometries: number[][][];
-  intervalLabelPos: Vector3[];
+  intervalLabelPos: number[][];
   labelRotation: Euler;
   color: string;
 }

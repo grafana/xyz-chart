@@ -12,7 +12,6 @@ export const Label = (props: LabelProps) => {
 
   const font = new FontLoader().parse(Roboto);
   const labelSize = props.labelSize ? props.labelSize : (SCENE_SCALE * 0.2) / 10;
-  
 
   const calculateLabelOffset = () => {
     textGeometry.computeBoundingBox();
@@ -28,7 +27,7 @@ export const Label = (props: LabelProps) => {
         textGeometry.translate(textGeometry.boundingBox!.min.x, 0, 0);
         break;
     }
-  }
+  };
 
   const textOptions: any = {
     font,
@@ -50,7 +49,7 @@ export const Label = (props: LabelProps) => {
 
   return (
     <mesh position={props.position} rotation={props.rotation ?? undefined} geometry={textGeometry}>
-      <meshStandardMaterial attach="material" color={color}/>
+      <meshStandardMaterial attach="material" color={color} />
     </mesh>
   );
 };

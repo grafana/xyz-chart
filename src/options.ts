@@ -107,30 +107,30 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ScatterPlotOpt
       defaultValue: DEFAULT_SKYBOX,
       showIf: (config) => config.hasSkybox,
     });
-    // .addNumberInput({
-    //   category: cameraCategory,
-    //   path: 'cameraFov',
-    //   name: 'Camera Field of View',
-    //   defaultValue: 75
-    // })
-    // .addNumberInput({
-    //   category: cameraCategory,
-    //   path: 'cameraX',
-    //   name: 'Camera X Position',
-    //   defaultValue: 0,
-    // })
-    // .addNumberInput({
-    //   category: cameraCategory,
-    //   path: 'cameraY',
-    //   name: 'Camera Y Position',
-    //   defaultValue: 0,
-    // })
-    // .addNumberInput({
-    //   category: cameraCategory,
-    //   path: 'cameraZ',
-    //   name: 'Camera Z Position',
-    //   defaultValue: 0,
-    // });
+  // .addNumberInput({
+  //   category: cameraCategory,
+  //   path: 'cameraFov',
+  //   name: 'Camera Field of View',
+  //   defaultValue: 75
+  // })
+  // .addNumberInput({
+  //   category: cameraCategory,
+  //   path: 'cameraX',
+  //   name: 'Camera X Position',
+  //   defaultValue: 0,
+  // })
+  // .addNumberInput({
+  //   category: cameraCategory,
+  //   path: 'cameraY',
+  //   name: 'Camera Y Position',
+  //   defaultValue: 0,
+  // })
+  // .addNumberInput({
+  //   category: cameraCategory,
+  //   path: 'cameraZ',
+  //   name: 'Camera Z Position',
+  //   defaultValue: 0,
+  // });
 };
 
 const categoryStyles = ['Scatter panel styles'];

@@ -36,10 +36,12 @@ export const Grid = (props: GridProps) => {
     return lineGeometries;
   };
 
+  // console.log('redraw')
+
   const options: ScatterPlotOptions = useContext(OptionsContext);
 
   const geometry = createGeometry();
-  const color = "#808080";
+  const color = '#808080';
 
   return (
     <>

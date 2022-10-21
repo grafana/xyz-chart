@@ -79,9 +79,8 @@ export function prepData(frames: DataFrame[], sceneScale: number, dataPointColor
   // chart coords, assuming as single data frame (although that's silly)
   for (let frame of frames) {
     if (frame.fields.length < 3) {
-      return{ points: new Float32Array(), colors: new Float32Array() };
+      return { points: new Float32Array(), colors: new Float32Array() };
     }
-
 
     for (let i = 0; i < 3; i++) {
       let vals = frame.fields[i].values.toArray();
@@ -126,7 +125,12 @@ export function prepData(frames: DataFrame[], sceneScale: number, dataPointColor
   return { points: new Float32Array(points), colors: new Float32Array(colors) };
 }
 
-export function getIntervalLabels(frames: DataFrame[], sceneScale: number, labelInterval: number, dateFormat: string): IntervalLabels {
+export function getIntervalLabels(
+  frames: DataFrame[],
+  sceneScale: number,
+  labelInterval: number,
+  dateFormat: string
+): IntervalLabels {
   const xLabels: string[] = [];
   const yLabels: string[] = [];
   const zLabels: string[] = [];
@@ -137,7 +141,7 @@ export function getIntervalLabels(frames: DataFrame[], sceneScale: number, label
   }
 
   //build labels based on first frame
-  const frame = frames[0]
+  const frame = frames[0];
 
   const xVals = frame.fields[0].values.toArray();
   const yVals = frame.fields[1].values.toArray();
@@ -156,7 +160,7 @@ export function getIntervalLabels(frames: DataFrame[], sceneScale: number, label
   const zFactor = (zMax - zMin) / intervalFactor;
 
   for (let i = 0; i < intervalFactor; i++) {
-    if (frame.fields[0].type === FieldType.time) {   
+    if (frame.fields[0].type === FieldType.time) {
       xLabels.push(moment.unix((xMin + i * xFactor) / 1000).format(dateFormat));
     } else {
       xLabels.push((xMin + i * xFactor).toFixed(2));
@@ -166,7 +170,7 @@ export function getIntervalLabels(frames: DataFrame[], sceneScale: number, label
     zLabels.push((zMin + i * zFactor).toFixed(2));
   }
 
-  if (frame.fields[0].type === FieldType.time) {      
+  if (frame.fields[0].type === FieldType.time) {
     xLabels.push(moment.unix(xMax / 1000).format(dateFormat));
   } else {
     xLabels.push(xMax.toFixed(2));
@@ -184,14 +188,14 @@ export function hexToRgb(hexColor: string): RGBColor {
   let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
 
   if (result === null) {
-    return { r: 1, g: 1, b: 1};
+    return { r: 1, g: 1, b: 1 };
   }
 
   let r = parseInt(result[1], 16);
   let g = parseInt(result[2], 16);
   let b = parseInt(result[3], 16);
 
-  return { r: r / 255, g: g / 255, b: b / 255};
+  return { r: r / 255, g: g / 255, b: b / 255 };
 }
 
 export function convertTextColorToHex(color: string): string {
