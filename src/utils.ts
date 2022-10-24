@@ -6,15 +6,6 @@ import moment from 'moment';
 import { COLOR_PICKER_OPTIONS, DATE_FORMAT, LABEL_INTERVAL, SCENE_SCALE } from 'consts';
 import { ScatterSeriesConfig, XYZDimensionConfig } from 'models.gen';
 
-export function createLineGeometry(startVec: Vector3, endVec: Vector3): BufferGeometry {
-  const points = [];
-
-  points.push(startVec);
-  points.push(endVec);
-
-  return new BufferGeometry().setFromPoints(points);
-}
-
 export function preparePlotByDims(series: DataFrame[], dimensions: XYZDimensionConfig): DataFrame[] {
   if (!series.length) {
     return [];

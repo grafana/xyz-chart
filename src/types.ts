@@ -13,6 +13,13 @@ declare global {
   }
 }
 
+/**
+ * A simple line geometry with:
+ * LineGeometry[0] --> Origin Point
+ * LineGeometry[1] --> Destinaiton Point
+ */
+export type LineGeometry = [[number, number, number], [number, number, number]];
+
 export interface LabelProps {
   position: Vector3;
   text: string;
