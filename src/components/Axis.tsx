@@ -2,7 +2,7 @@ import { Line } from '@react-three/drei';
 import { INTERVAL_INDEX_LENGTH, LABEL_DISTANCE_FROM_GRID, LABEL_INTERVAL, SCENE_SCALE, WHITE } from 'consts';
 import { ScatterPlotOptions } from 'models.gen';
 import OptionsContext from 'optionsContext';
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Euler } from '@react-three/fiber';
 import { Direction, GridAxisProps, AxisData, PointGeometry, LineGeometry } from 'types';
 import { Label } from './Label';
@@ -85,7 +85,7 @@ export const Axis = ({ direction, intervalLabels }: GridAxisProps) => {
     intervalLabelPos, 
     labelRotation, 
     color 
-  } = getAxisData(direction);
+  } = useMemo(() => getAxisData(direction), [direction]);
 
   return (
     <group key={'axis_' + direction}>
