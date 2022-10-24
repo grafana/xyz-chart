@@ -21,7 +21,7 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
   const posRef: any = useRef(null);
   const materialRef = useRef({} as PointsMaterial);
   const options: any = useContext(OptionsContext);
-  const circleTexture = useTexture('/public/plugins/grafana-labs-grafana-3-d-scatter-panel/img/circle.png');
+  const circleTexture = useTexture('/public/plugins/grafana-labs-grafana-3-d-scatter-panel/img/texture/dot.png');
   const [hoveredPointPos, setHoveredStatePos] = useState<Vector3 | null>(null);
   const [hoveredPointData, setHoveredPointData] = useState<string[]>([]);
 
