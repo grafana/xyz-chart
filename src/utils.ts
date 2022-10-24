@@ -1,4 +1,3 @@
-import { BufferGeometry, Vector3 } from 'three';
 import { DataFrame, Field, FieldType, ArrayVector, getFieldDisplayName } from '@grafana/data';
 import { IntervalLabels, PointData, RGBColor } from 'types';
 //eslint-disable-next-line no-restricted-imports
