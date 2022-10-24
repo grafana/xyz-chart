@@ -1,5 +1,6 @@
 import { extend, ReactThreeFiber } from '@react-three/fiber';
-import { Euler, Line, Vector3 } from 'three';
+import { Line } from 'three';
+import { Euler } from '@react-three/fiber';
 
 // <line /> is being reserved by dom, so we need to alias it
 extend({ Line_: Line });
@@ -13,8 +14,20 @@ declare global {
   }
 }
 
+/**
+ * A simple point geometry in the format [x, y, z].
+ */
+export type PointGeometry = [number, number, number];
+
+/**
+ * A simple line geometry with:
+ * LineGeometry[0] --> Origin Point
+ * LineGeometry[1] --> Destinaiton Point
+ */
+export type LineGeometry = [PointGeometry, PointGeometry];
+
 export interface LabelProps {
-  position: Vector3;
+  position: PointGeometry;
   text: string;
   rotation?: Euler;
   direction: Direction;
@@ -33,9 +46,9 @@ export enum Direction {
 }
 
 export interface AxisData {
-  axisPoints: Array<[number, number, number]>;
+  axisPoints: Array<PointGeometry>;
   intervalGeometries: number[][][];
-  intervalLabelPos: Vector3[];
+  intervalLabelPos: Array<PointGeometry>;
   labelRotation: Euler;
   color: string;
 }

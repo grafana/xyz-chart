@@ -1,8 +1,7 @@
-import { LABEL_INTERVAL, SCENE_SCALE } from 'consts';
-import React, { useRef } from 'react';
-import { BufferGeometry, Vector3 } from 'three';
-import { Direction, GridAxisProps } from 'types';
-import { createLineGeometry } from 'utils';
+import { AXIS_COLOR, LABEL_INTERVAL, SCENE_SCALE } from 'consts';
+import React, { useMemo, useRef } from 'react';
+import { Line } from '@react-three/drei';
+import { Direction, GridAxisProps, LineGeometry } from 'types';
 import { Axis } from './Axis';
 
 /* 
@@ -13,44 +12,45 @@ import { Axis } from './Axis';
 export const Grid = (props: GridAxisProps) => {
   const ref = useRef<any>(null);
 
-  const createGeometry = () => {
-    let lineGeometries: BufferGeometry[] = [];
+
+  const createGeometry = (): Array<LineGeometry> => {
+    let lineGeometries: Array<LineGeometry> = [];
 
     for (let i = 0; i < SCENE_SCALE; i = i + LABEL_INTERVAL) {
       switch (props.direction) {
         case Direction.Up:
-          lineGeometries.push(createLineGeometry(new Vector3(i, 0, 0), new Vector3(i, SCENE_SCALE, 0)));
-          lineGeometries.push(createLineGeometry(new Vector3(0, i, 0), new Vector3(SCENE_SCALE, i, 0)));
+          lineGeometries.push([[i, 0, 0], [i, SCENE_SCALE, 0]]);
+          lineGeometries.push([[0, i, 0], [SCENE_SCALE, i, 0]]);
           break;
         case Direction.Right:
-          lineGeometries.push(createLineGeometry(new Vector3(0, 0, i), new Vector3(SCENE_SCALE, 0, i)));
-          lineGeometries.push(createLineGeometry(new Vector3(i, 0, 0), new Vector3(i, 0, SCENE_SCALE)));
+          lineGeometries.push([[0, 0, i], [SCENE_SCALE, 0, i]]);
+          lineGeometries.push([[i, 0, 0], [i, 0, SCENE_SCALE]]);
           break;
         case Direction.Forward:
-          lineGeometries.push(createLineGeometry(new Vector3(0, i, 0), new Vector3(0, i, SCENE_SCALE)));
-          lineGeometries.push(createLineGeometry(new Vector3(0, 0, i), new Vector3(0, SCENE_SCALE, i)));
+          lineGeometries.push([[0, i, 0], [0, i, SCENE_SCALE]]);
+          lineGeometries.push([[0, 0, i], [0, SCENE_SCALE, i]]);
           break;
       }
     }
 
     return lineGeometries;
   };
-
-  const geometry = createGeometry();
-  const color = '#808080';
+  const lines = useMemo(() => createGeometry(), []);
 
   return (
-    <>
-      <group>
-        {geometry.map((lineGeo, index) => {
-          return (
-            <line_ ref={ref} geometry={lineGeo} key={index}>
-              <lineBasicMaterial attach="material" color={color} />
-            </line_>
-          );
-        })}
-        <Axis direction={props.direction} intervalLabels={props.intervalLabels} />
-      </group>
-    </>
+    <group>
+      {lines.map((lineGeo, index) => {
+        return (
+          <Line
+            ref={ ref }
+            points={ lineGeo }
+            color={ AXIS_COLOR }
+            key={ index }
+            lineWidth={ 2 }
+          />
+        );
+      })}
+      <Axis direction={props.direction} intervalLabels={props.intervalLabels} />
+    </group>
   );
 };

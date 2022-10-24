@@ -10,6 +10,7 @@ export const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 //Colors
 export const BLACK = '#000000';
 export const WHITE = '#ffffff';
+export const AXIS_COLOR = '#808080';
 export const COLOR_PICKER_OPTIONS: any = {
   ['super-light-red']: '#FFA6B0',
   ['light-red']: '#FF7383',
