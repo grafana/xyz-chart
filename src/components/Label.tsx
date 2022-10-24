@@ -12,7 +12,7 @@ export const Label = ({ direction, labelSize, position, rotation, text }: LabelP
 
   // Negative percentages don't work beyond -100% hence using
   // local units in that case instead
-  const anchorX = direction === Direction.Right ? '115%' : -1.15;
+  const anchorX = direction === Direction.Right ? "116%" : -1.15;
 
   return (
     <Text
