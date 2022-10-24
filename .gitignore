@@ -26,6 +26,10 @@ work/
 ci/
 e2e-results/
 
+# OS Files
+.DS_Store
+Thumbs.db
+
 # Editors
 .idea
 
