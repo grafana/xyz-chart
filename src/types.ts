@@ -34,9 +34,17 @@ export interface LabelProps {
   labelSize?: number;
 }
 
-export interface GridAxisProps {
+export interface GridVolumeProps {
+  intervalLabels: IntervalLabels;
+}
+
+export interface GridPlaneProps {
   direction: Direction;
   intervalLabels: any[];
+}
+
+export interface GridVolumeProps {
+  intervalLabels: IntervalLabels;
 }
 
 export enum Direction {

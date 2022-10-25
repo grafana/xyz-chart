@@ -4,10 +4,10 @@ import { ScatterPlotOptions } from 'models.gen';
 import OptionsContext from 'optionsContext';
 import React, { useContext, useMemo } from 'react';
 import { Euler } from '@react-three/fiber';
-import { Direction, GridAxisProps, AxisData, PointGeometry, LineGeometry } from 'types';
+import { Direction, GridPlaneProps, AxisData, PointGeometry, LineGeometry } from 'types';
 import { Label } from './Label';
 
-export const Axis = ({ direction, intervalLabels }: GridAxisProps) => {
+export const Axis: React.FC<GridPlaneProps> = ({ direction, intervalLabels }) => {
   const options: ScatterPlotOptions = useContext(OptionsContext);
 
   const getAxisData = (direction: Direction): AxisData => {

@@ -1,11 +1,14 @@
-import React, { createRef, RefObject, ReactNode } from 'react';
+import React, { createRef, useEffect, useState, RefObject, ReactNode, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Camera } from 'components/Camera';
-import { PlotScene } from 'components/PlotScene';
 import { DataFrame } from '@grafana/data';
+
+import { Camera } from 'components/Camera';
+import { getIntervalLabels, prepData } from 'utils';
 import { WHITE } from 'consts';
 import { ScatterPlotOptions } from 'models.gen';
 import { OptionsProvider } from 'optionsContext';
+import { PointCloud } from './PointCloud';
+import { GridVolume } from './GridVolume';
 interface Props {
   frames: DataFrame[];
   options: ScatterPlotOptions;
@@ -14,6 +17,16 @@ interface Props {
 export const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
   let ambLightRef: RefObject<ReactNode> = createRef();
   let pntLightRef: RefObject<ReactNode> = createRef();
+  const [pointData, setPointData] = useState(prepData(frames, options.pointColor ?? '#ff0000'));
+  const [intervalLabels, setIntervalLabels] = useState(getIntervalLabels(frames));
+
+  useEffect(() => {
+    const newLabels = getIntervalLabels(frames);
+
+    setIntervalLabels(newLabels);
+    setPointData(prepData(frames, options.pointColor ?? '#ff0000'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [frames]);
 
   return (
     <>
@@ -26,7 +39,10 @@ export const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
           <Camera />
           <ambientLight ref={ambLightRef} intensity={0.8} color={WHITE} />
           <pointLight ref={pntLightRef} intensity={1.0} position={[10, 10, 10]} />
-          <PlotScene frames={frames} lights={[ambLightRef, pntLightRef]} />
+          <Suspense fallback={null}>
+            <PointCloud frames={frames} points={pointData} lights={[ambLightRef, pntLightRef]} />
+          </Suspense>
+          <GridVolume intervalLabels={intervalLabels} />
         </OptionsProvider>
       </Canvas>
     </>
