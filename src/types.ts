@@ -43,10 +43,6 @@ export interface GridPlaneProps {
   intervalLabels: any[];
 }
 
-export interface GridVolumeProps {
-  intervalLabels: IntervalLabels;
-}
-
 export enum Direction {
   Up = 1,
   Right,
