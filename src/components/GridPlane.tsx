@@ -1,23 +1,18 @@
 import { AXIS_COLOR, LABEL_INTERVAL, SCENE_SCALE } from 'consts';
 import React, { useMemo, useRef } from 'react';
 import { Line } from '@react-three/drei';
-import { Direction, GridAxisProps, LineGeometry } from 'types';
+import { Direction, GridPlaneProps, LineGeometry } from 'types';
 import { Axis } from './Axis';
 
-/* 
-  Refactor and use <Line/> from drei package. Check Axis.tsx for example
-  Three.line does not support line width in WebGL, but drei's implementation does.
-  So I used a thicker line for axis and left the grid with the old implementation.
-*/
-export const Grid = (props: GridAxisProps) => {
+export const GridPlane: React.FC<GridPlaneProps> = ({ direction, intervalLabels }) => {
   const ref = useRef<any>(null);
 
 
-  const createGeometry = (): Array<LineGeometry> => {
+  const createGeometry = (direction: Direction): Array<LineGeometry> => {
     let lineGeometries: Array<LineGeometry> = [];
 
     for (let i = 0; i < SCENE_SCALE; i = i + LABEL_INTERVAL) {
-      switch (props.direction) {
+      switch (direction) {
         case Direction.Up:
           lineGeometries.push([[i, 0, 0], [i, SCENE_SCALE, 0]]);
           lineGeometries.push([[0, i, 0], [SCENE_SCALE, i, 0]]);
@@ -35,7 +30,7 @@ export const Grid = (props: GridAxisProps) => {
 
     return lineGeometries;
   };
-  const lines = useMemo(() => createGeometry(), []);
+  const lines = useMemo(() => createGeometry(direction), [direction]);
 
   return (
     <group>
@@ -50,7 +45,7 @@ export const Grid = (props: GridAxisProps) => {
           />
         );
       })}
-      <Axis direction={props.direction} intervalLabels={props.intervalLabels} />
+      <Axis direction={direction} intervalLabels={intervalLabels} />
     </group>
   );
 };
