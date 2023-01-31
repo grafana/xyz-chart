@@ -8,7 +8,8 @@
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch",
     "sign": "grafana-toolkit plugin:sign",
-    "start": "yarn watch"
+    "start": "yarn watch",
+    "spellcheck": "cspell -c cspell.config.json \"**/*.{ts,tsx,js,go,md,mdx,yml,yaml,json,scss,css}\""
   },
   "author": "Team 3D Panels",
   "license": "Apache-2.0",
@@ -16,7 +17,8 @@
     "@grafana/data": "latest",
     "@grafana/runtime": "^8.4.3",
     "@grafana/toolkit": "latest",
-    "@grafana/ui": "^8.4.3"
+    "@grafana/ui": "^8.4.3",
+    "cspell": "6.13.3"
   },
   "engines": {
     "node": ">=14"
@@ -26,10 +28,10 @@
     "@react-three/fiber": "^7.0.26",
     "@react-three/postprocessing": "^2.1.6",
     "@types/three": "^0.138.0",
+    "emotion": "^11.0.0",
     "moment": "^2.29.1",
     "postprocessing": "^6.25.0",
     "three": "^0.138.3",
-    "three-stdlib": "^2.8.8",
-    "emotion": "^11.0.0"
+    "three-stdlib": "^2.8.8"
   }
 }

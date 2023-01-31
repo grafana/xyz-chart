@@ -21,7 +21,7 @@ export type PointGeometry = [number, number, number];
 /**
  * A simple line geometry with:
  * LineGeometry[0] --> Origin Point
- * LineGeometry[1] --> Destinaiton Point
+ * LineGeometry[1] --> Destination Point
  */
 export type LineGeometry = [PointGeometry, PointGeometry];
 
