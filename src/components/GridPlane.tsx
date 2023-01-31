@@ -37,7 +37,7 @@ export const GridPlane: React.FC<GridPlaneProps> = ({ direction, intervalLabels 
             points={ lineGeo }
             color={ AXIS_COLOR }
             key={ index }
-            lineWidth={ 2 }
+            lineWidth={ 0.5 }
           />
         );
       })}

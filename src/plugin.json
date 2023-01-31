@@ -26,12 +26,11 @@
       }
     ],
     "screenshots": [
-      { "name": "Project tests dashboard", "path": "img/screenshot_project_overview.png" },
-      { "name": "Test overview", "path": "img/screenshot_test_overview.png" },
-      { "name": "Test run result", "path": "img/screenshot_test_result.png" },
-      { "name": "HTTP result breakdown", "path": "img/screenshot_http.png" },
-      { "name": "Thresholds result breakdown", "path": "img/screenshot_thresholds.png" },
-      { "name": "Checks result breakdown", "path": "img/screenshot_http.png" }
+      { "name": "XYZ Chart 1", "path": "img/chart-one.png" },
+      { "name": "XYZ Chart 2", "path": "img/chart-two.png" },
+      { "name": "Edit chart", "path": "img/edit-chart.png" },
+      { "name": "Hover over datapoints", "path": "img/hover-over-datapoints.png" },
+      { "name": "Zoom in", "path": "img/zoom-in.png" }
     ],
     "version": "%VERSION%",
     "updated": "%TODAY%"

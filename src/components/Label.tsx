@@ -17,7 +17,7 @@ export const Label = ({ direction, labelSize, position, rotation, text }: LabelP
   return (
     <Text
       color={color}
-      font="/public/plugins/grafana-labs-xyz-chart/fonts/Roboto-Regular.ttf"
+      font="/public/plugins/grafana-xyzchart-panel/fonts/Roboto-Regular.ttf"
       textAlign="left"
       //@ts-ignore
       anchorX={anchorX}

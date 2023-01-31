@@ -21,7 +21,7 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
   const pointsRef = useRef(pts);
   const materialRef = useRef(ptsMat);
   const options: ScatterPlotOptions = useContext(OptionsContext);
-  const circleTexture = useTexture('/public/plugins/grafana-labs-xyz-chart/img/dot.png');
+  const circleTexture = useTexture('/public/plugins/grafana-xyzchart-panel/img/dot.png');
   const [hoveredPointPos, setHoveredStatePos] = useState<Vector3 | null>(null);
   const [hoveredPointData, setHoveredPointData] = useState<string[]>([]);
 
@@ -55,7 +55,7 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
     (e) => {
       e.stopPropagation();
       const colorAttr = pointsRef.current.geometry.getAttribute('color');
-      colorAttr.setXYZ(e.index * 3, 1, 1, 1);
+      colorAttr.setXYZ(e.index, 1, 1, 1);
       colorAttr.needsUpdate = true;
       pointsRef.current.geometry.setAttribute('color', colorAttr);
 
@@ -80,7 +80,7 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
 
       const color: RGBColor = hexToRgb(options.pointColor ?? '#ff0000');
       const colorAttr = pointsRef.current.geometry.getAttribute('color');
-      colorAttr.setXYZ(e.index * 3, color.r, color.g, color.b);
+      colorAttr.setXYZ(e.index, color.r, color.g, color.b);
       colorAttr.needsUpdate = true;
       pointsRef.current.geometry.setAttribute('color', colorAttr);
 
