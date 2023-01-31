@@ -84,10 +84,7 @@ export const Axis: React.FC<GridPlaneProps> = ({ direction, intervalLabels }) =>
 
   const { axisPoints, intervalGeometries, intervalLabelPos, labelRotation, color } = useMemo(
     () => getAxisData(direction),
-    
-    
-    
-    []
+    [direction, getAxisData]
   );
 
   return (
