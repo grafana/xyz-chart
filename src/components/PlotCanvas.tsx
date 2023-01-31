@@ -28,7 +28,7 @@ export const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
     setPointData(prepData(frames, options.pointColor ?? '#ff0000'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [frames]);
-  
+
   function Loader() {
     const { progress } = useProgress();
     return <Html center>{progress} % loaded</Html>;

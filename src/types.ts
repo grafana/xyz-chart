@@ -1,6 +1,5 @@
-import { extend, ReactThreeFiber } from '@react-three/fiber';
+import { extend, ReactThreeFiber, Euler } from '@react-three/fiber';
 import { Line } from 'three';
-import { Euler } from '@react-three/fiber';
 
 // <line /> is being reserved by dom, so we need to alias it
 extend({ Line_: Line });
@@ -50,9 +49,9 @@ export enum Direction {
 }
 
 export interface AxisData {
-  axisPoints: Array<PointGeometry>;
+  axisPoints: PointGeometry[];
   intervalGeometries: number[][][];
-  intervalLabelPos: Array<PointGeometry>;
+  intervalLabelPos: PointGeometry[];
   labelRotation: Euler;
   color: string;
 }

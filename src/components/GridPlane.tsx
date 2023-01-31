@@ -5,22 +5,40 @@ import { Direction, GridPlaneProps, LineGeometry } from 'types';
 import { Axis } from './Axis';
 
 export const GridPlane: React.FC<GridPlaneProps> = ({ direction, intervalLabels }) => {
-  const createGeometry = (direction: Direction): Array<LineGeometry> => {
-    let lineGeometries: Array<LineGeometry> = [];
+  const createGeometry = (direction: Direction): LineGeometry[] => {
+    let lineGeometries: LineGeometry[] = [];
 
     for (let i = 0; i < SCENE_SCALE; i = i + LABEL_INTERVAL) {
       switch (direction) {
         case Direction.Up:
-          lineGeometries.push([[i, 0, 0], [i, SCENE_SCALE, 0]]);
-          lineGeometries.push([[0, i, 0], [SCENE_SCALE, i, 0]]);
+          lineGeometries.push([
+            [i, 0, 0],
+            [i, SCENE_SCALE, 0],
+          ]);
+          lineGeometries.push([
+            [0, i, 0],
+            [SCENE_SCALE, i, 0],
+          ]);
           break;
         case Direction.Right:
-          lineGeometries.push([[0, 0, i], [SCENE_SCALE, 0, i]]);
-          lineGeometries.push([[i, 0, 0], [i, 0, SCENE_SCALE]]);
+          lineGeometries.push([
+            [0, 0, i],
+            [SCENE_SCALE, 0, i],
+          ]);
+          lineGeometries.push([
+            [i, 0, 0],
+            [i, 0, SCENE_SCALE],
+          ]);
           break;
         case Direction.Forward:
-          lineGeometries.push([[0, i, 0], [0, i, SCENE_SCALE]]);
-          lineGeometries.push([[0, 0, i], [0, SCENE_SCALE, i]]);
+          lineGeometries.push([
+            [0, i, 0],
+            [0, i, SCENE_SCALE],
+          ]);
+          lineGeometries.push([
+            [0, 0, i],
+            [0, SCENE_SCALE, i],
+          ]);
           break;
       }
     }
@@ -32,14 +50,7 @@ export const GridPlane: React.FC<GridPlaneProps> = ({ direction, intervalLabels 
   return (
     <group>
       {lines.map((lineGeo, index) => {
-        return (
-          <Line
-            points={ lineGeo }
-            color={ AXIS_COLOR }
-            key={ index }
-            lineWidth={ 0.5 }
-          />
-        );
+        return <Line points={lineGeo} color={AXIS_COLOR} key={index} lineWidth={0.5} />;
       })}
       <Axis direction={direction} intervalLabels={intervalLabels} />
     </group>
