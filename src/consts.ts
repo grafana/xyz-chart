@@ -43,11 +43,3 @@ export const COLOR_PICKER_OPTIONS: any = {
   ['semi-dark-purple']: '#A352CC',
   ['dark-purple']: '#8F3BB8',
 };
-
-//SkyBox
-export const SKYBOXES = [
-  { label: 'Grafana', value: 'grafana' },
-  { label: 'Hackathon', value: 'hackathon' },
-  { label: 'Universe', value: 'universe' },
-];
-export const DEFAULT_SKYBOX = 'grafana';
