@@ -12,12 +12,12 @@ export const Label = ({ direction, labelSize, position, rotation, text }: LabelP
 
   // Negative percentages don't work beyond -100% hence using
   // local units in that case instead
-  const anchorX = direction === Direction.Right ? "116%" : -1.15;
+  const anchorX = direction === Direction.Right ? '116%' : -1.15;
 
   return (
     <Text
       color={color}
-      font="/public/plugins/grafana-labs-grafana-3-d-scatter-panel/fonts/Roboto-Regular.ttf"
+      font="/public/plugins/grafana-labs-xyz-chart/fonts/Roboto-Regular.ttf"
       textAlign="left"
       //@ts-ignore
       anchorX={anchorX}

@@ -1,13 +1,10 @@
 import { AXIS_COLOR, LABEL_INTERVAL, SCENE_SCALE } from 'consts';
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo } from 'react';
 import { Line } from '@react-three/drei';
 import { Direction, GridPlaneProps, LineGeometry } from 'types';
 import { Axis } from './Axis';
 
 export const GridPlane: React.FC<GridPlaneProps> = ({ direction, intervalLabels }) => {
-  const ref = useRef<any>(null);
-
-
   const createGeometry = (direction: Direction): Array<LineGeometry> => {
     let lineGeometries: Array<LineGeometry> = [];
 
@@ -37,7 +34,6 @@ export const GridPlane: React.FC<GridPlaneProps> = ({ direction, intervalLabels 
       {lines.map((lineGeo, index) => {
         return (
           <Line
-            ref={ ref }
             points={ lineGeo }
             color={ AXIS_COLOR }
             key={ index }
