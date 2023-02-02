@@ -14,7 +14,8 @@
     "start": "yarn watch",
     "test": "jest --watch --onlyChanged",
     "test:ci": "jest --passWithNoTests --maxWorkers 4",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "spellcheck": "cspell -c cspell.config.json \"**/*.{ts,tsx,js,go,md,mdx,yml,yaml,json,scss,css}\""
   },
   "author": "Team 3D Panels",
   "license": "Apache-2.0",
@@ -36,6 +37,7 @@
     "@typescript-eslint/eslint-plugin": "^5.42.1",
     "@typescript-eslint/parser": "^5.42.1",
     "copy-webpack-plugin": "^11.0.0",
+    "cspell": "6.13.3",
     "css-loader": "^6.7.1",
     "eslint": "8.26.0",
     "eslint-config-prettier": "^8.3.0",
