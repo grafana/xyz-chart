@@ -1,14 +1,14 @@
 import { PanelPlugin } from '@grafana/data';
-import { defaultScatterConfig, ScatterPlotOptions } from './models.gen';
-import { ScatterPlotPanel } from './ScatterPlotPanel';
+import { defualtXyzChartConfig, XYZChartOptions } from './models.gen';
+import { XYZChart } from './XYZChart';
 import { XYZDimsEditor } from 'XYZDimsEditor';
 
-export const plugin = new PanelPlugin<ScatterPlotOptions>(ScatterPlotPanel).setPanelOptions((builder) => {
+export const plugin = new PanelPlugin<XYZChartOptions>(XYZChart).setPanelOptions((builder) => {
   builder
     .addRadio({
       path: 'seriesMapping',
       name: 'Series mapping',
-      defaultValue: defaultScatterConfig.seriesMapping,
+      defaultValue: defualtXyzChartConfig.seriesMapping,
       settings: {
         options: [
           { value: 'auto', label: 'Auto' },
@@ -42,12 +42,12 @@ export const plugin = new PanelPlugin<ScatterPlotOptions>(ScatterPlotPanel).setP
       path: 'pointColor',
       name: 'Point color',
       settings: {},
-      defaultValue: defaultScatterConfig.pointColor,
+      defaultValue: defualtXyzChartConfig.pointColor,
     })
     .addNumberInput({
       path: 'pointSize',
       name: 'Point size',
       settings: {},
-      defaultValue: defaultScatterConfig.pointSize,
+      defaultValue: defualtXyzChartConfig.pointSize,
     });
 });

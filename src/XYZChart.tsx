@@ -1,12 +1,12 @@
 import React, { useMemo, lazy, useState, useEffect, Suspense } from 'react';
 import { PanelProps } from '@grafana/data';
 import { useTheme2 } from '@grafana/ui';
-import { ScatterPlotOptions } from 'models.gen';
+import { XYZChartOptions as XYZChartOptions } from 'models.gen';
 import { preparePlotByDims, preparePlotByExplicitSeries } from 'utils';
 
-interface Props extends PanelProps<ScatterPlotOptions> {}
+interface Props extends PanelProps<XYZChartOptions> {}
 
-export const ScatterPlotPanel: React.FC<Props> = (props) => {
+export const XYZChart: React.FC<Props> = (props) => {
   const theme = useTheme2();
   const frames = useMemo(() => {
     if (props.options.seriesMapping === 'manual') {
@@ -16,7 +16,7 @@ export const ScatterPlotPanel: React.FC<Props> = (props) => {
     }
   }, [props.data.series, props.options.series, props.options.dims, props.options.seriesMapping]);
 
-  const options: ScatterPlotOptions = props.options;
+  const options: XYZChartOptions = props.options;
   const [isMounted, setIsMounted] = useState(false);
   options.themeColor = theme.isDark ? '#ffffff' : '#000000';
   options.hudBgColor = theme.colors.background.secondary;

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import OptionsContext from 'optionsContext';
-import { ScatterPlotOptions } from 'models.gen';
+import { XYZChartOptions } from 'models.gen';
 import { Html } from '@react-three/drei';
 import { css } from '@emotion/css';
 
@@ -12,7 +12,7 @@ interface HUDProps {
 }
 
 export const HUD: React.FC<HUDProps> = ({ pointPos, xValue, yValue, zValue }) => {
-  const options: ScatterPlotOptions = useContext(OptionsContext);
+  const options: XYZChartOptions = useContext(OptionsContext);
   const styles = getStyles(options);
 
   return (
@@ -33,7 +33,7 @@ export const HUD: React.FC<HUDProps> = ({ pointPos, xValue, yValue, zValue }) =>
   );
 };
 
-const getStyles = (options: ScatterPlotOptions) => {
+const getStyles = (options: XYZChartOptions) => {
   return {
     tooltip: css`
       padding: 10px;

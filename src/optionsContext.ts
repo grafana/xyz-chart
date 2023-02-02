@@ -1,7 +1,7 @@
 import React from 'react';
-import { ScatterPlotOptions } from 'models.gen';
+import { XYZChartOptions } from 'models.gen';
 
-const opts: ScatterPlotOptions = {
+const opts: XYZChartOptions = {
   pointColor: '',
   pointSize: 0,
   seriesMapping: 'auto',

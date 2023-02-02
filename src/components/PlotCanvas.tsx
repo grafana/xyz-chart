@@ -6,13 +6,13 @@ import { DataFrame } from '@grafana/data';
 import { Camera } from 'components/Camera';
 import { getIntervalLabels, prepData } from 'utils';
 import { WHITE } from 'consts';
-import { ScatterPlotOptions } from 'models.gen';
+import { XYZChartOptions } from 'models.gen';
 import { OptionsProvider } from 'optionsContext';
 import { PointCloud } from './PointCloud';
 import { GridVolume } from './GridVolume';
 interface Props {
   frames: DataFrame[];
-  options: ScatterPlotOptions;
+  options: XYZChartOptions;
 }
 
 const PlotCanvas: React.FC<Props> = ({ frames, options }) => {

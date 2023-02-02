@@ -1,6 +1,6 @@
 import { HideableFieldConfig, AxisConfig } from '@grafana/schema';
 
-export interface ScatterSeriesConfig extends HideableFieldConfig, AxisConfig {
+export interface XYZSeriesConfig extends HideableFieldConfig, AxisConfig {
   x?: string;
   y?: string;
   z?: string;
@@ -11,7 +11,7 @@ export interface XYZDimensionConfig {
   x?: string; // name | first
 }
 
-export interface ScatterPlotOptions {
+export interface XYZChartOptions {
   pointColor: string;
   pointSize: number;
   themeColor?: string;
@@ -19,10 +19,10 @@ export interface ScatterPlotOptions {
 
   seriesMapping: 'auto' | 'manual' | undefined;
   dims?: XYZDimensionConfig;
-  series?: ScatterSeriesConfig;
+  series?: XYZSeriesConfig;
 }
 
-export const defaultScatterConfig: ScatterPlotOptions = {
+export const defualtXyzChartConfig: XYZChartOptions = {
   pointColor: 'red',
   pointSize: 5,
   seriesMapping: 'auto',
