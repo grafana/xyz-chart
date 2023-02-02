@@ -1,8 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, lazy, useState, useEffect, Suspense } from 'react';
 import { PanelProps } from '@grafana/data';
 import { useTheme2 } from '@grafana/ui';
 import { ScatterPlotOptions } from 'models.gen';
-import { PlotCanvas } from 'components/PlotCanvas';
 import { preparePlotByDims, preparePlotByExplicitSeries } from 'utils';
 
 interface Props extends PanelProps<ScatterPlotOptions> {}
@@ -18,8 +17,13 @@ export const ScatterPlotPanel: React.FC<Props> = (props) => {
   }, [props.data.series, props.options.series, props.options.dims, props.options.seriesMapping]);
 
   const options: ScatterPlotOptions = props.options;
+  const [isMounted, setIsMounted] = useState(false);
   options.themeColor = theme.isDark ? '#ffffff' : '#000000';
   options.hudBgColor = theme.colors.background.secondary;
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   let error = false;
   for (const frame of frames) {
@@ -29,6 +33,8 @@ export const ScatterPlotPanel: React.FC<Props> = (props) => {
     }
   }
 
+  const Canvas = lazy(() => import('components/PlotCanvas'));
+
   if (error || frames.length === 0) {
     return (
       <div className="panel-empty">
@@ -37,5 +43,10 @@ export const ScatterPlotPanel: React.FC<Props> = (props) => {
     );
   }
 
-  return <PlotCanvas frames={frames} options={options} />;
+
+  return (
+    <>
+      { !isMounted ? <div className="panel-empty"/> : (<Suspense fallback={null}><Canvas frames={frames} options={options} /></Suspense>) }
+    </>
+    );
 };

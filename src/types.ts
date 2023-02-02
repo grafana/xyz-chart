@@ -1,17 +1,4 @@
-import { extend, ReactThreeFiber, Euler } from '@react-three/fiber';
-import { Line } from 'three';
-
-// <line /> is being reserved by dom, so we need to alias it
-extend({ Line_: Line });
-
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace JSX {
-    interface IntrinsicElements {
-      line_: ReactThreeFiber.Object3DNode<Line, typeof Line>;
-    }
-  }
-}
+import { Euler } from '@react-three/fiber';
 
 /**
  * A simple point geometry in the format [x, y, z].
