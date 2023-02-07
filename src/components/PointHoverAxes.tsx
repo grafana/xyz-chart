@@ -2,7 +2,7 @@ import { Line } from '@react-three/drei';
 import OptionsContext from 'optionsContext';
 import React, { useContext } from 'react';
 import { Vector3 } from 'three';
-import { ScatterPlotOptions } from 'models.gen';
+import { XYZChartOptions } from 'models.gen';
 
 interface PointHoverAxesProps {
   pointVector: Vector3;
@@ -11,7 +11,7 @@ interface PointHoverAxesProps {
 export const PointHoverAxes = (props: PointHoverAxesProps) => {
   const { pointVector } = props;
 
-  const options: ScatterPlotOptions = useContext(OptionsContext);
+  const options: XYZChartOptions = useContext(OptionsContext);
 
   const upPlanePos: Vector3 = new Vector3(pointVector.x, pointVector.y, 0);
   const forwardPlanePos: Vector3 = new Vector3(0, pointVector.y, pointVector.z);

@@ -4,7 +4,7 @@ import { SelectableValue, getFrameDisplayName, StandardEditorProps, getFieldDisp
 import { Label, Select } from '@grafana/ui';
 
 import { getXYZDimensions } from './dims';
-import { XYZDimensionConfig, ScatterPlotOptions } from './models.gen';
+import { XYZDimensionConfig, XYZChartOptions } from './models.gen';
 
 interface XYZInfo {
   validFields: Array<SelectableValue<string>>;
@@ -15,7 +15,7 @@ export const XYZDimsEditor = ({
   value,
   onChange,
   context,
-}: StandardEditorProps<XYZDimensionConfig, null, ScatterPlotOptions>) => {
+}: StandardEditorProps<XYZDimensionConfig, null, XYZChartOptions>) => {
   const frameNames = useMemo(() => {
     if (context?.data?.length) {
       return context.data.map((f, idx) => ({

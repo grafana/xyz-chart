@@ -7,7 +7,7 @@ import { useTexture } from '@react-three/drei';
 import { PointHoverAxes } from './PointHoverAxes';
 import { HUD } from './HUD';
 import { DataFrame } from '@grafana/data';
-import { ScatterPlotOptions } from 'models.gen';
+import { XYZChartOptions } from 'models.gen';
 
 interface Props {
   points: PointData;
@@ -20,7 +20,7 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
   const ptsMat: PointsMaterial = new PointsMaterial();
   const pointsRef = useRef(pts);
   const materialRef = useRef(ptsMat);
-  const options: ScatterPlotOptions = useContext(OptionsContext);
+  const options: XYZChartOptions = useContext(OptionsContext);
   const circleTexture = useTexture('/public/plugins/grafana-xyzchart-panel/img/dot.png');
   const [hoveredPointPos, setHoveredStatePos] = useState<Vector3 | null>(null);
   const [hoveredPointData, setHoveredPointData] = useState<string[]>([]);

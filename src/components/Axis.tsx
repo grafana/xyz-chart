@@ -1,6 +1,6 @@
 import { Line } from '@react-three/drei';
 import { INTERVAL_INDEX_LENGTH, LABEL_DISTANCE_FROM_GRID, LABEL_INTERVAL, SCENE_SCALE, WHITE } from 'consts';
-import { ScatterPlotOptions } from 'models.gen';
+import { XYZChartOptions } from 'models.gen';
 import OptionsContext from 'optionsContext';
 import React, { useContext, useMemo, useCallback } from 'react';
 import { Euler } from '@react-three/fiber';
@@ -8,7 +8,7 @@ import { Direction, GridPlaneProps, AxisData, PointGeometry, LineGeometry } from
 import { Label } from './Label';
 
 export const Axis: React.FC<GridPlaneProps> = ({ direction, intervalLabels }) => {
-  const options: ScatterPlotOptions = useContext(OptionsContext);
+  const options: XYZChartOptions = useContext(OptionsContext);
 
   const getAxisData = useCallback(
     (direction: Direction): AxisData => {

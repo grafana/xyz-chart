@@ -6,16 +6,16 @@ import { DataFrame } from '@grafana/data';
 import { Camera } from 'components/Camera';
 import { getIntervalLabels, prepData } from 'utils';
 import { WHITE } from 'consts';
-import { ScatterPlotOptions } from 'models.gen';
+import { XYZChartOptions } from 'models.gen';
 import { OptionsProvider } from 'optionsContext';
 import { PointCloud } from './PointCloud';
 import { GridVolume } from './GridVolume';
 interface Props {
   frames: DataFrame[];
-  options: ScatterPlotOptions;
+  options: XYZChartOptions;
 }
 
-export const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
+const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
   let ambLightRef: RefObject<ReactNode> = createRef();
   let pntLightRef: RefObject<ReactNode> = createRef();
   const [pointData, setPointData] = useState(prepData(frames, options.pointColor ?? '#ff0000'));
@@ -56,3 +56,5 @@ export const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
     </>
   );
 };
+
+export default PlotCanvas;

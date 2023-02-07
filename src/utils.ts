@@ -3,7 +3,7 @@ import { IntervalLabels, PointData, RGBColor } from 'types';
 //eslint-disable-next-line no-restricted-imports
 import moment from 'moment';
 import { COLOR_PICKER_OPTIONS, DATE_FORMAT, LABEL_INTERVAL, SCENE_SCALE } from 'consts';
-import { ScatterSeriesConfig, XYZDimensionConfig } from 'models.gen';
+import { XYZSeriesConfig, XYZDimensionConfig } from 'models.gen';
 
 export function preparePlotByDims(series: DataFrame[], dimensions: XYZDimensionConfig): DataFrame[] {
   if (!series.length) {
@@ -69,7 +69,7 @@ export function preparePlotByDims(series: DataFrame[], dimensions: XYZDimensionC
   return [frame];
 }
 
-export function preparePlotByExplicitSeries(series: DataFrame[], explicitSeries: ScatterSeriesConfig): DataFrame[] {
+export function preparePlotByExplicitSeries(series: DataFrame[], explicitSeries: XYZSeriesConfig): DataFrame[] {
   if (!series.length || !explicitSeries || (!explicitSeries.x && !explicitSeries.y && !explicitSeries.z)) {
     return [];
   }
