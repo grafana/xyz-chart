@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { SelectableValue, getFrameDisplayName, StandardEditorProps, getFieldDisplayName } from '@grafana/data';
 import { Label, Select } from '@grafana/ui';
@@ -26,28 +26,56 @@ export const XYZDimsEditor = ({
     return [{ value: 0, label: 'First result' }];
   }, [context.data]);
 
+  // Resets value.x to undefined whenever
+  // the frame index or data change.
+  //
+  // onChange is only called on select interaction
+  // so we need to call it manually here when data changes
+  useEffect(() => {
+    if (value?.x !== undefined) {
+      onChange({
+        ...value,
+        x: undefined
+      })
+    }
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  , [context.data, value?.frame]);
+
   const dims = useMemo(() => getXYZDimensions(value, context.data), [context.data, value]);
 
   const info = useMemo(() => {
-    const first = {
-      label: '?',
-      value: undefined, // empty
-    };
-    const v: XYZInfo = {
-      validFields: [first],
-      xField: value?.x
-        ? {
-            label: `${value.x} (Not found)`,
-            value: value.x, // empty
-          }
-        : first,
+    const notFoundField = {
+      label: `Not found`,
+      value: undefined
     };
 
-    if (context.data.length === 0 || !dims.frame) {
-      return v;
+    const errorInfo: XYZInfo = {
+      validFields: [notFoundField],
+      xField: notFoundField
     }
 
+    if (context.data.length === 0 || !dims.frame) {
+      return errorInfo;
+    }
+
+    let fieldsInfo: XYZInfo = {
+      validFields: [],
+      xField: {}
+    };
     const frame = context.data ? context.data[value?.frame ?? 0] : undefined;
+
+    if (frame?.fields) {
+      const firstNumericValField = frame.fields.find((f) => f.type === 'number');
+      if (firstNumericValField) {
+        const firstNumericValFieldName = getFieldDisplayName(firstNumericValField, frame, context.data);
+
+        fieldsInfo.xField = {
+          label: `${firstNumericValFieldName} (First)`,
+          value: firstNumericValFieldName,
+        };
+      }
+    }
 
     for (let field of dims.frame.fields) {
       const name = getFieldDisplayName(field, frame, context.data);
@@ -55,21 +83,14 @@ export const XYZDimsEditor = ({
         label: name,
         value: name,
       };
-      v.validFields.push(sel);
-      if (first.label === '?') {
-        first.label = `${name} (First)`;
-      }
+      fieldsInfo.validFields.push(sel);
       if (value?.x && name === value.x) {
-        v.xField = sel;
+        fieldsInfo.xField = sel;
       }
     }
 
-    return v;
-  }, [dims, context.data, value]);
-
-  if (!context.data) {
-    return <div>No data...</div>;
-  }
+    return fieldsInfo;
+  }, [context.data, dims.frame, value]);
 
   return (
     <div>

@@ -1,4 +1,4 @@
-import { DataFrame, Field, FieldType, getFieldDisplayName } from '@grafana/data';
+import { DataFrame, Field, FieldType } from '@grafana/data';
 
 import { XYZDimensionConfig } from './models.gen';
 
@@ -25,6 +25,7 @@ export function getXYZDimensions(cfg?: XYZDimensionConfig, data?: DataFrame[]): 
 
     return dims;
   }
+
   if (!cfg) {
     cfg = {
       frame: 0,
@@ -43,11 +44,7 @@ export function getXYZDimensions(cfg?: XYZDimensionConfig, data?: DataFrame[]): 
   let xIndex = -1;
   for (let i = 0; i < frame.fields.length; i++) {
     const f = frame.fields[i];
-    if (cfg.x && cfg.x === getFieldDisplayName(f, frame, data)) {
-      xIndex = i;
-      break;
-    }
-    if (isGraphable(f) && !cfg.x) {
+    if (isGraphable(f)) {
       xIndex = i;
       break;
     }

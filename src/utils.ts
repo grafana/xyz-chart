@@ -23,13 +23,14 @@ export function preparePlotByDims(series: DataFrame[], dimensions: XYZDimensionC
   for (const field of series[dims.frame].fields) {
     const name = getFieldDisplayName(field, series[dims.frame], series);
 
-    if (name === dims.x || dims.x === null) {
+    if (name === dims.x) {
       xField = field;
+      continue;
+    }
 
-      if (dims.x === null) {
-        dims.x = name;
-      }
-
+    if (dims.x === null && [FieldType.time, FieldType.number].includes(field.type)) {
+      xField = field;
+      dims.x = name;
       continue;
     }
 
