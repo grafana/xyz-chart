@@ -27,10 +27,8 @@
     "src/fonts/**"
   ],
   "ignoreRegExpList": [
-    // ignore multiline imports
     "import\\s*\\((.|[\r\n])*?\\)",
-    // ignore single line imports
     "import\\s*.*\".*?\""
   ],
-  "words": ["grafana", "datasource", "datasources"]
+  "words": ["grafana", "datasource", "datasources", "Drei"]
 }
