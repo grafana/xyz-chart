@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
   "name": "XYZ Chart",
-  "state": "alpha",
+  "state": "beta",
   "id": "grafana-xyzchart-panel",
   "info": {
     "description": "XYZ chart",
