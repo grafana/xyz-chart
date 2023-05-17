@@ -1,6 +1,6 @@
 {
   "name": "grafana-labs-grafana-3-d-scatter-panel",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "scripts": {
     "build": "webpack -c ./webpack.config.ts --env production",

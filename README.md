@@ -12,9 +12,9 @@ https://user-images.githubusercontent.com/199847/223649247-580aec80-2182-4c32-bf
 
 The XYZ Chart includes typical 3D camera controls so that data can panned, zoomed, and rotated. This allows for straightforward analysis from various perspectives.
 
-## Alpha
+## Beta
 
-This plugin is currently in alpha. Many changes are expected so please pay attention to new versions being released.
+This plugin is currently in beta. Many changes are expected so please pay attention to new versions being released.
 
 ## Implementation
 
