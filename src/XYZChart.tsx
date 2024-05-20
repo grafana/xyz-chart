@@ -4,7 +4,7 @@ import { useTheme2 } from '@grafana/ui';
 import { XYZChartOptions as XYZChartOptions } from 'models.gen';
 import { preparePlotByDims, preparePlotByExplicitSeries } from 'utils';
 
-interface Props extends PanelProps<XYZChartOptions> {}
+interface Props extends PanelProps<XYZChartOptions> { }
 
 export const XYZChart: React.FC<Props> = (props) => {
   const theme = useTheme2();
@@ -46,7 +46,7 @@ export const XYZChart: React.FC<Props> = (props) => {
 
   return (
     <>
-      { !isMounted ? <div className="panel-empty"/> : (<Suspense fallback={null}><Canvas frames={frames} options={options} /></Suspense>) }
+      {!isMounted ? <div className="panel-empty" /> : (<Suspense fallback={null}><div style={{ cursor: 'grab', width: '100%', height: '100%' }}><Canvas frames={frames} options={options} /></div></Suspense>)}
     </>
-    );
+  );
 };
