@@ -2,6 +2,7 @@ import { PanelPlugin } from '@grafana/data';
 import { defualtXyzChartConfig, XYZChartOptions } from './models.gen';
 import { XYZChart } from './XYZChart';
 import { XYZDimsEditor } from 'XYZDimsEditor';
+import { ThresholdEditor } from 'editors/ThresholdEditor';
 
 export const plugin = new PanelPlugin<XYZChartOptions>(XYZChart).setPanelOptions((builder) => {
   builder
@@ -17,7 +18,7 @@ export const plugin = new PanelPlugin<XYZChartOptions>(XYZChart).setPanelOptions
       },
     })
     .addCustomEditor({
-      id: 'xyPlotConfig',
+      id: 'xyzPlotConfig',
       path: 'dims',
       name: 'Data',
       editor: XYZDimsEditor,
@@ -49,5 +50,12 @@ export const plugin = new PanelPlugin<XYZChartOptions>(XYZChart).setPanelOptions
       name: 'Point size',
       settings: {},
       defaultValue: defualtXyzChartConfig.pointSize,
+    })
+    .addCustomEditor({
+      id: 'thresholds',
+      name: 'Thresholds',
+      path: 'thresholds',
+      editor: ThresholdEditor,
+      defaultValue: undefined,
     });
 });
