@@ -7,6 +7,8 @@ import { Euler } from '@react-three/fiber';
 import { Direction, GridPlaneProps, AxisData, PointGeometry, LineGeometry } from 'types';
 import { Label } from './Label';
 
+const AXIS_LINE_WIDTH = 1;
+
 export const Axis: React.FC<GridPlaneProps> = ({ direction, intervalLabels }) => {
   const options: XYZChartOptions = useContext(OptionsContext);
 
@@ -89,11 +91,16 @@ export const Axis: React.FC<GridPlaneProps> = ({ direction, intervalLabels }) =>
 
   return (
     <group key={'axis_' + direction}>
-      <Line points={axisPoints} color={color} lineWidth={2.5} dashed={false} />
+      <Line points={axisPoints} color={color} lineWidth={AXIS_LINE_WIDTH} dashed={false} />
       {intervalGeometries.map((points, index) => {
         return (
           <group key={index}>
-            <Line points={points as Array<[number, number, number]>} color={color} lineWidth={2.5} dashed={false} />
+            <Line
+              points={points as Array<[number, number, number]>}
+              color={color}
+              lineWidth={AXIS_LINE_WIDTH}
+              dashed={false}
+            />
             <Label
               direction={direction}
               position={intervalLabelPos[index]}
