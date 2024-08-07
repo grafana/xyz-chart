@@ -95,13 +95,13 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
       <points ref={pointsRef} onPointerOver={hover} onPointerOut={unhover}>
         <bufferGeometry attach="geometry">
           <bufferAttribute
-            attachObject={['attributes', 'position']}
+            attach="attributes-position"
             count={points.points.length / 3}
             array={points.points}
             itemSize={3}
           />
           <bufferAttribute
-            attachObject={['attributes', 'color']}
+            attach="attributes-color"
             count={points.colors.length / 3}
             array={points.colors}
             itemSize={3}
