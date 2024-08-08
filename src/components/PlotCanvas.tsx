@@ -1,6 +1,6 @@
 import { Html, useProgress } from '@react-three/drei';
 import React, { createRef, useEffect, useState, RefObject, Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, RaycasterProps } from '@react-three/fiber';
 import { DataFrame } from '@grafana/data';
 
 import { Camera } from 'components/Camera';
@@ -10,7 +10,7 @@ import { XYZChartOptions } from 'models.gen';
 import { OptionsProvider } from 'optionsContext';
 import { PointCloud } from './PointCloud';
 import { GridVolume } from './GridVolume';
-import { AmbientLight } from 'three';
+import { AmbientLight, PointLight } from 'three';
 interface Props {
   frames: DataFrame[];
   options: XYZChartOptions;
@@ -18,7 +18,7 @@ interface Props {
 
 const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
   let ambLightRef: RefObject<AmbientLight> = createRef();
-  let pntLightRef: RefObject<AmbientLight> = createRef();
+  let pntLightRef: RefObject<PointLight> = createRef();
   const [pointData, setPointData] = useState(prepData(frames, options.pointColor ?? '#ff0000'));
   const [intervalLabels, setIntervalLabels] = useState(getIntervalLabels(frames));
 
@@ -35,9 +35,19 @@ const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
     return <Html center>{progress} % loaded</Html>;
   }
 
+  const raycasterProps: RaycasterProps = {
+    params: {
+      Mesh: {},
+      Line: { threshold: 1 },
+      LOD: {},
+      Points: { threshold: 2 },
+      Sprite: {},
+    },
+  };
+
   return (
     <>
-      <Canvas raycaster={{ params: { Points: { threshold: 2 } } }} linear flat>
+      <Canvas raycaster={raycasterProps} linear flat>
         {/*
           Context does not work outside of Canvas. Seems Canvas is outside parent component in DOM
           https://github.com/facebook/react/issues/17126
