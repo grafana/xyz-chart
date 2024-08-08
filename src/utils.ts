@@ -1,89 +1,95 @@
-import { DataFrame, Field, FieldType, ArrayVector, getFieldDisplayName } from '@grafana/data';
+import { DataFrame, Field, FieldType, ArrayVector, getFieldDisplayName, toDataFrame } from '@grafana/data';
 import { IntervalLabels, PointData, RGBColor } from 'types';
 //eslint-disable-next-line no-restricted-imports
 import moment from 'moment';
 import { COLOR_PICKER_OPTIONS, DATE_FORMAT, LABEL_INTERVAL, SCENE_SCALE } from 'consts';
 import { XYZSeriesConfig, XYZDimensionConfig } from 'models.gen';
 
-export function preparePlotByDims(series: DataFrame[], dimensions: XYZDimensionConfig): DataFrame[] {
-  if (!series.length) {
+export function preparePlotByDims(series: DataFrame[], dimensions: XYZDimensionConfig[]): DataFrame[] {
+  if (!series.length || !dimensions) {
     return [];
   }
 
-  const dims = {
-    frame: dimensions?.frame ?? 0,
-    x: dimensions?.x ?? null,
-  };
+  let frames: DataFrame[] = [];
 
-  let copy: Field;
-  const fields: Field[] = [];
+  for (const dim of dimensions) {
+    const dims = {
+      frame: dim.frame ?? 0,
+      x: dim.x ?? null,
+    };
 
-  let xField: Field | null = null;
+    let copy: Field;
+    const fields: Field[] = [];
 
-  for (const field of series[dims.frame].fields) {
-    const name = getFieldDisplayName(field, series[dims.frame], series);
+    let xField: Field | null = null;
 
-    if (name === dims.x) {
-      xField = field;
+    for (const field of series[dims.frame].fields) {
+      const name = getFieldDisplayName(field, series[dims.frame], series);
+
+      if (name === dims.x) {
+        xField = field;
+        continue;
+      }
+
+      if (dims.x === null && [FieldType.time, FieldType.number].includes(field.type)) {
+        xField = field;
+        dims.x = name;
+        continue;
+      }
+
+      switch (field.type) {
+        case FieldType.time:
+          fields.push(field);
+          break;
+
+        case FieldType.number:
+          copy = {
+            ...field,
+            values: new ArrayVector(
+              field.values.toArray().map((v) => {
+                if (!(Number.isFinite(v) || v == null)) {
+                  return null;
+                }
+
+                return v;
+              })
+            ),
+          };
+
+          fields.push(copy);
+          break;
+      }
+    }
+
+    if (!xField) {
+      frames.push(toDataFrame({}));
       continue;
     }
 
-    if (dims.x === null && [FieldType.time, FieldType.number].includes(field.type)) {
-      xField = field;
-      dims.x = name;
-      continue;
-    }
-
-    switch (field.type) {
-      case FieldType.time:
-        fields.push(field);
-        break;
-
-      case FieldType.number:
-        copy = {
-          ...field,
-          values: new ArrayVector(
-            field.values.toArray().map((v) => {
-              if (!(Number.isFinite(v) || v == null)) {
-                return null;
-              }
-
-              return v;
-            })
-          ),
-        };
-
-        fields.push(copy);
-        break;
-    }
+    frames.push({
+      ...series[dims.frame],
+      fields: [xField, ...fields],
+    });
   }
 
-  if (!xField) {
-    return [];
-  }
-
-  const frame: DataFrame = {
-    ...series[dims.frame],
-    fields: [xField, ...fields],
-  };
-
-  return [frame];
+  return frames;
 }
 
-export function preparePlotByExplicitSeries(series: DataFrame[], explicitSeries: XYZSeriesConfig): DataFrame[] {
-  if (!series.length || !explicitSeries || (!explicitSeries.x && !explicitSeries.y && !explicitSeries.z)) {
+export function preparePlotByExplicitSeries(series: DataFrame[], explicitSeries: XYZSeriesConfig[]): DataFrame[] {
+  if (!series.length || !explicitSeries) {
     return [];
   }
 
+  const frames: DataFrame[] = [];
   let copy: Field;
 
   let xField: Field | null = null;
   let yField: Field | null = null;
   let zField: Field | null = null;
 
-  for (const frame of series) {
-    for (const field of frame.fields) {
-      const name = getFieldDisplayName(field, series[0], series);
+  for (let i = 0; i < series.length; i++) {
+    for (const field of series[i].fields) {
+      const name = getFieldDisplayName(field, series[i], series);
 
       let f: Field | null = null;
 
@@ -114,30 +120,31 @@ export function preparePlotByExplicitSeries(series: DataFrame[], explicitSeries:
         continue;
       }
 
-      if (name === explicitSeries.x) {
+      if (name === explicitSeries[i].x) {
         xField = f;
       }
 
-      if (name === explicitSeries.y) {
+      if (name === explicitSeries[i].y) {
         yField = f;
       }
 
-      if (name === explicitSeries.z) {
+      if (name === explicitSeries[i].z) {
         zField = f;
       }
     }
+
+    if (!xField || !yField || !zField) {
+      frames.push(toDataFrame({}));
+      continue;
+    }
+
+    frames.push({
+      ...series[i],
+      fields: [xField, yField, zField],
+    });
   }
 
-  if (!xField || !yField || !zField) {
-    return [];
-  }
-
-  const frame: DataFrame = {
-    ...series[0],
-    fields: [xField, yField, zField],
-  };
-
-  return [frame];
+  return frames;
 }
 
 type ScaleFactors = {
@@ -148,65 +155,145 @@ type ScaleFactors = {
   };
 };
 
+interface FrameOptions {
+  pointColor: string;
+  pointSize: number;
+}
+
 /**
  * Take sparse frame data and format for display with R3F.
  */
-export function prepData(frames: DataFrame[], dataPointColor: string): PointData {
-  const points = [],
-    colors = [];
-  let scaleFactors: ScaleFactors = {};
+export function prepData(frames: DataFrame[], frameOptions: FrameOptions[]): PointData[] {
+  const boundaryFrame = createBoundaryDataFrame(frames);
+
   // TODO: add support for multiple frames
   // Also, at this moment, we assume that the first 3 fields of a frame are supported types and use those to plot.
   // Having a frame with more fields, where some fields are not supported (e.g: string), will result in a broken chart.
 
   // Create scaling factor to map data coordinates to
   // chart coords, assuming as single data frame (although that's silly)
-  for (let frame of frames) {
-    if (frame.fields.length < 3) {
-      return { points: new Float32Array(), colors: new Float32Array() };
-    }
+  let factor: ScaleFactors = {}
 
-    for (let i = 0; i < 3; i++) {
-      let vals = frame.fields[i].values.toArray();
-      const max = Math.max(...vals);
-      const min = Math.min(...vals);
-
-      scaleFactors[i] = {
-        min: min,
-        max: max,
-        factor: (max - min) / SCENE_SCALE === 0 ? 1 : (max - min) / SCENE_SCALE,
-      };
-    }
+  if (boundaryFrame.fields.length < 3) {
+    return [{ points: new Float32Array(), colors: new Float32Array() }];
   }
 
-  for (let frame of frames) {
+  for (let i = 0; i < 3; i++) {
+    let vals = boundaryFrame.fields[i].values.toArray();
+    const max = Math.max(...vals);
+    const min = Math.min(...vals);
+
+    factor[i] = {
+      min: min,
+      max: max,
+      factor: (max - min) / SCENE_SCALE === 0 ? 1 : (max - min) / SCENE_SCALE,
+    };
+  }
+
+  const pointsArr = [];
+
+  for (let x = 0; x < frames.length; x ++) {
+    const points = [],
+      colors = [];
     // TODO: Currently this is simply determing point location
     // by taking the first (sensible, i.e datetime or numeric) field as X, the second field as Y,
     // and the third avaiable field as Z
-    for (let i = 0; i < frame.length; i++) {
+    for (let i = 0; i < frames[x].length; i++) {
       // Use the first three fields
       // At this point we should only have
       // DateTime fields and number fields
       for (let j = 0; j < 3; j++) {
-        switch (frame.fields[j].type) {
+        switch (frames[x].fields[j].type) {
           case FieldType.time:
           case FieldType.number:
             points.push(
-              frame.fields[j].values.get(i) / scaleFactors[j].factor - scaleFactors[j].min / scaleFactors[j].factor
+              frames[x].fields[j].values.get(i) / factor[j].factor - factor[j].min / factor[j].factor
             );
             break;
         }
       }
 
-      const normalizedColor: RGBColor = hexToRgb(dataPointColor);
+      const normalizedColor: RGBColor = hexToRgb(frameOptions[x].pointColor);
 
       colors.push(normalizedColor.r);
       colors.push(normalizedColor.g);
       colors.push(normalizedColor.b);
     }
+
+    pointsArr.push({ points: new Float32Array(points), colors: new Float32Array(colors) });
   }
 
-  return { points: new Float32Array(points), colors: new Float32Array(colors) };
+  return pointsArr;
+}
+
+// this is used for intervals and scaling now that we have multiple frame
+// support. Not the best solution, but it works for now.
+// We're creating a dataframe with high/low values for each axis
+function createBoundaryDataFrame(frames: DataFrame[]): DataFrame {
+  if (frames.length === 0) {
+    return toDataFrame({});
+  }
+
+  if (frames.length === 1) {
+    return frames[0];
+  }
+
+  const boundaryFrame = frames[0];
+  const fields: Field[] = [];
+
+  let highestXValue = 0;
+  let highestYValue = 0;
+  let highestZValue = 0;
+  let lowestXValue = Infinity;
+  let lowestYValue = Infinity;
+  let lowestZValue = Infinity;
+
+  for (let frame of frames) { 
+    const xVals = frame.fields[0].values.toArray();
+    const yVals = frame.fields[1].values.toArray();
+    const zVals = frame.fields[2].values.toArray();
+
+    const xMax = Math.max(...xVals);
+    const yMax = Math.max(...yVals);
+    const zMax = Math.max(...zVals);
+
+    const xMin = Math.min(...xVals);
+    const yMin = Math.min(...yVals);
+    const zMin = Math.min(...zVals);
+
+    if (xMax > highestXValue) {
+      highestXValue = xMax;
+    }
+
+    if (yMax > highestYValue) {
+      highestYValue = yMax;
+    }
+
+    if (zMax > highestZValue) {
+      highestZValue = zMax;
+    }
+
+    if (xMin < lowestXValue) {
+      lowestXValue = xMin;
+    }
+
+    if (yMin < lowestYValue) {
+      lowestYValue = yMin;
+    }
+
+    if (zMin < lowestZValue) {
+      lowestZValue = zMin;
+    }
+  }
+
+  fields.push({ name: 'x', type: FieldType.number, values: new ArrayVector([lowestXValue, highestXValue]), config: {} });
+  fields.push({ name: 'y', type: FieldType.number, values: new ArrayVector([lowestYValue, highestYValue]), config: {} });
+  fields.push({ name: 'z', type: FieldType.number, values: new ArrayVector([lowestZValue, highestZValue]), config: {} });
+
+  return {
+    ...boundaryFrame,
+    fields,
+  };
 }
 
 export function getIntervalLabels(frames: DataFrame[]): IntervalLabels {
@@ -220,7 +307,7 @@ export function getIntervalLabels(frames: DataFrame[]): IntervalLabels {
   }
 
   //build labels based on first frame
-  const frame = frames[0];
+  const frame = createBoundaryDataFrame(frames);
 
   if (frame.fields.length < 3) {
     return { xLabels, yLabels, zLabels };

@@ -19,7 +19,7 @@ export const plugin = new PanelPlugin<XYZChartOptions>(XYZChart).setPanelOptions
     .addCustomEditor({
       id: 'xyPlotConfig',
       path: 'dims',
-      name: 'Data',
+      name: 'Auto mapping',
       editor: XYZDimsEditor,
       showIf: (cfg) => cfg.seriesMapping === 'auto',
     })
@@ -38,16 +38,16 @@ export const plugin = new PanelPlugin<XYZChartOptions>(XYZChart).setPanelOptions
       name: 'Z Field',
       showIf: (cfg) => cfg.seriesMapping === 'manual',
     })
-    .addColorPicker({
-      path: 'pointColor',
-      name: 'Point color',
-      settings: {},
-      defaultValue: defualtXyzChartConfig.pointColor,
-    })
-    .addNumberInput({
-      path: 'pointSize',
-      name: 'Point size',
-      settings: {},
-      defaultValue: defualtXyzChartConfig.pointSize,
-    });
+    // .addColorPicker({
+    //   path: 'pointColor',
+    //   name: 'Point color',
+    //   settings: {},
+    //   defaultValue: defualtXyzChartConfig.pointColor,
+    // })
+    // .addNumberInput({
+    //   path: 'pointSize',
+    //   name: 'Point size',
+    //   settings: {},
+    //   defaultValue: defualtXyzChartConfig.pointSize,
+    // });
 });

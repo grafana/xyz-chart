@@ -16,6 +16,28 @@ export const XYZChart: React.FC<Props> = (props) => {
     }
   }, [props.data.series, props.options.series, props.options.dims, props.options.seriesMapping]);
 
+  const frameOptions = useMemo(() => {
+    if (props.options.seriesMapping === 'manual' && props.options.series) {
+      return props.options.series.map((opts) => {
+        return {
+          pointColor: opts.pointColor ?? '#ff0000',
+          pointSize: opts.pointSize ?? 1,
+        }
+      })
+    } 
+    
+    if (props.options.dims) {
+      return props.options.dims.map((opts) => {
+        return {
+          pointColor: opts.pointColor ?? '#ff0000' ,
+          pointSize: opts.pointSize ?? 1,
+        }
+      })
+    }
+
+    return [];
+  }, [props.options.dims, props.options.series, props.options.seriesMapping]);
+
   const options: XYZChartOptions = props.options;
   const [isMounted, setIsMounted] = useState(false);
   options.themeColor = theme.isDark ? '#ffffff' : '#000000';
@@ -43,10 +65,9 @@ export const XYZChart: React.FC<Props> = (props) => {
     );
   }
 
-
   return (
     <>
-      {!isMounted ? <div className="panel-empty" /> : (<Suspense fallback={null}><div style={{ cursor: 'grab', width: '100%', height: '100%' }}><Canvas frames={frames} options={options} /></div></Suspense>)}
+      {!isMounted ? <div className="panel-empty" /> : (<Suspense fallback={null}><div style={{ cursor: 'grab', width: '100%', height: '100%' }}><Canvas frames={frames} frameOptions={frameOptions} options={options} /></div></Suspense>)}
     </>
   );
 };

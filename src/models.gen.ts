@@ -4,11 +4,15 @@ export interface XYZSeriesConfig extends HideableFieldConfig, AxisConfig {
   x?: string;
   y?: string;
   z?: string;
+  pointColor?: string;
+  pointSize?: number;
 }
 
 export interface XYZDimensionConfig {
   frame: number;
   x?: string; // name | first
+  pointColor?: string;
+  pointSize?: number;
 }
 
 export interface XYZChartOptions {
@@ -18,8 +22,8 @@ export interface XYZChartOptions {
   hudBgColor?: string;
 
   seriesMapping: 'auto' | 'manual' | undefined;
-  dims?: XYZDimensionConfig;
-  series?: XYZSeriesConfig;
+  dims?: XYZDimensionConfig[];
+  series?: XYZSeriesConfig[];
 }
 
 export const defualtXyzChartConfig: XYZChartOptions = {
