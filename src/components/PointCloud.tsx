@@ -1,26 +1,24 @@
 import { hexToRgb } from '../utils';
-import OptionsContext from 'optionsContext';
-import React, { useRef, useState, useContext, useEffect, useCallback, RefObject, ReactNode } from 'react';
+import React, { useRef, useState, useEffect, useCallback, RefObject, ReactNode } from 'react';
 import { PointData, RGBColor } from 'types';
 import { BufferAttribute, PointsMaterial, Vector3, BufferGeometry } from 'three';
 import { useTexture } from '@react-three/drei';
 import { PointHoverAxes } from './PointHoverAxes';
 import { HUD } from './HUD';
 import { DataFrame } from '@grafana/data';
-import { XYZChartOptions } from 'models.gen';
 
 interface Props {
   points: PointData;
   lights: Array<RefObject<ReactNode>>;
-  frames: DataFrame[];
+  frame: DataFrame;
+  options: { pointColor: string; pointSize: number };
 }
 
-export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
+export const PointCloud: React.FC<Props> = ({ points, lights, frame, options }) => {
   const pts: { geometry: BufferGeometry } = { geometry: new BufferGeometry() };
   const ptsMat: PointsMaterial = new PointsMaterial();
   const pointsRef = useRef(pts);
   const materialRef = useRef(ptsMat);
-  const options: XYZChartOptions = useContext(OptionsContext);
   const circleTexture = useTexture('/public/plugins/grafana-xyzchart-panel/img/dot.png');
   const [hoveredPointPos, setHoveredStatePos] = useState<Vector3 | null>(null);
   const [hoveredPointData, setHoveredPointData] = useState<string[]>([]);
@@ -60,7 +58,7 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
       pointsRef.current.geometry.setAttribute('color', colorAttr);
 
       let hudData = [];
-      for (let field of frames[0].fields) {
+      for (let field of frame.fields) {
         hudData.push(`${field.name}: ${field.values.get(e.index)}`);
       }
 
@@ -71,7 +69,7 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
 
       setHoveredStatePos(pointPos);
     },
-    [frames]
+    [frame]
   );
 
   const unhover = useCallback(
