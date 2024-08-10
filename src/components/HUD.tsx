@@ -3,9 +3,10 @@ import OptionsContext from 'optionsContext';
 import { XYZChartOptions } from 'models.gen';
 import { Html } from '@react-three/drei';
 import { css } from '@emotion/css';
+import { Vector3 } from 'three';
 
 interface HUDProps {
-  pointPos: THREE.Vector3;
+  pointPos: Vector3;
   xValue: string;
   yValue: string;
   zValue: string;
