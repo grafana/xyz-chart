@@ -18,14 +18,14 @@ interface Props {
 const PlotCanvas: React.FC<Props> = ({ frames, options }) => {
   let ambLightRef: RefObject<ReactNode> = createRef();
   let pntLightRef: RefObject<ReactNode> = createRef();
-  const [pointData, setPointData] = useState(prepData(frames, options.pointColor ?? '#ff0000'));
+  const [pointData, setPointData] = useState(prepData(frames, options.pointColor ?? '#ff0000', options.useFieldsAsColor));
   const [intervalLabels, setIntervalLabels] = useState(getIntervalLabels(frames));
 
   useEffect(() => {
     const newLabels = getIntervalLabels(frames);
 
     setIntervalLabels(newLabels);
-    setPointData(prepData(frames, options.pointColor ?? '#ff0000'));
+    setPointData(prepData(frames, options.pointColor ?? '#ff0000', options.useFieldsAsColor));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [frames]);
 

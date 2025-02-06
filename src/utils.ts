@@ -70,7 +70,7 @@ export function preparePlotByDims(series: DataFrame[], dimensions: XYZDimensionC
   return [frame];
 }
 
-export function preparePlotByExplicitSeries(series: DataFrame[], explicitSeries: XYZSeriesConfig): DataFrame[] {
+export function preparePlotByExplicitSeries(series: DataFrame[], explicitSeries: XYZSeriesConfig, useFieldsAsColor: boolean): DataFrame[] {
   if (!series.length || !explicitSeries || (!explicitSeries.x && !explicitSeries.y && !explicitSeries.z)) {
     return [];
   }
@@ -80,7 +80,10 @@ export function preparePlotByExplicitSeries(series: DataFrame[], explicitSeries:
   let xField: Field | null = null;
   let yField: Field | null = null;
   let zField: Field | null = null;
-
+  let rField: Field | null = null;
+  let gField: Field | null = null;
+  let bField: Field | null = null;
+  
   for (const frame of series) {
     for (const field of frame.fields) {
       const name = getFieldDisplayName(field, series[0], series);
@@ -125,6 +128,18 @@ export function preparePlotByExplicitSeries(series: DataFrame[], explicitSeries:
       if (name === explicitSeries.z) {
         zField = f;
       }
+
+      if (name === explicitSeries.r && useFieldsAsColor) {
+        rField = f;
+      }
+
+      if (name === explicitSeries.g && useFieldsAsColor) {
+        gField = f;
+      }
+
+      if (name === explicitSeries.b && useFieldsAsColor) {
+        bField = f;
+      }
     }
   }
 
@@ -132,9 +147,20 @@ export function preparePlotByExplicitSeries(series: DataFrame[], explicitSeries:
     return [];
   }
 
+  if (useFieldsAsColor && (!rField || !gField || !bField)) {
+    return [];
+  }
+
+  const finalFields = [
+    xField,
+    yField,
+    zField,
+    ...(useFieldsAsColor ? [rField, gField, bField] : [])
+  ].filter((field): field is NonNullable<typeof field> => field !== null);
+  
   const frame: DataFrame = {
     ...series[0],
-    fields: [xField, yField, zField],
+    fields: finalFields,
   };
 
   return [frame];
@@ -151,14 +177,14 @@ type ScaleFactors = {
 /**
  * Take sparse frame data and format for display with R3F.
  */
-export function prepData(frames: DataFrame[], dataPointColor: string): PointData {
+export function prepData(frames: DataFrame[], dataPointColor: string, useFieldsAsColor: boolean): PointData {
   const points = [],
     colors = [];
   let scaleFactors: ScaleFactors = {};
   // TODO: add support for multiple frames
   // Also, at this moment, we assume that the first 3 fields of a frame are supported types and use those to plot.
   // Having a frame with more fields, where some fields are not supported (e.g: string), will result in a broken chart.
-
+  
   // Create scaling factor to map data coordinates to
   // chart coords, assuming as single data frame (although that's silly)
   for (let frame of frames) {
@@ -196,16 +222,25 @@ export function prepData(frames: DataFrame[], dataPointColor: string): PointData
             );
             break;
         }
+
+        // Use single color from options for every point
+        if (!useFieldsAsColor) {
+          const normalizedColor: RGBColor = hexToRgb(dataPointColor);
+  
+          colors.push(normalizedColor.r);
+          colors.push(normalizedColor.g);
+          colors.push(normalizedColor.b);
+        }
       }
 
-      const normalizedColor: RGBColor = hexToRgb(dataPointColor);
-
-      colors.push(normalizedColor.r);
-      colors.push(normalizedColor.g);
-      colors.push(normalizedColor.b);
+      // Use the 4th, 5th and 6th field as color values
+      if (useFieldsAsColor) {
+        for (let j = 3; j < 6; j++) {
+          colors.push(frame.fields[j].values.get(i) / 255);
+        }
+      }
     }
   }
-
   return { points: new Float32Array(points), colors: new Float32Array(colors) };
 }
 

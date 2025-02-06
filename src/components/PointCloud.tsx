@@ -24,15 +24,18 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
   const circleTexture = useTexture('/public/plugins/grafana-xyzchart-panel/img/dot.png');
   const [hoveredPointPos, setHoveredStatePos] = useState<Vector3 | null>(null);
   const [hoveredPointData, setHoveredPointData] = useState<string[]>([]);
+  const [hoveredPointColor, setHoveredPointColor] = useState<RGBColor>({r: 255, g: 255, b: 255});
 
   useEffect(() => {
-    const color: RGBColor = hexToRgb(options.pointColor ?? '#ff0000');
-    const colorAttr = pointsRef.current.geometry.getAttribute('color');
-    for (let i = 0; i < colorAttr.array.length; i++) {
-      colorAttr.setXYZ(i, color.r, color.g, color.b);
-      colorAttr.needsUpdate = true;
+    if (!options.useFieldsAsColor) {
+      const color: RGBColor = hexToRgb(options.pointColor ?? '#ff0000');
+      const colorAttr = pointsRef.current.geometry.getAttribute('color');
+      for (let i = 0; i < colorAttr.array.length; i++) {
+        colorAttr.setXYZ(i, color.r, color.g, color.b);
+        colorAttr.needsUpdate = true;
+      }
     }
-  }, [options.pointColor]);
+  }, [options.pointColor, options.useFieldsAsColor]);
 
   useEffect(() => {
     if (materialRef.current) {
@@ -55,6 +58,15 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
     (e) => {
       e.stopPropagation();
       const colorAttr = pointsRef.current.geometry.getAttribute('color');
+
+      if (options.useFieldsAsColor) {
+        //save current color value of hovered point
+        const r = colorAttr.getX(e.index);
+        const g = colorAttr.getY(e.index);
+        const b = colorAttr.getZ(e.index);
+        setHoveredPointColor({r: r, g: g, b: b});
+      }
+
       colorAttr.setXYZ(e.index, 1, 1, 1);
       colorAttr.needsUpdate = true;
       pointsRef.current.geometry.setAttribute('color', colorAttr);
@@ -71,23 +83,33 @@ export const PointCloud: React.FC<Props> = ({ points, lights, frames }) => {
 
       setHoveredStatePos(pointPos);
     },
-    [frames]
+    [frames, options.useFieldsAsColor]
   );
 
   const unhover = useCallback(
     (e) => {
       e.stopPropagation();
+      let color: RGBColor = {r: 255, g: 255, b: 255}
 
-      const color: RGBColor = hexToRgb(options.pointColor ?? '#ff0000');
+      if (!options.useFieldsAsColor) {
+        color = hexToRgb(options.pointColor ?? '#ff0000');
+      }
+      else {
+        color = hoveredPointColor;
+      }
+
+      // When moving the cursor too fast, the color of the points does not get updated correctly.
+      // This behavior also exists in the unmodified version of the plugin.
       const colorAttr = pointsRef.current.geometry.getAttribute('color');
       colorAttr.setXYZ(e.index, color.r, color.g, color.b);
       colorAttr.needsUpdate = true;
       pointsRef.current.geometry.setAttribute('color', colorAttr);
+      
 
       setHoveredPointData([]);
       setHoveredStatePos(null);
     },
-    [options.pointColor]
+    [options.pointColor, options.useFieldsAsColor, hoveredPointColor]
   );
 
   return (
