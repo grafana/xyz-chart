@@ -5,6 +5,7 @@ const opts: XYZChartOptions = {
   pointColor: '',
   pointSize: 0,
   seriesMapping: 'auto',
+  useFieldsAsColor: false
 };
 
 const OptionsContext = React.createContext(opts);

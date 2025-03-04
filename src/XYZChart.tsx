@@ -10,11 +10,11 @@ export const XYZChart: React.FC<Props> = (props) => {
   const theme = useTheme2();
   const frames = useMemo(() => {
     if (props.options.seriesMapping === 'manual') {
-      return preparePlotByExplicitSeries(props.data.series, props.options.series!);
+      return preparePlotByExplicitSeries(props.data.series, props.options.series!, props.options.useFieldsAsColor);
     } else {
       return preparePlotByDims(props.data.series, props.options.dims!);
     }
-  }, [props.data.series, props.options.series, props.options.dims, props.options.seriesMapping]);
+  }, [props.data.series, props.options.series, props.options.dims, props.options.seriesMapping, props.options.useFieldsAsColor]);
 
   const options: XYZChartOptions = props.options;
   const [isMounted, setIsMounted] = useState(false);

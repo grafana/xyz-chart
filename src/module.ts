@@ -38,11 +38,33 @@ export const plugin = new PanelPlugin<XYZChartOptions>(XYZChart).setPanelOptions
       name: 'Z Field',
       showIf: (cfg) => cfg.seriesMapping === 'manual',
     })
+    .addBooleanSwitch({
+      path: 'useFieldsAsColor',
+      name: 'Use fields as color (RGB channels)',
+      defaultValue: defualtXyzChartConfig.useFieldsAsColor,
+      showIf: (cfg) => cfg.seriesMapping === 'manual',
+    })
+    .addFieldNamePicker({
+      path: 'series.r',
+      name: 'Red channel',
+      showIf: (cfg) => cfg.useFieldsAsColor,
+    })
+    .addFieldNamePicker({
+      path: 'series.g',
+      name: 'Green channel',
+      showIf: (cfg) => cfg.useFieldsAsColor,
+    })
+    .addFieldNamePicker({
+      path: 'series.b',
+      name: 'Blue channel',
+      showIf: (cfg) => cfg.useFieldsAsColor,
+    })
     .addColorPicker({
       path: 'pointColor',
       name: 'Point color',
       settings: {},
       defaultValue: defualtXyzChartConfig.pointColor,
+      showIf: (cfg) => !cfg.useFieldsAsColor
     })
     .addNumberInput({
       path: 'pointSize',
