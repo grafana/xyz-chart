@@ -1,0 +1,34 @@
+{
+  "ignorePaths": [
+    "coverage/**",
+    "cypress/**",
+    "dist/**",
+    "go.sum",
+    "mage_output_file.go",
+    "node_modules/**",
+    "provisioning/**/*.yaml",
+    "src/dashboards/*.json",
+    "**/testdata/**/*.json",
+    "**/testdata/**/*.jsonc",
+    "vendor/**",
+    "cspell.config.json",
+    "package.json",
+    "yarn.lock",
+    "docker-compose*.yaml",
+    "docker-compose*.yml",
+    "src/plugin.json",
+    "src/utils.ts",
+    "src/dims.ts",
+    "src/consts.ts",
+    "src/components",
+    "src/models.gen.ts",
+    "src/module*",
+    "src/optionsContext.ts",
+    "src/fonts/**"
+  ],
+  "ignoreRegExpList": [
+    "import\\s*\\((.|[\r\n])*?\\)",
+    "import\\s*.*\".*?\""
+  ],
+  "words": ["grafana", "datasource", "datasources", "Drei"]
+}
