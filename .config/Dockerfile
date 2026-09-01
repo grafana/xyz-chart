@@ -1,4 +1,4 @@
-ARG grafana_version=latest
+ARG grafana_version=latest@sha256:f772d434e8fab0049deb2b1b30abd43342bcfca1537614aa8d36080232cf4283
 
 FROM grafana/grafana:${grafana_version}
 
